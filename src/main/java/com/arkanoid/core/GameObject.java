@@ -1,6 +1,6 @@
 package com.arkanoid.core;
 
-abstract class GameObject {
+public abstract class GameObject {
     private double x;
     private double y;
     private double width;

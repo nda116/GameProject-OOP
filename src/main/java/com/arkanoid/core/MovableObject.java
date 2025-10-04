@@ -1,6 +1,6 @@
 package com.arkanoid.core;
 
-abstract class MovableObject extends GameObject{
+public abstract class MovableObject extends GameObject{
     private double dx;
     private double dy;
 
