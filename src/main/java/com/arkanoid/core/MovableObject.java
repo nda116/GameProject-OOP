@@ -27,6 +27,7 @@ public abstract class MovableObject extends GameObject{
     }
 
     public void move() {
-
+        setX(getX() + dx);
+        setY(getY() + dy);
     }
 }
