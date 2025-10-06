@@ -2,6 +2,9 @@ package com.arkanoid.objects;
 
 import com.arkanoid.core.MovableObject;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 public class Paddle extends MovableObject {
     private double speed;
     private final double screenWidth;
@@ -35,11 +38,18 @@ public class Paddle extends MovableObject {
 
     @Override
     public void update() {
-
+        if (x < 0) {
+            x = 0;
+        }
+        if (x + width > screenWidth) {
+            x = screenWidth - width;
+        }
     }
 
     @Override
     public void render(GraphicsContext gc) {
-
+        gc.setFill(Color.BLUE);
+        gc.fillRoundRect(x, y, width, height, 10, 10);
     }
+
 }
