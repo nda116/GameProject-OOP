@@ -44,4 +44,16 @@ public abstract class GameObject {
     public void setWidth(double width) {
         this.width = width;
     }
+
+    /**
+     * check collision between 2 objects.
+     * @param other other object.
+     * @return collision exist or not.
+     */
+    public boolean checkCollision (GameObject other) {
+        return x < other.x + other.width &&
+                x + width > other.x &&
+                y < other.y + other.height &&
+                y + height > other.y;
+    }
 }
