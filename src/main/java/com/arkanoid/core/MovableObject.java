@@ -1,8 +1,8 @@
 package com.arkanoid.core;
 
 public abstract class MovableObject extends GameObject{
-    private double dx;
-    private double dy;
+    protected double dx;
+    protected double dy;
 
     public MovableObject(double x, double y, double width, double height, double dx, double dy) {
         super(x, y, width, height);
