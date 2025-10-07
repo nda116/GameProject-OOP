@@ -1,4 +1,4 @@
-package com.arkanoid.objects;
+package com.arkanoid.entities;
 
 import com.arkanoid.core.MovableObject;
 import com.arkanoid.core.GameObject;
