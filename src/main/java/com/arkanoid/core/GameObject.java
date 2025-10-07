@@ -1,5 +1,10 @@
 package com.arkanoid.core;
 
+/**
+ * class GameObject contains.
+ * void update()
+ * boolean checkCollision (GameObject other)
+ */
 public abstract class GameObject {
     private double x;
     private double y;
@@ -45,6 +50,9 @@ public abstract class GameObject {
         this.width = width;
     }
 
+    public abstract void update();
+    public abstract void render();
+
     /**
      * check collision between 2 objects.
      * @param other other object.
@@ -55,18 +63,5 @@ public abstract class GameObject {
                 x + width > other.x &&
                 y < other.y + other.height &&
                 y + height > other.y;
-    }
-
-    /**
-     * Calculate distance between center of 2 GameObject.
-     * @param other other GameObject.
-     * @return distance between them.
-     */
-    public double Distance (GameObject other) {
-        double thiscenterX = (getX() + getWidth()) / 2;
-        double thiscenterY = (getY() + getHeight()) / 2;
-        double othercenterX = (other.getX() + other.getWidth()) / 2;
-        double othercenterY = (other.getY() + other.getHeight()) / 2;
-        return Math.sqrt(Math.pow(othercenterX - thiscenterX, 2) + Math.pow(othercenterY - thiscenterY, 2));
     }
 }
