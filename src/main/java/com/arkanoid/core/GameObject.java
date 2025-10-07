@@ -44,4 +44,29 @@ public abstract class GameObject {
     public void setWidth(double width) {
         this.width = width;
     }
+
+    /**
+     * check collision between 2 objects.
+     * @param other other object.
+     * @return collision exist or not.
+     */
+    public boolean checkCollision (GameObject other) {
+        return x < other.x + other.width &&
+                x + width > other.x &&
+                y < other.y + other.height &&
+                y + height > other.y;
+    }
+
+    /**
+     * Calculate distance between center of 2 GameObject.
+     * @param other other GameObject.
+     * @return distance between them.
+     */
+    public double Distance (GameObject other) {
+        double thiscenterX = (getX() + getWidth()) / 2;
+        double thiscenterY = (getY() + getHeight()) / 2;
+        double othercenterX = (other.getX() + other.getWidth()) / 2;
+        double othercenterY = (other.getY() + other.getHeight()) / 2;
+        return Math.sqrt(Math.pow(othercenterX - thiscenterX, 2) + Math.pow(othercenterY - thiscenterY, 2));
+    }
 }
