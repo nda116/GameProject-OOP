@@ -1,7 +1,10 @@
-package com.arkanoid.core.bricks;
+package com.arkanoid.bricks;
 
 import com.arkanoid.core.GameObject;
 
+/**
+ * void HPlost() Minus HP of brick.
+ */
 public class Bricks extends GameObject {
     private int brickHP;
     private String type;
@@ -36,21 +39,11 @@ public class Bricks extends GameObject {
         this.type = type;
     }
 
+    /**
+     * Minus HP of brick.
+     */
     public void HPlost() {
         brickHP --;
-    }
-
-    /**
-     * Calculate distance between center of 2 bricks.
-     * @param other other brick.
-     * @return distance between them.
-     */
-    public double Distance (Bricks other) {
-        double thiscenterX = (getX() + getWidth()) / 2;
-        double thiscenterY = (getY() + getHeight()) / 2;
-        double othercenterX = (other.getX() + other.getWidth()) / 2;
-        double othercenterY = (other.getY() + other.getHeight()) / 2;
-        return Math.sqrt(Math.pow(othercenterX - thiscenterX, 2) + Math.pow(othercenterY - thiscenterY, 2));
     }
 }
 

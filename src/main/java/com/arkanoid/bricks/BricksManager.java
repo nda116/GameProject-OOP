@@ -1,8 +1,13 @@
-package com.arkanoid.core.bricks;
+package com.arkanoid.bricks;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * void addBrick(Bricks) add new brick to brickList.
+ * void updateBrickHP(Ball) update bricks HP in brickList.
+ * void updateBrickList () update brickList, remove bricks which have HP <= 0.
+ */
 public class BricksManager {
     private ArrayList<Bricks> bricksList = new ArrayList<>();
 
@@ -45,6 +50,4 @@ public class BricksManager {
             }
         }
     }
-
-
 }
