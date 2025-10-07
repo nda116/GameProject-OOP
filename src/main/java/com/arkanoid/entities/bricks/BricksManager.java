@@ -3,13 +3,28 @@ package com.arkanoid.entities.bricks;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/**
- * void addBrick(Bricks) add new brick to brickList.
- * void updateBrickHP(Ball) update bricks HP in brickList.
- * void updateBrickList () update brickList, remove bricks which have HP <= 0.
- */
+import com.arkanoid.entities.Ball;
+import com.arkanoid.PowerUps.PowerUps;
+import com.arkanoid.PowerUps.PowerUpsManager;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
+
 public class BricksManager {
     private ArrayList<Bricks> bricksList = new ArrayList<>();
+
+    private Random rand = new Random();
+    private PowerUpsManager powerUpsManager;
+    private float powerUpDropChance = 0.1f; // bắt đầu 10%
+    private final float MAX_DROP_CHANCE = 0.9f; // tối đa 90%
+
+    public BricksManager(PowerUpsManager powerUpManager) {
+        this.powerUpsManager = powerUpsManager;
+    }
+    public void resetDropChance() {
+        powerUpDropChance = 0.1f;
+    }
 
     public void addBrick (Bricks new_Brick) {
         bricksList.add(new_Brick);
@@ -50,4 +65,20 @@ public class BricksManager {
             }
         }
     }
+
+    public void onBrickDestroyed(Bricks brick) {
+        if (rand.nextFloat() < powerUpDropChance) {
+            int type = rand.nextInt(2); //set up power
+            PowerUps p = new PowerUps(brick.getX(), brick.getY(), type);
+            if (powerUpsManager != null) {
+                powerUpsManager.addPowerUps(p);
+            }
+        }
+
+        powerUpDropChance += 0.2f;
+        if (powerUpDropChance > MAX_DROP_CHANCE) {
+            powerUpDropChance = MAX_DROP_CHANCE;
+        }
+    }
 }
+

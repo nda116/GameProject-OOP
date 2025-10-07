@@ -45,5 +45,15 @@ public class Bricks extends GameObject {
     public void HPlost() {
         brickHP --;
     }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void render() {
+
+    }
 }
 
