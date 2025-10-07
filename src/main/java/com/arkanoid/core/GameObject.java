@@ -1,12 +1,15 @@
 package com.arkanoid.core;
 
-import javafx.scene.canvas.GraphicsContext;
-
+/**
+ * class GameObject contains.
+ * void update()
+ * boolean checkCollision (GameObject other)
+ */
 public abstract class GameObject {
-    protected double x;
-    protected double y;
-    protected double width;
-    protected double height;
+    private double x;
+    private double y;
+    private double width;
+    private double height;
 
     public GameObject(double x, double y, double width, double height) {
         this.x = x;
@@ -47,15 +50,8 @@ public abstract class GameObject {
         this.width = width;
     }
 
-    /**
-     * update position of object.
-     */
     public abstract void update();
-
-    /**
-     * draw object on screen.
-     */
-    public abstract void render(GraphicsContext gc);
+    public abstract void render();
 
     /**
      * check collision between 2 objects.

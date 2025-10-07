@@ -2,9 +2,10 @@ package com.arkanoid.entities;
 
 import com.arkanoid.core.MovableObject;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-
+/**
+ * class Paddle contains.
+ * void moveLeft(), void moveRight()
+ */
 public class Paddle extends MovableObject {
     private double speed;
     private final double screenWidth;
@@ -25,31 +26,29 @@ public class Paddle extends MovableObject {
     }
 
     public void moveLeft() {
-        dx = -speed;
+        setDx(-speed);
         move();
-        dx = 0;
+        setDx(0);
     }
 
     public void moveRight() {
-        dx = speed;
+        setDx(speed);
         move();
-        dx = 0;
+        setDx(0);
     }
 
     @Override
     public void update() {
-        if (x < 0) {
-            x = 0;
+        if (getX() < 0) {
+            setX(0);
         }
-        if (x + width > screenWidth) {
-            x = screenWidth - width;
+        if (getX() + getWidth() > screenWidth) {
+            setX(screenWidth - getWidth());
         }
     }
 
     @Override
-    public void render(GraphicsContext gc) {
-        gc.setFill(Color.BLUE);
-        gc.fillRoundRect(x, y, width, height, 10, 10);
-    }
+    public void render() {
 
+    }
 }

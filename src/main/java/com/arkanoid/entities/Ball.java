@@ -3,9 +3,12 @@ package com.arkanoid.entities;
 import com.arkanoid.core.MovableObject;
 import com.arkanoid.core.GameObject;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-
+/**
+ * class Ball contains.
+ * void updateVelocity()
+ * void bounceOff(GameObject other)
+ * boolean isOutOfBounds(), void reset(double startX, double startY)
+ */
 public class Ball extends MovableObject {
     private double speed;
     private double directionX;
@@ -29,8 +32,8 @@ public class Ball extends MovableObject {
      * Updates the velocity (dx, dy) based on speed and direction.
      */
     private void updateVelocity() {
-        dx = speed * directionX;
-        dy = speed * directionY;
+        setDx(speed * directionX);
+        setDy(speed * directionY);
     }
 
     public double getSpeed() {
@@ -70,8 +73,8 @@ public class Ball extends MovableObject {
         if (!checkCollision(other)) return;
 
         // Calculate collision position
-        double ballCenterX = x + width / 2;
-        double ballCenterY = y + height / 2;
+        double ballCenterX = getX() + getWidth() / 2;
+        double ballCenterY = getY() + getHeight() / 2;
         double objCenterX = other.getX() + other.getWidth() / 2;
         double objCenterY = other.getY() + other.getHeight() / 2;
 
@@ -84,18 +87,18 @@ public class Ball extends MovableObject {
             directionX = -directionX;
             updateVelocity();
             if (deltaX > 0) {
-                x = other.getX() + other.getWidth();
+                setX(other.getX() + other.getWidth());
             } else {
-                x = other.getX() - width;
+                setX(other.getX() - getWidth());
             }
         } else {
             // Collision from top or bottom
             directionY = -directionY;
             updateVelocity();
             if (deltaY > 0) {
-                y = other.getY() + other.getHeight();
+                setY(other.getY() + other.getHeight());
             } else {
-                y = other.getY() - height;
+                setY(other.getY() - getHeight());
             }
         }
     }
@@ -110,7 +113,7 @@ public class Ball extends MovableObject {
         if (!checkCollision(paddle)) return;
 
         // Calculate reflection angle based on hit position on paddle
-        double ballCenter = x + width / 2;
+        double ballCenter = getX() + getWidth() / 2;
         double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
         double hitPosition = (ballCenter - paddleCenter) / (paddle.getWidth() / 2);
 
@@ -125,7 +128,7 @@ public class Ball extends MovableObject {
         updateVelocity();
 
         // Place ball above paddle
-        y = paddle.getY() - height;
+        setY(paddle.getY() - getHeight());
     }
 
     /**
@@ -134,7 +137,7 @@ public class Ball extends MovableObject {
      * @return true if ball is out of bounds, false otherwise
      */
     public boolean isOutOfBounds() {
-        return y > screenHeight;
+        return getY() > screenHeight;
     }
 
     /**
@@ -144,8 +147,8 @@ public class Ball extends MovableObject {
      * @param startY The y-coordinate for the reset position
      */
     public void reset(double startX, double startY) {
-        x = startX;
-        y = startY;
+        setX(startX);
+        setY(startY);
 
         directionX = 0;
         directionY = 1;
@@ -157,23 +160,22 @@ public class Ball extends MovableObject {
         move();
 
         // Collision with left and right walls
-        if (x <= 0 || x + width >= screenWidth) {
+        if (getX() <= 0 || getX() + getWidth() >= screenWidth) {
             directionX = -directionX;
             updateVelocity();
-            x = Math.max(0, Math.min(x, screenWidth - width));
+            setX(Math.max(0, Math.min(getX(), screenWidth - getWidth())));
         }
 
         // Collision with top wall
-        if (y <= 0) {
+        if (getY() <= 0) {
             directionY = -directionY;
             updateVelocity();
-            y = 0;
+            setY(0);
         }
     }
 
     @Override
-    public void render(GraphicsContext gc) {
-        gc.setFill(Color.ORANGE);
-        gc.fillOval(x, y, width, height);
+    public void render() {
+
     }
 }
