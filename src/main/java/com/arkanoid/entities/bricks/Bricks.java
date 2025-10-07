@@ -1,4 +1,4 @@
-package com.arkanoid.bricks;
+package com.arkanoid.entities.bricks;
 
 import com.arkanoid.core.GameObject;
 

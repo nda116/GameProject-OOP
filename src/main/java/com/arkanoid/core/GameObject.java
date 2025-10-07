@@ -1,7 +1,5 @@
 package com.arkanoid.core;
 
-import com.arkanoid.bricks.Bricks;
-
 public abstract class GameObject {
     private double x;
     private double y;
