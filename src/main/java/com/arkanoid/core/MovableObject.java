@@ -9,8 +9,8 @@ public abstract class MovableObject extends GameObject{
     private double dy;
 
     public MovableObject(double x, double y, double width, double height,
-                         double dx, double dy) {
-        super(x, y, width, height);
+                         double dx, double dy, String imagePath) {
+        super(x, y, width, height, imagePath);
         this.dx = dx;
         this.dy = dy;
     }

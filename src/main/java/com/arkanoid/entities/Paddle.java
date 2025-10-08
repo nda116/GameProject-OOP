@@ -1,6 +1,7 @@
 package com.arkanoid.entities;
 
 import com.arkanoid.core.MovableObject;
+import javafx.scene.Group;
 
 /**
  * class Paddle contains.
@@ -12,7 +13,7 @@ public class Paddle extends MovableObject {
 
     public Paddle(double x, double y, double width, double height,
                   double speed, double screenWidth) {
-        super(x, y, width, height, 0, 0);
+        super(x, y, width, height, 0, 0, "/paddle/Normal_Paddle.png");
         this.speed = speed;
         this.screenWidth = screenWidth;
     }
@@ -45,10 +46,5 @@ public class Paddle extends MovableObject {
         if (getX() + getWidth() > screenWidth) {
             setX(screenWidth - getWidth());
         }
-    }
-
-    @Override
-    public void render() {
-
     }
 }

@@ -2,6 +2,7 @@ package com.arkanoid.entities;
 
 import com.arkanoid.core.MovableObject;
 import com.arkanoid.core.GameObject;
+import javafx.scene.Group;
 
 /**
  * class Ball contains.
@@ -18,7 +19,7 @@ public class Ball extends MovableObject {
 
     public Ball(double x, double y, double radius, double speed,
                 double screenWidth, double screenHeight) {
-        super(x, y, radius * 2, radius * 2, 0, 0);
+        super(x, y, radius * 2, radius * 2, 0, 0, "/ball.png");
         this.speed = speed;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -172,10 +173,5 @@ public class Ball extends MovableObject {
             updateVelocity();
             setY(0);
         }
-    }
-
-    @Override
-    public void render() {
-
     }
 }

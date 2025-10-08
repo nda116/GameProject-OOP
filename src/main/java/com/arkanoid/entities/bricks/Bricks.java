@@ -1,26 +1,22 @@
 package com.arkanoid.entities.bricks;
 
 import com.arkanoid.core.GameObject;
+import javafx.scene.Group;
 
 /**
  * void HPlost() Minus HP of brick.
  */
-public class Bricks extends GameObject {
+public abstract class Bricks extends GameObject {
     private int brickHP;
     private String type;
     public static final String NORMAL = "normal";
     public static final String INVINCIBLE = "invincible";
     public static final String EXPLOSION = "explosion";
-    public static final int EXPLOSION_RADIUS = 100;
 
-    public Bricks(double x, double y, double width, double height, String type) {
-        super(x, y, width, height);
+
+    public Bricks(double x, double y, double width, double height, String type, String imagePath) {
+        super(x, y, width, height, imagePath);
         this.type = type;
-        if (this.type.equals(NORMAL) || this.type.equals(EXPLOSION)) {
-            brickHP = 1;
-        } else if (this.type.equals(INVINCIBLE)) {
-            brickHP = 100;
-        }
     }
 
     public int getBrickHP() {
@@ -44,6 +40,10 @@ public class Bricks extends GameObject {
      */
     public void HPlost() {
         brickHP --;
+    }
+
+    @Override
+    public void update() {
     }
 }
 

@@ -1,5 +1,9 @@
 package com.arkanoid.core;
 
+import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 /**
  * class GameObject contains.
  * void update()
@@ -10,12 +14,26 @@ public abstract class GameObject {
     private double y;
     private double width;
     private double height;
+    private String imagePath;
+    private ImageView imageView;
 
-    public GameObject(double x, double y, double width, double height) {
+    public GameObject(double x, double y, double width, double height, String imagePath) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.imagePath = imagePath;
+
+        Image image = new Image(getClass().getResourceAsStream(imagePath));
+        imageView = new ImageView(image);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        imageView.setX(x);
+        imageView.setY(y);
+    }
+
+    public ImageView getImageView() {
+        return imageView;
     }
 
     public double getX() {
@@ -50,8 +68,17 @@ public abstract class GameObject {
         this.width = width;
     }
 
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     public abstract void update();
-    public abstract void render();
+
+    public void render(Group root) {
+        if (!root.getChildren().contains(getImageView())) {
+            root.getChildren().add(getImageView());
+        }
+    }
 
     /**
      * check collision between 2 objects.
@@ -63,5 +90,18 @@ public abstract class GameObject {
                 x + width > other.x &&
                 y < other.y + other.height &&
                 y + height > other.y;
+    }
+
+    /**
+     * Calculate distance between center of 2 GameObject.
+     * @param other other GameObject.
+     * @return distance between them.
+     */
+    public double distance (GameObject other) {
+        double thiscenterX = (getX() + getWidth()) / 2;
+        double thiscenterY = (getY() + getHeight()) / 2;
+        double othercenterX = (other.getX() + other.getWidth()) / 2;
+        double othercenterY = (other.getY() + other.getHeight()) / 2;
+        return Math.sqrt(Math.pow(othercenterX - thiscenterX, 2) + Math.pow(othercenterY - thiscenterY, 2));
     }
 }
