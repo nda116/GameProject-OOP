@@ -7,7 +7,9 @@ import javafx.scene.image.ImageView;
 /**
  * class GameObject contains.
  * void update()
- * boolean checkCollision (GameObject other)
+ * void render(Group) add imageView to tree Scene.
+ * boolean checkCollision (GameObject) check collision between 2 objects.
+ * double distance (GameObject) Calculate distance between center of 2 GameObject.
  */
 public abstract class GameObject {
     private double x;
@@ -74,6 +76,10 @@ public abstract class GameObject {
 
     public abstract void update();
 
+    /**
+     * add imageView to tree Scene.
+     * @param root tree Scene.
+     */
     public void render(Group root) {
         if (!root.getChildren().contains(getImageView())) {
             root.getChildren().add(getImageView());

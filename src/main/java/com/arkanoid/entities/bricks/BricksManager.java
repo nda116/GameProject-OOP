@@ -10,6 +10,7 @@ import java.util.Iterator;
  * void addBrick(Bricks) add new brick to brickList.
  * void updateBrickHP(Ball) update bricks HP in brickList.
  * void updateBrickList () update brickList, remove bricks which have HP <= 0.
+ * void renderBrickList(Group) add imageView of all bricks from bricklist to Scene tree.
  */
 public class BricksManager {
     private ArrayList<Bricks> bricksList = new ArrayList<>();
@@ -54,6 +55,10 @@ public class BricksManager {
         }
     }
 
+    /**
+     * add imageView of all bricks from bricklist to Scene tree.
+     * @param root Scene tree.
+     */
     public void renderBrickList(Group root) {
         for (int i = 0; i < bricksList.size(); i++) {
             bricksList.get(i).render(root);

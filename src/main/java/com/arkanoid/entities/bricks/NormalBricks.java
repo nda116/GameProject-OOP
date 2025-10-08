@@ -1,5 +1,9 @@
 package com.arkanoid.entities.bricks;
 
+/**
+ * Constructor for NormalBricks.
+ * String getImagePath(String) add imagePath base on color of the bricks.
+ */
 public class NormalBricks extends Bricks {
     private String color;
     public static final String RED = "red";
@@ -12,6 +16,11 @@ public class NormalBricks extends Bricks {
         setBrickHP(1);
     }
 
+    /**
+     * Add imagePath base on color of the bricks.
+     * @param color color of the bricks.
+     * @return string imagePath.
+     */
     private static String getImagePath(String color) {
         if (color.equals(RED)) {
             return "/bricks/Normal_Red.png";

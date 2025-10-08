@@ -1,5 +1,8 @@
 package com.arkanoid.entities.bricks;
 
+/**
+ * Constructor for ExplosionBricks
+ */
 public class ExplosionBricks extends Bricks{
     public static final int EXPLOSION_RADIUS = 100;
 
