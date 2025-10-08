@@ -1,5 +1,7 @@
 package com.arkanoid.core;
 
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * class GameObject contains.
  * void update()
@@ -51,7 +53,7 @@ public abstract class GameObject {
     }
 
     public abstract void update();
-    public abstract void render();
+    public abstract void render(GraphicsContext gc);
 
     /**
      * check collision between 2 objects.
