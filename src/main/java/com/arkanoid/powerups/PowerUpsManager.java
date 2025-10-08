@@ -1,4 +1,4 @@
-package com.arkanoid.PowerUps;
+package com.arkanoid.powerups;
 
 import com.arkanoid.entities.Ball;
 import com.arkanoid.entities.Paddle;

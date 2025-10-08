@@ -1,6 +1,5 @@
-package com.arkanoid.PowerUps;
+package com.arkanoid.powerups;
 import com.arkanoid.core.MovableObject;
-import java.awt.*;
 
 /**
  * This class represents power-ups for the game.
