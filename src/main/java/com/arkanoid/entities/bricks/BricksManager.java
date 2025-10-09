@@ -1,5 +1,7 @@
 package com.arkanoid.entities.bricks;
 
+import com.arkanoid.entities.Ball;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -29,7 +31,7 @@ public class BricksManager {
                 if (current.getType().equals(Bricks.EXPLOSION)) {
                     for (int j = 0; j < bricksList.size(); j++){
                         Bricks check = bricksList.get(i);
-                        if(check != current && current.Distance(check) < Bricks.EXPLOSION_RADIUS) {
+                        if(check != current && current.distance(check) < Bricks.EXPLOSION_RADIUS) {
                             check.HPlost();
                         }
                     }
