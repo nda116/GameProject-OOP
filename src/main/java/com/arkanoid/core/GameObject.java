@@ -66,4 +66,18 @@ public abstract class GameObject {
                 y < other.y + other.height &&
                 y + height > other.y;
     }
+
+    /**
+     * Calculate distance between center of 2 GameObject.
+     * @param other other GameObject.
+     * @return distance between them.
+     */
+    public double distance (GameObject other) {
+        double centerX = (getX() + getWidth()) / 2;
+        double centerY = (getY() + getHeight()) / 2;
+        double otherCenterX = (other.getX() + other.getWidth()) / 2;
+        double otherCenterY = (other.getY() + other.getHeight()) / 2;
+        return Math.sqrt(Math.pow(otherCenterX - centerX, 2)
+                + Math.pow(otherCenterY - centerY, 2));
+    }
 }
