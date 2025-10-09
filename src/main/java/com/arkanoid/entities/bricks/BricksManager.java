@@ -16,8 +16,8 @@ public class BricksManager {
 
     private Random rand = new Random();
     private PowerUpsManager powerUpsManager;
-    private float powerUpDropChance = 0.1f; // bắt đầu 10%
-    private final float MAX_DROP_CHANCE = 0.9f; // tối đa 90%
+    private float powerUpDropChance = 0.1f; // start with 10%
+    private final float MAX_DROP_CHANCE = 0.9f; // maximum 90%
 
     public BricksManager(PowerUpsManager powerUpManager) {
         this.powerUpsManager = powerUpsManager;
@@ -26,8 +26,8 @@ public class BricksManager {
         powerUpDropChance = 0.1f;
     }
 
-    public void addBrick (Bricks new_Brick) {
-        bricksList.add(new_Brick);
+    public void addBrick (Bricks newBrick) {
+        bricksList.add(newBrick);
     }
 
     /**
