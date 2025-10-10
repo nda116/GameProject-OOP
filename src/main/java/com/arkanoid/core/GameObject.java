@@ -1,13 +1,13 @@
 package com.arkanoid.core;
 
-import javafx.scene.Group;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
 
 /**
  * class GameObject contains.
  * void update()
- * void render(Group) add imageView to tree Scene.
+ * void render(GraphicsContext) render GameObject.
  * boolean checkCollision (GameObject) check collision between 2 objects.
  * double distance (GameObject) Calculate distance between center of 2 GameObject.
  */
@@ -16,26 +16,13 @@ public abstract class GameObject {
     private double y;
     private double width;
     private double height;
-    private String imagePath;
-    private ImageView imageView;
+    private Image objectImage;
 
-    public GameObject(double x, double y, double width, double height, String imagePath) {
+    public GameObject(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.imagePath = imagePath;
-
-        Image image = new Image(getClass().getResourceAsStream(imagePath));
-        imageView = new ImageView(image);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        imageView.setX(x);
-        imageView.setY(y);
-    }
-
-    public ImageView getImageView() {
-        return imageView;
     }
 
     public double getX() {
@@ -70,21 +57,20 @@ public abstract class GameObject {
         this.width = width;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public Image getObjectImage() {
+        return objectImage;
+    }
+
+    public void setObjectImage(String imagePath) {
+        try {
+            objectImage = new Image(getClass().getResourceAsStream(imagePath));
+        } catch (Exception e) {
+            System.out.println("Can not find" + imagePath);
+        }
     }
 
     public abstract void update();
-
-    /**
-     * add imageView to tree Scene.
-     * @param root tree Scene.
-     */
-    public void render(Group root) {
-        if (!root.getChildren().contains(getImageView())) {
-            root.getChildren().add(getImageView());
-        }
-    }
+    public abstract void render(GraphicsContext gc);
 
     /**
      * check collision between 2 objects.
@@ -96,18 +82,5 @@ public abstract class GameObject {
                 x + width > other.x &&
                 y < other.y + other.height &&
                 y + height > other.y;
-    }
-
-    /**
-     * Calculate distance between center of 2 GameObject.
-     * @param other other GameObject.
-     * @return distance between them.
-     */
-    public double distance (GameObject other) {
-        double thiscenterX = (getX() + getWidth()) / 2;
-        double thiscenterY = (getY() + getHeight()) / 2;
-        double othercenterX = (other.getX() + other.getWidth()) / 2;
-        double othercenterY = (other.getY() + other.getHeight()) / 2;
-        return Math.sqrt(Math.pow(othercenterX - thiscenterX, 2) + Math.pow(othercenterY - thiscenterY, 2));
     }
 }

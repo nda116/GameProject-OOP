@@ -1,19 +1,23 @@
 package com.arkanoid.entities.bricks;
 
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * Constructor for NormalBricks.
  * String getImagePath(String) add imagePath base on color of the bricks.
  */
-public class NormalBricks extends Bricks {
+public class NormalBrick extends Brick {
     private String color;
     public static final String RED = "red";
     public static final String YELLOW = "yellow";
     public static final String BLUE = "blue";
 
-    public NormalBricks(double x, double y, double width, double height, String color) {
-        super(x, y, width, height, Bricks.NORMAL, getImagePath(color));
+    public NormalBrick(double x, double y, double width, double height, String color) {
+        super(x, y, width, height, Brick.NORMAL);
         this.color = color;
         setBrickHP(1);
+
+        setObjectImage(getImagePath(color));
     }
 
     /**
@@ -23,11 +27,11 @@ public class NormalBricks extends Bricks {
      */
     private static String getImagePath(String color) {
         if (color.equals(RED)) {
-            return "/bricks/Normal_Red.png";
+            return "/images/bricks/normal_red_brick.png";
         } else if (color.equals(YELLOW)) {
-            return "/bricks/Normal_Yellow.png";
+            return "/images/bricks/normal_yellow_brick.png";
         } else if (color.equals(BLUE)) {
-            return "/bricks/Normal_Blue.png";
+            return "/images/bricks/normal_blue_brick.png";
         } else {
             return "";
         }
@@ -40,5 +44,10 @@ public class NormalBricks extends Bricks {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    @Override
+    public void render(GraphicsContext gc) {
+        gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
     }
 }
