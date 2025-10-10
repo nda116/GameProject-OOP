@@ -25,7 +25,7 @@ public class Main extends Application {
     private Paddle paddle;
     private Ball ball;
 
-    private BricksManager level1;
+    private BrickManager level1;
 
     private boolean leftPressed = false;
     private boolean rightPressed = false;
@@ -85,7 +85,7 @@ public class Main extends Application {
         double ballY = CANVAS_HEIGHT / 2 - ballRadius;
         ball = new Ball(ballX, ballY, ballRadius, 5, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-        level1 = new BricksManager();
+        level1 = new BrickManager();
 
         int rows = 5;
         int cols = 10;

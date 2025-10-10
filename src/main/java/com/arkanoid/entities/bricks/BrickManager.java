@@ -2,8 +2,8 @@ package com.arkanoid.entities.bricks;
 
 import com.arkanoid.entities.Ball;
 import javafx.scene.canvas.GraphicsContext;
-import com.arkanoid.powerups.PowerUps;
-import com.arkanoid.powerups.PowerUpsManager;
+import com.arkanoid.powerups.PowerUp;
+import com.arkanoid.powerups.PowerUpManager;
 
 import java.util.*;
 import java.util.ArrayList;
@@ -17,11 +17,11 @@ import java.util.Random;
  * void updateBrickList () update brickList, remove bricks which have HP <= 0.
  * void renderBrickList(GraphicsContext) render bricks from bricksList.
  */
-public class BricksManager {
+public class BrickManager {
     private ArrayList<Brick> bricksList = new ArrayList<>();
 
     private Random rand = new Random();
-    private PowerUpsManager powerUpsManager;
+    private PowerUpManager powerUpsManager;
     private float powerUpDropChance = 0.1f; // start with 10%
     private final float MAX_DROP_CHANCE = 0.9f; // maximum 90%
 
@@ -105,7 +105,7 @@ public class BricksManager {
     public void onBrickDestroyed(Brick brick) {
         if (rand.nextFloat() < powerUpDropChance) {
             int type = rand.nextInt(2); //set up power
-            PowerUps p = new PowerUps(brick.getX(), brick.getY(), type);
+            PowerUp p = new PowerUp(brick.getX(), brick.getY(), type);
             if (powerUpsManager != null) {
                 powerUpsManager.addPowerUps(p);
             }

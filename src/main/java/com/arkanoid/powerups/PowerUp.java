@@ -7,14 +7,14 @@ import javafx.scene.canvas.GraphicsContext;
  * Each Power-Up is a movable object that falls from the position of a destroyed brick.
  * When it collides with the player's paddle, it triggers effect.
  */
-public class PowerUps extends MovableObject {
+public class PowerUp extends MovableObject {
     private int type;
     private boolean active = true;
 
     public static final int WIDTH = 20;
     public static final int HEIGHT = 20;
 
-    public PowerUps(double x, double y, int type) {
+    public PowerUp(double x, double y, int type) {
         super(x, y, WIDTH, HEIGHT,0 ,3);
         this.type = type;
     }

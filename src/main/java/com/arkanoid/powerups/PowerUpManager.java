@@ -10,8 +10,8 @@ import java.util.List;
  * Manage power-ups for the game.
  * This class stores and updates power-ups, check collision and activates power-ups.
  */
-public class PowerUpsManager {
-    private final ArrayList<PowerUps> powerUps = new ArrayList<>();
+public class PowerUpManager {
+    private final ArrayList<PowerUp> powerUps = new ArrayList<>();
     private Paddle paddle;
     private final List<Ball> balls;
     private int screenHeight = 600;
@@ -19,12 +19,12 @@ public class PowerUpsManager {
     private long doubleScoreStartTime;
     private static final long EFFECT_DURATION = 8000;
 
-    public PowerUpsManager(Paddle paddle, List<Ball> balls) {
+    public PowerUpManager(Paddle paddle, List<Ball> balls) {
         this.paddle = paddle;
         this.balls = balls;
     }
 
-    public void addPowerUps(PowerUps p) {
+    public void addPowerUps(PowerUp p) {
         powerUps.add(p);
     }
 
@@ -33,9 +33,9 @@ public class PowerUpsManager {
      * Check if power-ups falls down the screen or deactivated.
      */
     public void update() {
-        Iterator<PowerUps> it = powerUps.iterator();
+        Iterator<PowerUp> it = powerUps.iterator();
         while (it.hasNext()) {
-            PowerUps p = it.next();
+            PowerUp p = it.next();
             p.update();
 
             if (p.getY() > screenHeight || !p.isActive()) {
@@ -59,7 +59,7 @@ public class PowerUpsManager {
      *          third power-up: increase ball's speed
      * Random power-up will be picked when dropped
      */
-    private void applyEffect(PowerUps p) {
+    private void applyEffect(PowerUp p) {
         switch (p.getType()) {
             case 0:
                 new Thread(() -> {
@@ -88,7 +88,7 @@ public class PowerUpsManager {
         }
     }
 
-    public ArrayList<PowerUps> getPowerUps() {
+    public ArrayList<PowerUp> getPowerUps() {
         return powerUps;
     }
 }
