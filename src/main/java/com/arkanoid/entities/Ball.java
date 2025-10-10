@@ -19,8 +19,6 @@ public class Ball extends MovableObject {
     private final double screenWidth;
     private final double screenHeight;
 
-    private Image ballImage;
-
     public Ball(double x, double y, double radius, double speed,
                 double screenWidth, double screenHeight) {
         super(x, y, radius * 2, radius * 2, 0, 0);
@@ -28,11 +26,7 @@ public class Ball extends MovableObject {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
 
-        try {
-            ballImage = new Image(getClass().getResourceAsStream("/images/ball.png"));
-        } catch (Exception e) {
-            System.out.println("Can not find image ball.png");
-        }
+        setObjectImage("/images/ball.png");
 
         directionX = 0;
         directionY = 1;
@@ -187,7 +181,7 @@ public class Ball extends MovableObject {
 
     @Override
     public void render(GraphicsContext gc) {
-        gc.drawImage(ballImage, getX(), getY(), getWidth(), getHeight());
+        gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
 
         //System.out.println("Paddle: (" + getX() + ", " + getY() + ")");
     }

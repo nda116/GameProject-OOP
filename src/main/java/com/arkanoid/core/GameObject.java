@@ -1,17 +1,22 @@
 package com.arkanoid.core;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+
 
 /**
  * class GameObject contains.
  * void update()
- * boolean checkCollision (GameObject other)
+ * void render(GraphicsContext) render GameObject.
+ * boolean checkCollision (GameObject) check collision between 2 objects.
+ * double distance (GameObject) Calculate distance between center of 2 GameObject.
  */
 public abstract class GameObject {
     private double x;
     private double y;
     private double width;
     private double height;
+    private Image objectImage;
 
     public GameObject(double x, double y, double width, double height) {
         this.x = x;
@@ -52,6 +57,18 @@ public abstract class GameObject {
         this.width = width;
     }
 
+    public Image getObjectImage() {
+        return objectImage;
+    }
+
+    public void setObjectImage(String imagePath) {
+        try {
+            objectImage = new Image(getClass().getResourceAsStream(imagePath));
+        } catch (Exception e) {
+            System.out.println("Can not find" + imagePath);
+        }
+    }
+
     public abstract void update();
     public abstract void render(GraphicsContext gc);
 
@@ -65,19 +82,5 @@ public abstract class GameObject {
                 x + width > other.x &&
                 y < other.y + other.height &&
                 y + height > other.y;
-    }
-
-    /**
-     * Calculate distance between center of 2 GameObject.
-     * @param other other GameObject.
-     * @return distance between them.
-     */
-    public double distance (GameObject other) {
-        double centerX = (getX() + getWidth()) / 2;
-        double centerY = (getY() + getHeight()) / 2;
-        double otherCenterX = (other.getX() + other.getWidth()) / 2;
-        double otherCenterY = (other.getY() + other.getHeight()) / 2;
-        return Math.sqrt(Math.pow(otherCenterX - centerX, 2)
-                + Math.pow(otherCenterY - centerY, 2));
     }
 }
