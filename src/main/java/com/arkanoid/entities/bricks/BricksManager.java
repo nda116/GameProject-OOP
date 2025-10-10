@@ -2,8 +2,8 @@ package com.arkanoid.entities.bricks;
 
 import com.arkanoid.entities.Ball;
 import javafx.scene.canvas.GraphicsContext;
-import com.arkanoid.PowerUps.PowerUps;
-import com.arkanoid.PowerUps.PowerUpsManager;
+import com.arkanoid.powerups.PowerUps;
+import com.arkanoid.powerups.PowerUpsManager;
 
 import java.util.*;
 import java.util.ArrayList;
@@ -102,7 +102,7 @@ public class BricksManager {
         }
     }
 
-    public void onBrickDestroyed(Bricks brick) {
+    public void onBrickDestroyed(Brick brick) {
         if (rand.nextFloat() < powerUpDropChance) {
             int type = rand.nextInt(2); //set up power
             PowerUps p = new PowerUps(brick.getX(), brick.getY(), type);
