@@ -1,5 +1,6 @@
 package com.arkanoid.powerups;
 import com.arkanoid.core.MovableObject;
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * This class represents power-ups for the game.
@@ -23,9 +24,8 @@ public class PowerUps extends MovableObject {
         move();
     }
 
-    @Override
-    public void render() {
-
+    public void render(GraphicsContext gc) {
+        gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
     }
 
     public boolean isActive() {

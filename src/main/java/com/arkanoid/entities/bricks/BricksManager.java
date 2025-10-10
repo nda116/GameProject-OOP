@@ -25,9 +25,9 @@ public class BricksManager {
     private float powerUpDropChance = 0.1f; // start with 10%
     private final float MAX_DROP_CHANCE = 0.9f; // maximum 90%
 
-    public BricksManager(PowerUpsManager powerUpManager) {
+    /*public BricksManager(PowerUpsManager powerUpManager) {
         this.powerUpsManager = powerUpsManager;
-    }
+    }*/
     public void resetDropChance() {
         powerUpDropChance = 0.1f;
     }
