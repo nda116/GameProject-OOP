@@ -1,18 +1,24 @@
 package com.arkanoid.entities.bricks;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.arkanoid.entities.Ball;
+import javafx.scene.canvas.GraphicsContext;
 import com.arkanoid.PowerUps.PowerUps;
 import com.arkanoid.PowerUps.PowerUpsManager;
 
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+/**
+ * void addBrick(Bricks) add new brick to brickList.
+ * void updateBrickHP(Ball) update bricks HP in brickList.
+ * void explosionTrigger (Brick) Triggers a chain explosion starting from the specified brick.
+ * void updateBrickList () update brickList, remove bricks which have HP <= 0.
+ * void renderBrickList(GraphicsContext) render bricks from bricksList.
+ */
 public class BricksManager {
-    private ArrayList<Bricks> bricksList = new ArrayList<>();
+    private ArrayList<Brick> bricksList = new ArrayList<>();
 
     private Random rand = new Random();
     private PowerUpsManager powerUpsManager;
@@ -26,7 +32,7 @@ public class BricksManager {
         powerUpDropChance = 0.1f;
     }
 
-    public void addBrick (Bricks newBrick) {
+    public void addBrick (Brick newBrick) {
         bricksList.add(newBrick);
     }
 
@@ -34,19 +40,38 @@ public class BricksManager {
      * update bricks HP in brickList.
      * minus HP if collision between ball and brick occur.
      * if brick type is EXPLOSION, minus HP of surround bricks.
-     * @param ball Movable Object.
+     * @param ball ball.
      */
     public void updateBrickHP(Ball ball) {
         for (int i = 0; i < bricksList.size(); i++) {
-            Bricks current = bricksList.get(i);
+            Brick current = bricksList.get(i);
             if (current.checkCollision(ball)) {
                 current.HPlost();
-                if (current.getType().equals(Bricks.EXPLOSION)) {
-                    for (int j = 0; j < bricksList.size(); j++){
-                        Bricks check = bricksList.get(i);
-                        if(check != current && current.Distance(check) < Bricks.EXPLOSION_RADIUS) {
-                            check.HPlost();
-                        }
+                ball.bounceOff(current);
+                if (current.getType().equals(Brick.EXPLOSION)) {
+                    explosionTrigger(current);
+                }
+            }
+        }
+    }
+
+    /**
+     * Triggers a chain explosion starting from the specified brick.
+     * @param start start of the chain explosion.
+     */
+    private void explosionTrigger (Brick start) {
+        Queue<Brick> explosionQueue = new ArrayDeque<>();
+        explosionQueue.add(start);
+
+        while (!explosionQueue.isEmpty()) {
+            Brick current = explosionQueue.poll();
+
+            for (int j = 0; j < bricksList.size(); j++){
+                Brick check = bricksList.get(j);
+                if(check.getBrickHP() > 0 && current.isAdjacent(check)) {
+                    check.HPlost();
+                    if(check.getType().equals(Brick.EXPLOSION)) {
+                        explosionQueue.add(check);
                     }
                 }
             }
@@ -56,13 +81,24 @@ public class BricksManager {
     /**
      * update brickList, remove bricks which have HP <= 0.
      */
-    public void updateBrickList () {
-        Iterator<Bricks> it = bricksList.iterator();
+    public void updateBrickList() {
+        Iterator<Brick> it = bricksList.iterator();
+
         while(it.hasNext()) {
-            Bricks b = it.next();
+            Brick b = it.next();
             if (b.getBrickHP() <= 0) {
                 it.remove();
             }
+        }
+    }
+
+    /**
+     * render bricks from bricksList.
+     * @param gc GraphicContext.
+     */
+    public void renderBrickList(GraphicsContext gc) {
+        for (int i = 0; i < bricksList.size(); i++) {
+            bricksList.get(i).render(gc);
         }
     }
 
@@ -81,4 +117,3 @@ public class BricksManager {
         }
     }
 }
-

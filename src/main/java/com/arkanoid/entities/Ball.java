@@ -3,6 +3,9 @@ package com.arkanoid.entities;
 import com.arkanoid.core.MovableObject;
 import com.arkanoid.core.GameObject;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+
 /**
  * class Ball contains.
  * void updateVelocity()
@@ -22,6 +25,8 @@ public class Ball extends MovableObject {
         this.speed = speed;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
+
+        setObjectImage("/images/ball.png");
 
         directionX = 0;
         directionY = 1;
@@ -175,7 +180,9 @@ public class Ball extends MovableObject {
     }
 
     @Override
-    public void render() {
+    public void render(GraphicsContext gc) {
+        gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
 
+        //System.out.println("Paddle: (" + getX() + ", " + getY() + ")");
     }
 }

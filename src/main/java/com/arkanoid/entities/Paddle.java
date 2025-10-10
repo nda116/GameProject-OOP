@@ -2,6 +2,9 @@ package com.arkanoid.entities;
 
 import com.arkanoid.core.MovableObject;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+
 /**
  * class Paddle contains.
  * void moveLeft(), void moveRight()
@@ -15,6 +18,8 @@ public class Paddle extends MovableObject {
         super(x, y, width, height, 0, 0);
         this.speed = speed;
         this.screenWidth = screenWidth;
+
+        setObjectImage("/images/paddle/normal_paddle.png");
     }
 
     public double getSpeed() {
@@ -48,7 +53,9 @@ public class Paddle extends MovableObject {
     }
 
     @Override
-    public void render() {
+    public void render(GraphicsContext gc) {
+        gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
 
+        //System.out.println("Ball: (" + getX() + ", " + getY() + ")");
     }
 }
