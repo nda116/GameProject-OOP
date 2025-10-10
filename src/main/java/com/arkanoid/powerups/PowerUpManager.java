@@ -11,7 +11,7 @@ import java.util.List;
  * This class stores and updates power-ups, check collision and activates power-ups.
  */
 public class PowerUpManager {
-    private final ArrayList<PowerUp> powerUps = new ArrayList<>();
+    private final ArrayList<PowerUp> powerUp = new ArrayList<>();
     private Paddle paddle;
     private final List<Ball> balls;
     private int screenHeight = 600;
@@ -25,7 +25,7 @@ public class PowerUpManager {
     }
 
     public void addPowerUps(PowerUp p) {
-        powerUps.add(p);
+        powerUp.add(p);
     }
 
     /**
@@ -33,7 +33,7 @@ public class PowerUpManager {
      * Check if power-ups falls down the screen or deactivated.
      */
     public void update() {
-        Iterator<PowerUp> it = powerUps.iterator();
+        Iterator<PowerUp> it = powerUp.iterator();
         while (it.hasNext()) {
             PowerUp p = it.next();
             p.update();
@@ -89,6 +89,6 @@ public class PowerUpManager {
     }
 
     public ArrayList<PowerUp> getPowerUps() {
-        return powerUps;
+        return powerUp;
     }
 }
