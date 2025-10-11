@@ -46,7 +46,7 @@ public class Paddle extends MovableObject {
      * Stops the paddle's horizontal movement.
      */
     public void stop() {
-        dx = 0;
+        setDx(0);
     }
 
     @Override

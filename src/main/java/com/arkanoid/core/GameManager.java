@@ -27,11 +27,9 @@ public class GameManager {
     private GameState gameState;
     private int level;
 
-    // Screen dimensions
     private double screenWidth;
     private double screenHeight;
 
-    // View
     private GameView gameView;
 
     // Game loop
@@ -41,11 +39,9 @@ public class GameManager {
     private Set<KeyCode> pressedKeys;
 
     // Power-up timing
-    private PowerUp activePowerUp;
+    private PowerUp powerUp;
     private double powerUpTimer;
-    private double originalBallSpeed;
 
-    // Constants
     private static final int LIVES = 3;
     private static final int BRICK_ROWS = 5;
     private static final int BRICK_COLS = 10;
@@ -92,13 +88,11 @@ public class GameManager {
         this.screenHeight = height;
         this.gameView = view;
 
-        // Initialize game state
         score = 0;
         lives = LIVES;
         level = 1;
         gameState = GameState.READY;
-
-        // Create game objects
+        
         initGameObjects();
     }
 
@@ -134,7 +128,7 @@ public class GameManager {
         double brickWidth = 15 * 5;
         double brickHeight = 7.5 * 5;
         double offsetX = 25;
-        double offsetY = 20;
+        double offsetY = 60;
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {

@@ -1,157 +1,61 @@
 package com.arkanoid;
 
-import com.arkanoid.entities.Ball;
-import com.arkanoid.entities.Paddle;
-import com.arkanoid.entities.bricks.*;
-
-import com.arkanoid.entities.bricks.ExplosionBrick;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import com.arkanoid.core.GameManager;
+import com.arkanoid.core.GameView;
 
+/**
+ * Main application class for the Arkanoid game.
+ * Initializes the game window and starts the game loop.
+ *
+ */
 public class Main extends Application {
-    private static final int CANVAS_WIDTH = 800;
-    private static final int CANVAS_HEIGHT = 600;
+    private static final int WINDOW_WIDTH = 800;
+    private static final int WINDOW_HEIGHT = 600;
+    private static final String GAME_TITLE = "Arkanoid Game";
 
-    private Canvas canvas;
-    private GraphicsContext gc;
-
-    private Paddle paddle;
-    private Ball ball;
-
-    private BrickManager level1;
-
-    private boolean leftPressed = false;
-    private boolean rightPressed = false;
+    private GameManager gameManager;
+    private GameView gameView;
 
     @Override
     public void start(Stage primaryStage) {
-        canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-        gc = canvas.getGraphicsContext2D();
+        gameView = new GameView(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        initGameObjects();
+        // Initialize game manager with view
+        gameManager = GameManager.getInstance();
+        gameManager.init(WINDOW_WIDTH, WINDOW_HEIGHT, gameView);
 
-        StackPane root = new StackPane(canvas);
-        Scene scene = new Scene(root, CANVAS_WIDTH, CANVAS_HEIGHT);
+        // Create scene
+        Scene scene = new Scene(gameView.getRoot(), WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.LEFT) {
-                leftPressed = true;
-            }
-            if (e.getCode() == KeyCode.RIGHT) {
-                rightPressed = true;
-            }
-        });
+        // Set up input handling
+        scene.setOnKeyPressed(event -> gameManager.handleInput(event.getCode(), true));
+        scene.setOnKeyReleased(event -> gameManager.handleInput(event.getCode(), false));
 
-        scene.setOnKeyReleased(e -> {
-            if (e.getCode() == KeyCode.LEFT) {
-                leftPressed = false;
-            }
-            if (e.getCode() == KeyCode.RIGHT) {
-                rightPressed = false;
-            }
-        });
-
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                update();
-                render();
-            }
-        };
-        timer.start();
-
-        primaryStage.setTitle("Arkanoid Game");
+        // Configure stage
+        primaryStage.setTitle(GAME_TITLE);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        // Start the game
+        gameManager.start();
     }
 
-    private void initGameObjects() {
-        double paddleWidth = 150;
-        double paddleHeight = 25;
-        double paddleX = (CANVAS_WIDTH - paddleWidth) / 2;
-        double paddleY = CANVAS_HEIGHT - 50;
-        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 8, CANVAS_WIDTH);
-
-        double ballRadius = 20;
-        double ballX = CANVAS_WIDTH / 2 - ballRadius;
-        double ballY = CANVAS_HEIGHT / 2 - ballRadius;
-        ball = new Ball(ballX, ballY, ballRadius, 5, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-        level1 = new BrickManager();
-
-        int rows = 5;
-        int cols = 10;
-        double brickWidth = 15 * 5;
-        double brickHeight = 7.5 * 5;
-        double offsetX = 25;
-        double offsetY = 20;
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                double x = offsetX + col * (brickWidth);
-                double y = offsetY + row * (brickHeight);
-
-                if (row == rows - 1 && col % 2 == 0) {
-                    level1.addBrick(new ExplosionBrick(x, y, brickWidth, brickHeight));
-                } else if (row == 2 && col % 2 == 0) {
-                    level1.addBrick(new InvincibleBrick(x, y, brickWidth, brickHeight));
-                } else if ((row + col) % 3 == 0) {
-                    level1.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.YELLOW));
-                } else if ((row + col) % 3 == 1) {
-                    level1.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.RED));
-                } else {
-                    level1.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.BLUE));
-                }
-            }
+    @Override
+    public void stop() {
+        if (gameManager != null) {
+            gameManager.stop();
         }
     }
 
-    private void update() {
-        if (leftPressed) {
-            paddle.moveLeft();
-        }
-        if (rightPressed) {
-            paddle.moveRight();
-        }
-
-        paddle.update();
-
-        ball.update();
-
-        if (ball.checkCollision(paddle)) {
-            ball.bounceOffPaddle(paddle);
-        }
-
-
-
-        // Check collision with bricks
-        level1.updateBrickHP(ball);
-        level1.updateBrickList();
-
-        if (ball.isOutOfBounds()) {
-            ball.reset(CANVAS_WIDTH / 2 - ball.getWidth() / 2, CANVAS_HEIGHT / 2
-                    - ball.getHeight() / 2);
-        }
-    }
-
-    private void render() {
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-        level1.renderBrickList(gc);
-
-        paddle.render(gc);
-        ball.render(gc);
-    }
-
+    /**
+     * Main entry point for the application.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }

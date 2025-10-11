@@ -1,6 +1,5 @@
 package com.arkanoid.core;
 
-import com.arkanoid.core.GameManager;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
@@ -38,7 +37,6 @@ public class GameView {
 
         root.getChildren().add(canvas);
 
-        // Initial clear
         clear();
     }
 
@@ -81,7 +79,6 @@ public class GameView {
                     canvas.getWidth() - 10, 45);
         }
 
-        // Game state messages
         renderGameStateMessage(gameState);
     }
 
