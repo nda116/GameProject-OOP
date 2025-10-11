@@ -111,7 +111,6 @@ public class GameView {
                 break;
 
             case GAME_OVER:
-                // Semi-transparent overlay
                 gc.setFill(Color.rgb(0, 0, 0, 0.7));
                 gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
@@ -145,13 +144,5 @@ public class GameView {
 
     public GraphicsContext getGraphicsContext() {
         return gc;
-    }
-
-    public double getWidth() {
-        return canvas.getWidth();
-    }
-
-    public double getHeight() {
-        return canvas.getHeight();
     }
 }

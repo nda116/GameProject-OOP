@@ -108,7 +108,7 @@ public class GameManager {
         paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 8, screenWidth);
 
         // Create ball
-        double ballRadius = 20;
+        double ballRadius = 16;
         double ballX = screenWidth / 2 - ballRadius;
         double ballY = screenHeight / 2 - ballRadius;
         ball = new Ball(ballX, ballY, ballRadius, 5, screenWidth, screenHeight);
