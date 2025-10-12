@@ -1,13 +1,11 @@
 package com.arkanoid.entities.bricks;
 
 import javafx.scene.canvas.GraphicsContext;
-import com.arkanoid.powerups.PowerUp;
 import com.arkanoid.powerups.PowerUpManager;
 
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * void addBrick(Bricks) add new brick to brickList.
@@ -65,12 +63,13 @@ public class BrickManager {
     /**
      * update brickList, remove bricks which have HP <= 0.
      */
-    public void updateBrickList(PowerUpManager powerupmanager) {
+    public void updateBrickList(PowerUpManager powerupmanager, int score) {
         Iterator<Brick> it = bricksList.iterator();
 
         while(it.hasNext()) {
             Brick brick = it.next();
             if (brick.getBrickHP() <= 0) {
+                score += brick.getBrickScore();
                 it.remove();
                 if (brick.getType() == Brick.NORMAL) {
                     ((NormalBrick) brick).dropPowerUp(powerupmanager);

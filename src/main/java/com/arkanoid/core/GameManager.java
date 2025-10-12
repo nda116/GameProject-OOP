@@ -20,6 +20,7 @@ public class GameManager {
     private Scene scene;
     private GraphicsContext gc;
 
+    private int score;
     private Paddle paddle;
     private BallManager ballmanager;
     private BrickManager brickmanager;
@@ -152,7 +153,7 @@ public class GameManager {
             }
         }
 
-        brickmanager.updateBrickList(powerupmanager);
+        brickmanager.updateBrickList(powerupmanager, score);
         ballmanager.updateBallList();
         powerupmanager.updatePowerUpList();
 

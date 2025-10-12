@@ -2,14 +2,13 @@ package com.arkanoid.entities.bricks;
 
 import com.arkanoid.core.GameObject;
 
-import java.util.logging.XMLFormatter;
-
 /**
  * void HPlost() Minus HP of brick.
  * boolean isAdjacent(Brick) check adjacent between 2 Bricks.
  */
 public abstract class Brick extends GameObject {
     private int brickHP;
+    private int brickScore;
     private int type;
     public static final int NORMAL = 0;
     public static final int INVINCIBLE = 1;
@@ -35,6 +34,14 @@ public abstract class Brick extends GameObject {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getBrickScore() {
+        return brickScore;
+    }
+
+    public void setBrickScore(int brickScore) {
+        this.brickScore = brickScore;
     }
 
     /**

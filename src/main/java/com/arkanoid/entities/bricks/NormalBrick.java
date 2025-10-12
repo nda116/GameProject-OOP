@@ -22,9 +22,9 @@ public class NormalBrick extends Brick {
     public NormalBrick(double x, double y, double width, double height, String color) {
         super(x, y, width, height, Brick.NORMAL);
         this.color = color;
-        setBrickHP(1);
 
-        setObjectImage(getImagePath(color));
+        setBrickHP(1);
+        setObjectImage(setBrickstat(color));
     }
 
     /**
@@ -32,12 +32,15 @@ public class NormalBrick extends Brick {
      * @param color color of the bricks.
      * @return string imagePath.
      */
-    private static String getImagePath(String color) {
+    private String setBrickstat(String color) {
         if (color.equals(RED)) {
+            setBrickScore(50);
             return "/images/bricks/normal_red_brick.png";
         } else if (color.equals(YELLOW)) {
+            setBrickScore(60);
             return "/images/bricks/normal_yellow_brick.png";
         } else if (color.equals(BLUE)) {
+            setBrickScore(70);
             return "/images/bricks/normal_blue_brick.png";
         } else {
             return "";
