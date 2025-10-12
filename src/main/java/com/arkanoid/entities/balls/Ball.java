@@ -6,6 +6,9 @@ import com.arkanoid.entities.Paddle;
 
 import javafx.scene.canvas.GraphicsContext;
 
+import static com.arkanoid.Main.WINDOW_HEIGHT;
+import static com.arkanoid.Main.WINDOW_WIDTH;
+
 /**
  * class Ball contains.
  * void updateVelocity()
@@ -15,16 +18,11 @@ import javafx.scene.canvas.GraphicsContext;
 public class Ball extends MovableObject {
     private double speed;
     private double directionX;
-    private double directionY;
-    private final double screenWidth;
-    private final double screenHeight;
+    private double directionY;;
 
-    public Ball(double x, double y, double radius, double speed,
-                double screenWidth, double screenHeight) {
+    public Ball(double x, double y, double radius, double speed) {
         super(x, y, radius * 2, radius * 2, 0, 0);
         this.speed = speed;
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
 
         setObjectImage("/images/ball.png");
 
@@ -140,7 +138,7 @@ public class Ball extends MovableObject {
      * @return true if ball is out of bounds, false otherwise
      */
     public boolean isOutOfBounds() {
-        return getY() > screenHeight;
+        return getY() > WINDOW_HEIGHT;
     }
 
     /**
@@ -163,10 +161,10 @@ public class Ball extends MovableObject {
         move();
 
         // Collision with left and right walls
-        if (getX() <= 0 || getX() + getWidth() >= screenWidth) {
+        if (getX() <= 0 || getX() + getWidth() >= WINDOW_WIDTH) {
             directionX = -directionX;
             updateVelocity();
-            setX(Math.max(0, Math.min(getX(), screenWidth - getWidth())));
+            setX(Math.max(0, Math.min(getX(), WINDOW_WIDTH - getWidth())));
         }
 
         // Collision with top wall

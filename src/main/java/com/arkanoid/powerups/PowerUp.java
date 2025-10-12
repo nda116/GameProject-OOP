@@ -4,7 +4,8 @@ import com.arkanoid.core.MovableObject;
 import com.arkanoid.entities.Paddle;
 import com.arkanoid.entities.balls.BallManager;
 
-import static com.arkanoid.core.GameManager.CANVAS_HEIGHT;
+import static com.arkanoid.Main.WINDOW_HEIGHT;
+
 
 /**
  * This class represents power-ups for the game.
@@ -30,7 +31,7 @@ public abstract class PowerUp extends MovableObject {
      */
     public void update() {
         move();
-        if (getY() > CANVAS_HEIGHT) {
+        if (getY() > WINDOW_HEIGHT) {
             stopFalling();
         }
     }

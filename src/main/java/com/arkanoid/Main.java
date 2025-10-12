@@ -12,8 +12,8 @@ import com.arkanoid.core.GameView;
  *
  */
 public class Main extends Application {
-    private static final int WINDOW_WIDTH = 800;
-    private static final int WINDOW_HEIGHT = 600;
+    public static final int WINDOW_WIDTH = 800;
+    public static final int WINDOW_HEIGHT = 600;
     private static final String GAME_TITLE = "Arkanoid Game";
 
     private GameManager gameManager;
@@ -25,7 +25,7 @@ public class Main extends Application {
 
         // Initialize game manager with view
         gameManager = GameManager.getInstance();
-        gameManager.init(WINDOW_WIDTH, WINDOW_HEIGHT, gameView);
+        gameManager.init(gameView);
 
         // Create scene
         Scene scene = new Scene(gameView.getRoot(), WINDOW_WIDTH, WINDOW_HEIGHT);

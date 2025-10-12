@@ -15,7 +15,7 @@ import java.util.Iterator;
  * void renderBrickList(GraphicsContext) render bricks from bricksList.
  */
 public class BrickManager {
-    private ArrayList<Brick> bricksList = new ArrayList<>();
+    private final ArrayList<Brick> bricksList = new ArrayList<>();
 
     public void addBrick (Brick newBrick) {
         bricksList.add(newBrick);
@@ -49,7 +49,7 @@ public class BrickManager {
         while (!explosionQueue.isEmpty()) {
             Brick current = explosionQueue.poll();
 
-            for (Brick brick : bricksList){;
+            for (Brick brick : bricksList){
                 if(brick.getBrickHP() > 0 && current.isAdjacent(brick)) {
                     brick.HPlost();
                     if(brick.getType() == Brick.EXPLOSION) {
