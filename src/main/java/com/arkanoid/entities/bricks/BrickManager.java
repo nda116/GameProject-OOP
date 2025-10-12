@@ -1,14 +1,11 @@
 package com.arkanoid.entities.bricks;
 
-import com.arkanoid.entities.Ball;
 import javafx.scene.canvas.GraphicsContext;
-import com.arkanoid.powerups.PowerUp;
 import com.arkanoid.powerups.PowerUpManager;
 
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * void addBrick(Bricks) add new brick to brickList.
@@ -20,38 +17,24 @@ import java.util.Random;
 public class BrickManager {
     private ArrayList<Brick> bricksList = new ArrayList<>();
 
-    private Random rand = new Random();
-    private PowerUpManager powerUpsManager;
-    private float powerUpDropChance = 0.1f; // start with 10%
-    private final float MAX_DROP_CHANCE = 0.9f; // maximum 90%
-
-    /*public BricksManager(PowerUpsManager powerUpManager) {
-        this.powerUpsManager = powerUpsManager;
-    }*/
-    public void resetDropChance() {
-        powerUpDropChance = 0.1f;
-    }
-
     public void addBrick (Brick newBrick) {
         bricksList.add(newBrick);
+    }
+
+    public ArrayList<Brick> getBricksList() {
+        return bricksList;
     }
 
     /**
      * update bricks HP in brickList.
      * minus HP if collision between ball and brick occur.
      * if brick type is EXPLOSION, minus HP of surround bricks.
-     * @param ball ball.
+     * @param brick brick to updateHP.
      */
-    public void updateBrickHP(Ball ball) {
-        for (int i = 0; i < bricksList.size(); i++) {
-            Brick current = bricksList.get(i);
-            if (current.checkCollision(ball)) {
-                current.HPlost();
-                ball.bounceOff(current);
-                if (current.getType().equals(Brick.EXPLOSION)) {
-                    explosionTrigger(current);
-                }
-            }
+    public void updateBrickHP(Brick brick) {
+        brick.HPlost();
+        if (brick.getType() == Brick.EXPLOSION) {
+            explosionTrigger(brick);
         }
     }
 
@@ -66,12 +49,11 @@ public class BrickManager {
         while (!explosionQueue.isEmpty()) {
             Brick current = explosionQueue.poll();
 
-            for (int j = 0; j < bricksList.size(); j++){
-                Brick check = bricksList.get(j);
-                if(check.getBrickHP() > 0 && current.isAdjacent(check)) {
-                    check.HPlost();
-                    if(check.getType().equals(Brick.EXPLOSION)) {
-                        explosionQueue.add(check);
+            for (Brick brick : bricksList){;
+                if(brick.getBrickHP() > 0 && current.isAdjacent(brick)) {
+                    brick.HPlost();
+                    if(brick.getType() == Brick.EXPLOSION) {
+                        explosionQueue.add(brick);
                     }
                 }
             }
@@ -81,13 +63,17 @@ public class BrickManager {
     /**
      * update brickList, remove bricks which have HP <= 0.
      */
-    public void updateBrickList() {
+    public void updateBrickList(PowerUpManager powerupmanager, int score) {
         Iterator<Brick> it = bricksList.iterator();
 
         while(it.hasNext()) {
-            Brick b = it.next();
-            if (b.getBrickHP() <= 0) {
+            Brick brick = it.next();
+            if (brick.getBrickHP() <= 0) {
+                score += brick.getBrickScore();
                 it.remove();
+                if (brick.getType() == Brick.NORMAL) {
+                    ((NormalBrick) brick).dropPowerUp(powerupmanager);
+                }
             }
         }
     }
@@ -97,23 +83,8 @@ public class BrickManager {
      * @param gc GraphicContext.
      */
     public void renderBrickList(GraphicsContext gc) {
-        for (int i = 0; i < bricksList.size(); i++) {
-            bricksList.get(i).render(gc);
-        }
-    }
-
-    public void onBrickDestroyed(Brick brick) {
-        if (rand.nextFloat() < powerUpDropChance) {
-            int type = rand.nextInt(2); //set up power
-            PowerUp p = new PowerUp(brick.getX(), brick.getY(), type);
-            if (powerUpsManager != null) {
-                powerUpsManager.addPowerUps(p);
-            }
-        }
-
-        powerUpDropChance += 0.2f;
-        if (powerUpDropChance > MAX_DROP_CHANCE) {
-            powerUpDropChance = MAX_DROP_CHANCE;
+        for (Brick brick : bricksList) {
+            brick.render(gc);
         }
     }
 }

@@ -1,43 +1,56 @@
 package com.arkanoid.powerups;
+
 import com.arkanoid.core.MovableObject;
-import javafx.scene.canvas.GraphicsContext;
+import com.arkanoid.entities.Paddle;
+import com.arkanoid.entities.balls.BallManager;
+
+import static com.arkanoid.core.GameManager.CANVAS_HEIGHT;
 
 /**
  * This class represents power-ups for the game.
- * Each Power-Up is a movable object that falls from the position of a destroyed brick.
- * When it collides with the player's paddle, it triggers effect.
+ * applyEffect(Paddle, BallManager) apply effect on balls and paddle base on type of powerup.
  */
-public class PowerUp extends MovableObject {
+public abstract class PowerUp extends MovableObject {
     private int type;
-    private boolean active = true;
-
-    public static final int WIDTH = 20;
-    public static final int HEIGHT = 20;
+    private boolean falling = true;
+    private static final int WIDTH = 30;
+    private static final int HEIGHT = 30;
+    public static final int EXPAND = 0;
+    public static final int SLOWBALL = 1;
+    public static final int FASTBALL = 2;
 
     public PowerUp(double x, double y, int type) {
-        super(x, y, WIDTH, HEIGHT,0 ,3);
+        super(x, y, WIDTH, HEIGHT,0 ,1);
         this.type = type;
     }
 
-
+    /**
+     * update position of powerup.
+     * set isFalling to false if powerup out bound.
+     */
     public void update() {
         move();
+        if (getY() > CANVAS_HEIGHT) {
+            stopFalling();
+        }
     }
 
-    public void render(GraphicsContext gc) {
-        gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
+    public boolean isFalling() {
+        return falling;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void deactivate() {
-        active = false;
+    public void stopFalling() {
+        falling = false;
     }
 
     public int getType() {
         return type;
     }
 
+    /**
+     * Apply certain effect for the power-up
+     * @param paddle: paddle applied effect.
+     * @param ballmanager: balls applied effect.
+     */
+    public abstract void applyEffect(Paddle paddle, BallManager ballmanager);
 }

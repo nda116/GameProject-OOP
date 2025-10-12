@@ -1,94 +1,63 @@
 package com.arkanoid.powerups;
 
-import com.arkanoid.entities.Ball;
-import com.arkanoid.entities.Paddle;
+import javafx.scene.canvas.GraphicsContext;
+
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Manage power-ups for the game.
- * This class stores and updates power-ups, check collision and activates power-ups.
+ * void addPowerUps(PowerUp newPowerup) add new powerup to powerupsList.
+ * void updatePowerUp() update powerups from powerupsList.
+ * void updatePowerUpList() Update powerupsList.
+ * void renderPowerUpList(GraphicsContext gc) render powerups from powerupsList.
  */
 public class PowerUpManager {
-    private final ArrayList<PowerUp> powerUp = new ArrayList<>();
-    private Paddle paddle;
-    private final List<Ball> balls;
-    private int screenHeight = 600;
-
+    private final ArrayList<PowerUp> powerupList = new ArrayList<>();
     private long doubleScoreStartTime;
-    private static final long EFFECT_DURATION = 8000;
 
-    public PowerUpManager(Paddle paddle, List<Ball> balls) {
-        this.paddle = paddle;
-        this.balls = balls;
-    }
-
-    public void addPowerUps(PowerUp p) {
-        powerUp.add(p);
+    public ArrayList<PowerUp> getPowerupList() {
+        return powerupList;
     }
 
     /**
-     * Update power-ups.
-     * Check if power-ups falls down the screen or deactivated.
+     * add new powerup to powerupsList.
+     * @param newPowerup new powerup.
      */
-    public void update() {
-        Iterator<PowerUp> it = powerUp.iterator();
+    public void addPowerUps(PowerUp newPowerup) {
+        powerupList.add(newPowerup);
+    }
+
+    /**
+     * update powerups from powerupsList.
+     */
+    public void updatePowerUp() {
+        for (PowerUp powerup : powerupList) {
+            powerup.update();
+        }
+    }
+
+    /**
+     * Update powerupsList.
+     * Remove powerups from powerupsList if is Falling false.
+     */
+    public void updatePowerUpList() {
+        Iterator<PowerUp> it = powerupList.iterator();
         while (it.hasNext()) {
             PowerUp p = it.next();
-            p.update();
-
-            if (p.getY() > screenHeight || !p.isActive()) {
-                it.remove();
-                continue;
-            }
-
-            if (p.checkCollision(paddle)) {
-                applyEffect(p);
-                p.deactivate();
+            if (!p.isFalling()) {
                 it.remove();
             }
         }
     }
 
     /**
-     * Apply certain effect for the power-up
-     * @param p power-ups
-     *          first power-up: extend paddle
-     *          second power-up: decrease ball's speed
-     *          third power-up: increase ball's speed
-     * Random power-up will be picked when dropped
+     * render powerups from powerupsList.
+     * @param gc GraphicContext.
      */
-    private void applyEffect(PowerUp p) {
-        switch (p.getType()) {
-            case 0:
-                new Thread(() -> {
-                    double originalWidth = paddle.getWidth();
-                    paddle.setWidth(originalWidth * 1.5);
-                    try {
-                        Thread.sleep(EFFECT_DURATION);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    paddle.setWidth(originalWidth);
-                }).start();
-                break;
-            case 1:
-                for (Ball b : balls) {
-                    b.setSpeed(b.getSpeed() * 0.7);
-                }
-                break;
-            case 2:
-                for (Ball b : balls) {
-                    b.setSpeed(b.getSpeed() * 1.6);
-                }
-                break;
-            default:
-                System.err.println("Unknown powerup type: " + p.getType());
+    public void renderPowerUpList(GraphicsContext gc) {
+        for (PowerUp powerUp : powerupList) {
+            powerUp.render(gc);
         }
-    }
-
-    public ArrayList<PowerUp> getPowerUps() {
-        return powerUp;
     }
 }

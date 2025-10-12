@@ -1,10 +1,10 @@
-package com.arkanoid.entities;
+package com.arkanoid.entities.balls;
 
 import com.arkanoid.core.MovableObject;
 import com.arkanoid.core.GameObject;
+import com.arkanoid.entities.Paddle;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 /**
  * class Ball contains.
@@ -29,8 +29,17 @@ public class Ball extends MovableObject {
         setObjectImage("/images/ball.png");
 
         directionX = 0;
-        directionY = 1;
+        directionY = 0;
         updateVelocity();
+    }
+
+    /**
+     * set Ball position to middle of paddle
+     * @param paddle paddle.
+     */
+    public void setDefaultBall(Paddle paddle) {
+        setX(paddle.getX() + (paddle.getWidth() - getWidth()) / 2);
+        setY(paddle.getY() - getHeight());
     }
 
     /**
@@ -70,111 +79,59 @@ public class Ball extends MovableObject {
 
     /**
      * Handles bouncing off another GameObject.
-     * Determines the collision side by overlap (minimum translation)
-     * and reverses the appropriate direction. Handles corner collisions
-     * by reflecting both axes.
+     * Determines the collision side and reverses the appropriate direction.
      *
      * @param other The GameObject to bounce off from
      */
     public void bounceOff(GameObject other) {
-        if (!checkCollision(other)) return;
+        // Calculate collision position
+        double aLeft = getX(), aRight = getX() + getWidth();
+        double aTop = getY(), aBottom = getY() + getHeight();
 
-        final double PUSH_EPS = 0.01; // small push to avoid sticking
+        double bLeft = other.getX(), bRight = other.getX() + other.getWidth();
+        double bTop = other.getY(), bBottom = other.getY() + other.getHeight();
 
-        double ballLeft   = getX();
-        double ballRight  = getX() + getWidth();
-        double ballTop    = getY();
-        double ballBottom = getY() + getHeight();
+        double overlapX = Math.min(aRight, bRight) - Math.max(aLeft, bLeft);
+        double overlapY = Math.min(aBottom, bBottom) - Math.max(aTop, bTop);
 
-        double otherLeft   = other.getX();
-        double otherRight  = other.getX() + other.getWidth();
-        double otherTop    = other.getY();
-        double otherBottom = other.getY() + other.getHeight();
-
-        // overlap on each axis
-        double overlapX = Math.min(ballRight,  otherRight)  - Math.max(ballLeft,  otherLeft);
-        double overlapY = Math.min(ballBottom, otherBottom) - Math.max(ballTop, otherTop);
-
-        // centers for pushing direction
-        double ballCenterX = ballLeft + getWidth()  / 2.0;
-        double ballCenterY = ballTop  + getHeight() / 2.0;
-        double otherCenterX = otherLeft + other.getWidth() / 2.0;
-        double otherCenterY = otherTop  + other.getHeight() / 2.0;
-
-        if (overlapX <= 0 || overlapY <= 0) return;
-
-        // corner case: very close overlaps -> reflect both axes
-        final double CORNER_THRESHOLD = 1e-6;
-        if (Math.abs(overlapX - overlapY) < CORNER_THRESHOLD) {
-            directionX = -directionX;
-            directionY = -directionY;
-            updateVelocity();
-
-            if (ballCenterX > otherCenterX) {
-                setX(otherRight + PUSH_EPS);
-            } else {
-                setX(otherLeft - getWidth() - PUSH_EPS);
-            }
-            if (ballCenterY > otherCenterY) {
-                setY(otherBottom + PUSH_EPS);
-            } else {
-                setY(otherTop - getHeight() - PUSH_EPS);
-            }
-            return;
-        }
-
-        // decide which axis to resolve (smallest overlap -> that axis caused collision)
+        // Determine collision direction
         if (overlapX < overlapY) {
-            // horizontal collision: reflect X
             directionX = -directionX;
-            updateVelocity();
-
-            if (ballCenterX > otherCenterX) {
-                // ball came from right -> place to the right
-                setX(otherRight + PUSH_EPS);
-            } else {
-                // ball came from left -> place to the left
-                setX(otherLeft - getWidth() - PUSH_EPS);
-            }
+            if (aLeft < bLeft) setX(bLeft - getWidth() - 0.1);
+            else setX(bRight + 0.1);
         } else {
-            // vertical collision: reflect Y
             directionY = -directionY;
-            updateVelocity();
-
-            if (ballCenterY > otherCenterY) {
-                // ball came from below -> place below
-                setY(otherBottom + PUSH_EPS);
-            } else {
-                // ball came from above -> place above
-                setY(otherTop - getHeight() - PUSH_EPS);
-            }
+            if (aTop < bTop) setY(bTop - getHeight() - 0.1);
+            else setY(bBottom + 0.1);
         }
+
+        updateVelocity();
     }
 
     /**
      * Handles special bounce behavior with the paddle.
-     * Bounce angle depends on where the ball hits the paddle.
+     * The bounce angle depends on where the ball hits the paddle.
      *
      * @param paddle The paddle to bounce off from
      */
     public void bounceOffPaddle(Paddle paddle) {
-        double ballCenter = getX() + getWidth() / 2.0;
-        double paddleCenter = paddle.getX() + paddle.getWidth() / 2.0;
-        double hitPosition = (ballCenter - paddleCenter) / (paddle.getWidth() / 2.0);
+        // Calculate reflection angle based on hit position on paddle
+        double ballCenter = getX() + getWidth() / 2;
+        double paddleCenter = paddle.getX() + paddle.getWidth() / 2;
+        double hitPosition = (ballCenter - paddleCenter) / (paddle.getWidth() / 2);
 
-        // clamps hit position to [-1,1], 0 center
-        hitPosition = Math.max(-1.0, Math.min(1.0, hitPosition));
+        // Clamp hitPosition to [-1, 1]
+        hitPosition = Math.max(-1, Math.min(1, hitPosition));
 
-        // max bounce angle from vertical (use +/-75 degrees)
-        double maxBounceAngle = Math.toRadians(75.0);
-        double angle = hitPosition * maxBounceAngle;
+        // Calculate reflection angle (30 to 150 degrees)
+        double angle = hitPosition * Math.PI / 3; // -60 to +60 degrees
 
         directionX = Math.sin(angle);
         directionY = -Math.cos(angle);
         updateVelocity();
 
         // Place ball above paddle
-        setY(paddle.getY() - getHeight() - 0.01);
+        setY(paddle.getY() - getHeight());
     }
 
     /**

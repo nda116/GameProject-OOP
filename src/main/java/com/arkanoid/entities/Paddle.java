@@ -5,6 +5,9 @@ import com.arkanoid.core.MovableObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import static com.arkanoid.core.GameManager.CANVAS_HEIGHT;
+import static com.arkanoid.core.GameManager.CANVAS_WIDTH;
+
 /**
  * class Paddle contains.
  * void moveLeft(), void moveRight()
@@ -33,12 +36,24 @@ public class Paddle extends MovableObject {
     public void moveLeft() {
         setDx(-speed);
         move();
-        setDx(0);
+        //setDx(0);
     }
 
     public void moveRight() {
         setDx(speed);
         move();
+        //setDx(0);
+    }
+
+    /**
+     * set paddle position to middle of Canvas.
+     */
+    public void setDefault() {
+        setX((CANVAS_WIDTH - getWidth()) / 2);
+        setY(CANVAS_HEIGHT - 50);
+    }
+
+    public void stop() {
         setDx(0);
     }
 
