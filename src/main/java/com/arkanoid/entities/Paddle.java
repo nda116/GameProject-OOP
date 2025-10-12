@@ -3,10 +3,10 @@ package com.arkanoid.entities;
 import com.arkanoid.core.MovableObject;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
-import static com.arkanoid.core.GameManager.CANVAS_HEIGHT;
-import static com.arkanoid.core.GameManager.CANVAS_WIDTH;
+import static com.arkanoid.Main.WINDOW_HEIGHT;
+import static com.arkanoid.Main.WINDOW_WIDTH;
+
 
 /**
  * class Paddle contains.
@@ -14,13 +14,11 @@ import static com.arkanoid.core.GameManager.CANVAS_WIDTH;
  */
 public class Paddle extends MovableObject {
     private double speed;
-    private final double screenWidth;
 
     public Paddle(double x, double y, double width, double height,
-                  double speed, double screenWidth) {
+                  double speed) {
         super(x, y, width, height, 0, 0);
         this.speed = speed;
-        this.screenWidth = screenWidth;
 
         setObjectImage("/images/paddle/normal_paddle.png");
     }
@@ -49,12 +47,8 @@ public class Paddle extends MovableObject {
      * set paddle position to middle of Canvas.
      */
     public void setDefault() {
-        setX((CANVAS_WIDTH - getWidth()) / 2);
-        setY(CANVAS_HEIGHT - 50);
-    }
-
-    public void stop() {
-        setDx(0);
+        setX((WINDOW_WIDTH - getWidth()) / 2);
+        setY(WINDOW_HEIGHT - 50);
     }
 
     /**
@@ -69,8 +63,8 @@ public class Paddle extends MovableObject {
         if (getX() < 0) {
             setX(0);
         }
-        if (getX() + getWidth() > screenWidth) {
-            setX(screenWidth - getWidth());
+        if (getX() + getWidth() > WINDOW_WIDTH) {
+            setX(WINDOW_WIDTH - getWidth());
         }
     }
 
