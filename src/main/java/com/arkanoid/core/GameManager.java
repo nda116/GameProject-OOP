@@ -217,7 +217,7 @@ public class GameManager {
         ballmanager.updateBall();
         powerupmanager.updatePowerUp();
 
-        brickmanager.updateBrickList(powerupmanager, score);
+        score += brickmanager.updateBrickList(powerupmanager);
         ballmanager.updateBallList();
         powerupmanager.updatePowerUpList();
 
