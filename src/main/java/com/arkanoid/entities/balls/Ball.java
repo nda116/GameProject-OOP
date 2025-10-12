@@ -1,10 +1,10 @@
-package com.arkanoid.entities;
+package com.arkanoid.entities.balls;
 
 import com.arkanoid.core.MovableObject;
 import com.arkanoid.core.GameObject;
+import com.arkanoid.entities.Paddle;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 /**
  * class Ball contains.
@@ -29,8 +29,17 @@ public class Ball extends MovableObject {
         setObjectImage("/images/ball.png");
 
         directionX = 0;
-        directionY = 1;
+        directionY = 0;
         updateVelocity();
+    }
+
+    /**
+     * set Ball position to middle of paddle
+     * @param paddle paddle.
+     */
+    public void setDefaultBall(Paddle paddle) {
+        setX(paddle.getX() + (paddle.getWidth() - getWidth()) / 2);
+        setY(paddle.getY() - getHeight());
     }
 
     /**
@@ -75,37 +84,28 @@ public class Ball extends MovableObject {
      * @param other The GameObject to bounce off from
      */
     public void bounceOff(GameObject other) {
-        if (!checkCollision(other)) return;
-
         // Calculate collision position
-        double ballCenterX = getX() + getWidth() / 2;
-        double ballCenterY = getY() + getHeight() / 2;
-        double objCenterX = other.getX() + other.getWidth() / 2;
-        double objCenterY = other.getY() + other.getHeight() / 2;
+        double aLeft = getX(), aRight = getX() + getWidth();
+        double aTop = getY(), aBottom = getY() + getHeight();
 
-        double deltaX = ballCenterX - objCenterX;
-        double deltaY = ballCenterY - objCenterY;
+        double bLeft = other.getX(), bRight = other.getX() + other.getWidth();
+        double bTop = other.getY(), bBottom = other.getY() + other.getHeight();
+
+        double overlapX = Math.min(aRight, bRight) - Math.max(aLeft, bLeft);
+        double overlapY = Math.min(aBottom, bBottom) - Math.max(aTop, bTop);
 
         // Determine collision direction
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            // Collision from left or right
+        if (overlapX < overlapY) {
             directionX = -directionX;
-            updateVelocity();
-            if (deltaX > 0) {
-                setX(other.getX() + other.getWidth());
-            } else {
-                setX(other.getX() - getWidth());
-            }
+            if (aLeft < bLeft) setX(bLeft - getWidth() - 0.1);
+            else setX(bRight + 0.1);
         } else {
-            // Collision from top or bottom
             directionY = -directionY;
-            updateVelocity();
-            if (deltaY > 0) {
-                setY(other.getY() + other.getHeight());
-            } else {
-                setY(other.getY() - getHeight());
-            }
+            if (aTop < bTop) setY(bTop - getHeight() - 0.1);
+            else setY(bBottom + 0.1);
         }
+
+        updateVelocity();
     }
 
     /**
@@ -115,8 +115,6 @@ public class Ball extends MovableObject {
      * @param paddle The paddle to bounce off from
      */
     public void bounceOffPaddle(Paddle paddle) {
-        if (!checkCollision(paddle)) return;
-
         // Calculate reflection angle based on hit position on paddle
         double ballCenter = getX() + getWidth() / 2;
         double paddleCenter = paddle.getX() + paddle.getWidth() / 2;

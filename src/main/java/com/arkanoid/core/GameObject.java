@@ -8,8 +8,6 @@ import javafx.scene.image.Image;
  * class GameObject contains.
  * void update()
  * void render(GraphicsContext) render GameObject.
- * boolean checkCollision (GameObject) check collision between 2 objects.
- * double distance (GameObject) Calculate distance between center of 2 GameObject.
  */
 public abstract class GameObject {
     private double x;
@@ -61,6 +59,10 @@ public abstract class GameObject {
         return objectImage;
     }
 
+    /**
+     * set ObjectImage from new image path.
+     * @param imagePath path to image.
+     */
     public void setObjectImage(String imagePath) {
         try {
             objectImage = new Image(getClass().getResourceAsStream(imagePath));
@@ -71,16 +73,4 @@ public abstract class GameObject {
 
     public abstract void update();
     public abstract void render(GraphicsContext gc);
-
-    /**
-     * check collision between 2 objects.
-     * @param other other object.
-     * @return collision exist or not.
-     */
-    public boolean checkCollision (GameObject other) {
-        return x < other.x + other.width &&
-                x + width > other.x &&
-                y < other.y + other.height &&
-                y + height > other.y;
-    }
 }
