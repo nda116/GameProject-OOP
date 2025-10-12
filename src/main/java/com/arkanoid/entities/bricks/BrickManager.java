@@ -63,8 +63,9 @@ public class BrickManager {
     /**
      * update brickList, remove bricks which have HP <= 0.
      */
-    public void updateBrickList(PowerUpManager powerupmanager, int score) {
+    public int updateBrickList(PowerUpManager powerupmanager) {
         Iterator<Brick> it = bricksList.iterator();
+        int score = 0;
 
         while(it.hasNext()) {
             Brick brick = it.next();
@@ -76,6 +77,7 @@ public class BrickManager {
                 }
             }
         }
+        return score;
     }
 
     /**
