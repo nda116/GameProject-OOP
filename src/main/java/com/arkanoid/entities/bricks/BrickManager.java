@@ -128,6 +128,7 @@ public class BrickManager {
             Brick brick = it.next();
             if (brick.getBrickHP() <= 0) {
                 score += brick.getBrickScore();
+                totalScore -= brick.getBrickScore();
                 it.remove();
                 if (brick.getType() == Brick.NORMAL) {
                     ((NormalBrick) brick).dropPowerUp(powerupmanager);

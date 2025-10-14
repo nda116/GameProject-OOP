@@ -31,7 +31,6 @@ public class GameManager {
 
     // Game state
     private int score;
-    private int lastscore;
     private int lives;
     private GameState gameState;
     private int level;
@@ -101,8 +100,6 @@ public class GameManager {
      * Initializes game objects (paddle, ball, bricks).
      */
     private void initGameObjects(int level) {
-        lastscore = score;
-
         // Create paddle
         double paddleWidth = 150;
         double paddleHeight = 25;
@@ -205,7 +202,7 @@ public class GameManager {
             }
         }
 
-        if (brickmanager.getTotalScore() == score - lastscore) {
+        if (brickmanager.getTotalScore() == 0) {
             levelComplete();
         }
     }
