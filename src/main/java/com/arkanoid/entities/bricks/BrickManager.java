@@ -3,6 +3,8 @@ package com.arkanoid.entities.bricks;
 import javafx.scene.canvas.GraphicsContext;
 import com.arkanoid.powerups.PowerUpManager;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,13 +18,68 @@ import java.util.Iterator;
  */
 public class BrickManager {
     private final ArrayList<Brick> bricksList = new ArrayList<>();
+    private int totalScore;
+    private static final int BRICK_ROWS = 7;
+    private static final int BRICK_COLS = 10;
 
-    public void addBrick (Brick newBrick) {
-        bricksList.add(newBrick);
+    public int getTotalScore() {
+        return totalScore;
     }
 
     public ArrayList<Brick> getBricksList() {
         return bricksList;
+    }
+
+    private void addBrick (Brick newBrick) {
+        bricksList.add(newBrick);
+        totalScore += newBrick.getBrickScore();
+    }
+
+    public void createBricksFromFile(String resourcePath) {
+        double brickWidth = 16 * 5;
+        double brickHeight = 8 * 5;
+        double offsetX = 0;
+        double offsetY = 60;
+
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(getClass().getResourceAsStream(resourcePath)))) {
+            String line;
+            int row = 0;
+
+            while ((line = br.readLine()) != null && row < BRICK_ROWS) {
+                String[] tokens = line.trim().split("\\s+"); // separate by spaces
+
+                for (int col = 0; col < tokens.length && col < BRICK_COLS; col++) {
+                    String code = tokens[col];
+                    double x = offsetX + col * brickWidth;
+                    double y = offsetY + row * brickHeight;
+
+                    switch (code) {
+                        case "01":
+                            addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.YELLOW));
+                            break;
+                        case "02":
+                            addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.BLUE));
+                            break;
+                        case "03":
+                            addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.RED));
+                            break;
+                        case "04":
+                            addBrick(new InvincibleBrick(x, y, brickWidth, brickHeight));
+                            break;
+                        case "05":
+                            addBrick(new ExplosionBrick(x, y, brickWidth, brickHeight));
+                            break;
+                        case "00":
+                        default:
+                            break;
+                    }
+                }
+                row++;
+            }
+        } catch (Exception e) {
+            System.out.println("Can not find " + resourcePath);
+        }
     }
 
     /**

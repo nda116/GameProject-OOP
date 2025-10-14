@@ -8,8 +8,6 @@ import com.arkanoid.powerups.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.*;
 
 import static com.arkanoid.Main.WINDOW_HEIGHT;
@@ -33,6 +31,7 @@ public class GameManager {
 
     // Game state
     private int score;
+    private int lastscore;
     private int lives;
     private GameState gameState;
     private int level;
@@ -50,8 +49,7 @@ public class GameManager {
     private double powerUpTimer;
 
     private static final int LIVES = 3;
-    private static final int BRICK_ROWS = 7;
-    private static final int BRICK_COLS = 10;
+
 
     /**
      * Enum representing different game states.
@@ -96,13 +94,15 @@ public class GameManager {
         level = 1;
         gameState = GameState.READY;
 
-        initGameObjects();
+        initGameObjects(level);
     }
 
     /**
      * Initializes game objects (paddle, ball, bricks).
      */
-    private void initGameObjects() {
+    private void initGameObjects(int level) {
+        lastscore = score;
+
         // Create paddle
         double paddleWidth = 150;
         double paddleHeight = 25;
@@ -113,90 +113,9 @@ public class GameManager {
         ballmanager = new BallManager();
         powerupmanager = new PowerUpManager();
 
-        // Create bricks
         // createBricks();
-        createBricksFromFile("/maps/level1.txt");
-    }
-
-    /**
-     * Creates the brick layout for the current level.
-     */
-    private void createBricks() {
         brickmanager = new BrickManager();
-
-        double brickWidth = 15 * 5;
-        double brickHeight = 7.5 * 5;
-        double offsetX = 25;
-        double offsetY = 60;
-
-        for (int row = 0; row < BRICK_ROWS; row++) {
-            for (int col = 0; col < BRICK_COLS; col++) {
-                double x = offsetX + col * (brickWidth);
-                double y = offsetY + row * (brickHeight);
-
-                if (row == BRICK_ROWS - 1 && col % 2 == 0) {
-                    brickmanager.addBrick(new ExplosionBrick(x, y, brickWidth, brickHeight));
-                } else if (row == 2 && col % 2 == 0) {
-                    brickmanager.addBrick(new InvincibleBrick(x, y, brickWidth, brickHeight));
-                } else if ((row + col) % 3 == 0) {
-                    brickmanager.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.YELLOW));
-                } else if ((row + col) % 3 == 1) {
-                    brickmanager.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.RED));
-                } else {
-                    brickmanager.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.BLUE));
-                }
-            }
-        }
-    }
-
-    private void createBricksFromFile(String resourcePath) {
-        brickmanager = new BrickManager();
-
-        double brickWidth = 16 * 5;
-        double brickHeight = 8 * 5;
-        double offsetX = 0;
-        double offsetY = 60;
-
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(getClass().getResourceAsStream(resourcePath)))) {
-            String line;
-            int row = 0;
-
-            while ((line = br.readLine()) != null && row < BRICK_ROWS) {
-                String[] tokens = line.trim().split("\\s+"); // separate by spaces
-
-                for (int col = 0; col < tokens.length && col < BRICK_COLS; col++) {
-                    String code = tokens[col];
-                    double x = offsetX + col * brickWidth;
-                    double y = offsetY + row * brickHeight;
-
-                    switch (code) {
-                        case "01":
-                            brickmanager.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.YELLOW));
-                            break;
-                        case "02":
-                            brickmanager.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.BLUE));
-                            break;
-                        case "03":
-                            brickmanager.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.RED));
-                            break;
-                        case "04":
-                            brickmanager.addBrick(new InvincibleBrick(x, y, brickWidth, brickHeight));
-                            break;
-                        case "05":
-                            brickmanager.addBrick(new ExplosionBrick(x, y, brickWidth, brickHeight));
-                            break;
-                        case "00":
-                        default:
-
-                            break;
-                    }
-                }
-                row++;
-            }
-        } catch (Exception e) {
-            System.out.println("Can not find " + resourcePath);
-        }
+        brickmanager.createBricksFromFile("/maps/level" + level + ".txt");
     }
 
     /**
@@ -275,40 +194,20 @@ public class GameManager {
         ballmanager.updateBallList();
         powerupmanager.updatePowerUpList();
 
-
-
         // Check if ball is lost
         if (ballmanager.getBallsList().isEmpty()) {
             lives--;
             if (lives <= 0) {
                 gameOver();
             } else {
-                /*ball.reset(screenWidth / 2 - ball.getWidth() / 2, screenHeight / 2
-                        - ball.getHeight() / 2);
-                 */
                 ballmanager.setDefault(paddle);
                 gameState = GameState.READY;
-                // Auto-resume after 2 second
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        /*
-                        if (gameState == GameState.READY) {
-                            gameState = GameState.PLAYING;
-                        }
-                        */
-                    }
-                }, 2000);
             }
         }
 
-        // Update power-ups
-
-
-        /* Check level completion
-        if (isLevelComplete()) {
+        if (brickmanager.getTotalScore() == score - lastscore) {
             levelComplete();
-        }*/
+        }
     }
 
     /**
@@ -365,7 +264,6 @@ public class GameManager {
      * @return true if all bricks are destroyed
      */
     private boolean isLevelComplete() {
-
         return true;
     }
 
@@ -389,13 +287,8 @@ public class GameManager {
      * Starts the next level.
      */
     private void startNextLevel() {
-        createBricks();
-
-        /*
-        ball.reset(screenWidth / 2 - ball.getWidth() / 2, screenHeight / 2
-                - ball.getHeight() / 2);
-         */
-        gameState = GameState.PLAYING;
+        initGameObjects(level);
+        gameState = GameState.READY;
     }
 
     /**
@@ -413,7 +306,7 @@ public class GameManager {
         score = 0;
         lives = LIVES;
         level = 1;
-        initGameObjects();
+        initGameObjects(level);
         start();
     }
 
