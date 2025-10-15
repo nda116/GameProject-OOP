@@ -40,6 +40,10 @@ public class BrickManager {
         totalScore += newBrick.getBrickScore();
     }
 
+    /**
+     * Create Brick map each level from file .txt.
+     * @param resourcePath type String
+     */
     public void createBricksFromFile(String resourcePath) {
         double brickWidth = 16 * 5;
         double brickHeight = 8 * 5;
@@ -53,7 +57,7 @@ public class BrickManager {
                 try {
                     numberPowerUp = Integer.parseInt(firstLine.trim());
                 } catch (NumberFormatException e) {
-                    System.err.println("Invalid level code: " + firstLine);
+                    System.err.println("Invalid number powerup: " + firstLine);
                 }
             }
 
@@ -145,7 +149,8 @@ public class BrickManager {
                 totalScore -= brick.getBrickScore();
                 it.remove();
                 if (brick.getType() == Brick.NORMAL) {
-                    numberPowerUp = ((NormalBrick) brick).dropPowerUp(powerupmanager, numberPowerUp, numberNormalBrick);
+                    numberPowerUp = ((NormalBrick) brick).dropPowerUp(powerupmanager,
+                            numberPowerUp, numberNormalBrick);
                     numberNormalBrick--;
                 }
             }
