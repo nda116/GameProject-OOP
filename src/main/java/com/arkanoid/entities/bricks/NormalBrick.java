@@ -62,13 +62,15 @@ public class NormalBrick extends Brick {
     public int dropPowerUp(PowerUpManager powerupmanager, int numberPowerUp, int numberNormalBrick) {
         double powerUpDropChance = (double) numberPowerUp / numberNormalBrick;
         if (rand.nextFloat() < powerUpDropChance) {
-            int type = rand.nextInt(3); //set up power
+            int type = rand.nextInt(4); //set up power
             if (type == PowerUp.EXPAND) {
                 powerupmanager.addPowerUps(new ExpandPowerUp(getX(), getY()));
             } else if (type == PowerUp.SLOWBALL) {
                 powerupmanager.addPowerUps(new SlowBallPowerUp(getX(), getY()));
-            } else {
+            } else if (type == PowerUp.FASTBALL){
                 powerupmanager.addPowerUps(new FastBallPowerUp(getX(), getY()));
+            } else {
+                powerupmanager.addPowerUps(new ExtraBallPowerUp(getX(), getY()));
             }
             numberPowerUp--;
         }
