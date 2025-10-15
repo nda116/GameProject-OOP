@@ -12,8 +12,6 @@ import java.util.Random;
 public class NormalBrick extends Brick {
     private String color;
     private Random rand = new Random();
-    private float powerUpDropChance = 0.1f; // start with 10%
-    private final float MAX_DROP_CHANCE = 0.9f;// maximum 90%
 
     public static final String RED = "red";
     public static final String YELLOW = "yellow";
@@ -57,18 +55,12 @@ public class NormalBrick extends Brick {
     }
 
     /**
-     * set drop chance.
-     */
-    public void resetDropChance() {
-        powerUpDropChance = 0.1f;
-    }
-
-    /**
      * randomly drop powerup, the type powerup is random, add to powerupsList.
      * increase chance if last brick didnt drop powerup.
      * @param powerupmanager powerupManager with powerupsList.
      */
-    public void dropPowerUp(PowerUpManager powerupmanager) {
+    public int dropPowerUp(PowerUpManager powerupmanager, int numberPowerUp, int numberNormalBrick) {
+        double powerUpDropChance = (double) numberPowerUp / numberNormalBrick;
         if (rand.nextFloat() < powerUpDropChance) {
             int type = rand.nextInt(3); //set up power
             if (type == PowerUp.EXPAND) {
@@ -78,14 +70,9 @@ public class NormalBrick extends Brick {
             } else {
                 powerupmanager.addPowerUps(new FastBallPowerUp(getX(), getY()));
             }
-            resetDropChance();;
-        } else {
-            powerUpDropChance += 0.2f;
-            if (powerUpDropChance > MAX_DROP_CHANCE) {
-                powerUpDropChance = MAX_DROP_CHANCE;
-            }
+            numberPowerUp--;
         }
-
+        return numberPowerUp;
     }
 
     @Override

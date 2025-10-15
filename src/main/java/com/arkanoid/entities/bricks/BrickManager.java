@@ -19,6 +19,8 @@ import java.util.Iterator;
 public class BrickManager {
     private final ArrayList<Brick> bricksList = new ArrayList<>();
     private int totalScore;
+    private int numberPowerUp;
+    private int numberNormalBrick;
     private static final int BRICK_ROWS = 7;
     private static final int BRICK_COLS = 10;
 
@@ -32,6 +34,9 @@ public class BrickManager {
 
     private void addBrick (Brick newBrick) {
         bricksList.add(newBrick);
+        if (newBrick.getType() == Brick.NORMAL) {
+            numberNormalBrick++;
+        }
         totalScore += newBrick.getBrickScore();
     }
 
@@ -43,6 +48,15 @@ public class BrickManager {
 
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream(resourcePath)))) {
+            String firstLine = br.readLine();
+            if (firstLine != null) {
+                try {
+                    numberPowerUp = Integer.parseInt(firstLine.trim());
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid level code: " + firstLine);
+                }
+            }
+
             String line;
             int row = 0;
 
@@ -131,7 +145,8 @@ public class BrickManager {
                 totalScore -= brick.getBrickScore();
                 it.remove();
                 if (brick.getType() == Brick.NORMAL) {
-                    ((NormalBrick) brick).dropPowerUp(powerupmanager);
+                    numberPowerUp = ((NormalBrick) brick).dropPowerUp(powerupmanager, numberPowerUp, numberNormalBrick);
+                    numberNormalBrick--;
                 }
             }
         }
