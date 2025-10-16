@@ -18,6 +18,8 @@ public abstract class PowerUp extends MovableObject {
     public static final int SLOWBALL = 1;
     public static final int FASTBALL = 2;
     public static final int EXTRABALL = 3;
+    public static final int SPLITBALL = 4;
+
 
     public PowerUp(double x, double y, int type) {
         super(x, y, WIDTH, HEIGHT, 0, 1);
