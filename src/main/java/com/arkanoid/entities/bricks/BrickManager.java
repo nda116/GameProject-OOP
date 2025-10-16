@@ -84,6 +84,9 @@ public class BrickManager {
                         case "05":
                             addBrick(new ExplosionBrick(x, y, brickWidth, brickHeight));
                             break;
+                        case "06":
+                            addBrick(new InvisibleBrick(x, y, brickWidth, brickHeight));
+                            break;
                         case "00":
                         default:
                             break;
