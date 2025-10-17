@@ -34,13 +34,11 @@ public class Paddle extends MovableObject {
     public void moveLeft() {
         setDx(-speed);
         move();
-        //setDx(0);
     }
 
     public void moveRight() {
         setDx(speed);
         move();
-        //setDx(0);
     }
 
     /**
