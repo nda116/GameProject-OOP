@@ -7,6 +7,7 @@ import com.arkanoid.powerups.*;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
+
 import java.util.*;
 
 import static com.arkanoid.Main.WINDOW_HEIGHT;
@@ -47,8 +48,7 @@ public class GameManager {
     private double powerUpTimer;
 
     private static final int LIVES = 3;
-    private static final int BRICK_ROWS = 5;
-    private static final int BRICK_COLS = 10;
+
 
     /**
      * Enum representing different game states.
@@ -93,56 +93,26 @@ public class GameManager {
         level = 1;
         gameState = GameState.READY;
 
-        initGameObjects();
+        initGameObjects(level);
     }
 
     /**
      * Initializes game objects (paddle, ball, bricks).
      */
-    private void initGameObjects() {
+    private void initGameObjects(int level) {
         // Create paddle
         double paddleWidth = 150;
         double paddleHeight = 25;
         double paddleX = (WINDOW_WIDTH - paddleWidth) / 2;
         double paddleY = WINDOW_HEIGHT - 50;
-        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 8);
+        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 5);
 
         ballmanager = new BallManager();
         powerupmanager = new PowerUpManager();
 
-        // Create bricks
-        createBricks();
-    }
-
-    /**
-     * Creates the brick layout for the current level.
-     */
-    private void createBricks() {
+        // createBricks();
         brickmanager = new BrickManager();
-
-        double brickWidth = 15 * 5;
-        double brickHeight = 7.5 * 5;
-        double offsetX = 25;
-        double offsetY = 60;
-
-        for (int row = 0; row < BRICK_ROWS; row++) {
-            for (int col = 0; col < BRICK_COLS; col++) {
-                double x = offsetX + col * (brickWidth);
-                double y = offsetY + row * (brickHeight);
-
-                if (row == BRICK_ROWS - 1 && col % 2 == 0) {
-                    brickmanager.addBrick(new ExplosionBrick(x, y, brickWidth, brickHeight));
-                } else if (row == 2 && col % 2 == 0) {
-                    brickmanager.addBrick(new InvincibleBrick(x, y, brickWidth, brickHeight));
-                } else if ((row + col) % 3 == 0) {
-                    brickmanager.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.YELLOW));
-                } else if ((row + col) % 3 == 1) {
-                    brickmanager.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.RED));
-                } else {
-                    brickmanager.addBrick(new NormalBrick(x, y, brickWidth, brickHeight, NormalBrick.BLUE));
-                }
-            }
-        }
+        brickmanager.createBricksFromFile("/maps/level" + level + ".txt");
     }
 
     /**
@@ -183,7 +153,7 @@ public class GameManager {
 
         if (gameState == GameState.READY) {
             if (ballmanager.getBallsList().isEmpty()) {
-                ballmanager.addBall(new Ball(0, 0, 20,3));
+                ballmanager.addBall(new Ball(0, 0, 12,3));
             }
             ballmanager.setDefault(paddle);
         }
@@ -221,40 +191,20 @@ public class GameManager {
         ballmanager.updateBallList();
         powerupmanager.updatePowerUpList();
 
-
-
         // Check if ball is lost
         if (ballmanager.getBallsList().isEmpty()) {
             lives--;
             if (lives <= 0) {
                 gameOver();
             } else {
-                /*ball.reset(screenWidth / 2 - ball.getWidth() / 2, screenHeight / 2
-                        - ball.getHeight() / 2);
-                 */
                 ballmanager.setDefault(paddle);
                 gameState = GameState.READY;
-                // Auto-resume after 2 second
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        /*
-                        if (gameState == GameState.READY) {
-                            gameState = GameState.PLAYING;
-                        }
-                        */
-                    }
-                }, 2000);
             }
         }
 
-        // Update power-ups
-
-
-        /* Check level completion
-        if (isLevelComplete()) {
+        if (brickmanager.getTotalScore() == 0) {
             levelComplete();
-        }*/
+        }
     }
 
     /**
@@ -311,7 +261,6 @@ public class GameManager {
      * @return true if all bricks are destroyed
      */
     private boolean isLevelComplete() {
-
         return true;
     }
 
@@ -335,13 +284,8 @@ public class GameManager {
      * Starts the next level.
      */
     private void startNextLevel() {
-        createBricks();
-
-        /*
-        ball.reset(screenWidth / 2 - ball.getWidth() / 2, screenHeight / 2
-                - ball.getHeight() / 2);
-         */
-        gameState = GameState.PLAYING;
+        initGameObjects(level);
+        gameState = GameState.READY;
     }
 
     /**
@@ -359,7 +303,7 @@ public class GameManager {
         score = 0;
         lives = LIVES;
         level = 1;
-        initGameObjects();
+        initGameObjects(level);
         start();
     }
 

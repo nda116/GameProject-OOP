@@ -1,9 +1,13 @@
 package com.arkanoid.powerups;
 
+import com.arkanoid.entities.Paddle;
+import com.arkanoid.entities.balls.BallManager;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Manage power-ups for the game.
@@ -14,7 +18,7 @@ import java.util.Iterator;
  */
 public class PowerUpManager {
     private final ArrayList<PowerUp> powerupList = new ArrayList<>();
-    private long doubleScoreStartTime;
+    private final Timer timer = new Timer(true);
 
     public ArrayList<PowerUp> getPowerupList() {
         return powerupList;

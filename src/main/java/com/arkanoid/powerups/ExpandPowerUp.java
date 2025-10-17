@@ -7,7 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 /**
  * Constructor for ExpandPowerUp
  */
-public class ExpandPowerUp extends PowerUp{
+public class ExpandPowerUp extends PowerUp {
     private static final long EFFECT_DURATION = 8000;
 
     public ExpandPowerUp (double x, double y) {
@@ -27,6 +27,11 @@ public class ExpandPowerUp extends PowerUp{
             }
             paddle.setWidth(originalWidth);
         }).start();
+    }
+
+    @Override
+    public void removeEffect(Paddle paddle, BallManager ballManager) {
+
     }
 
     @Override
