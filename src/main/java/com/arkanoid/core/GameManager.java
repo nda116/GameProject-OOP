@@ -153,7 +153,7 @@ public class GameManager {
 
         if (gameState == GameState.READY) {
             if (ballmanager.getBallsList().isEmpty()) {
-                ballmanager.addBall(new Ball(0, 0, 20,3));
+                ballmanager.addBall(new Ball(0, 0, 12,3));
             }
             ballmanager.setDefault(paddle);
         }
