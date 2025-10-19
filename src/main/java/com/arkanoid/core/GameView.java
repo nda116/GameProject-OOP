@@ -1,6 +1,6 @@
 package com.arkanoid.core;
 
-import com.arkanoid.menu.Menu;
+import com.arkanoid.menu.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
@@ -19,8 +19,9 @@ public class GameView {
     private Canvas canvas;
     private GraphicsContext gc;
 
-    //Menu
+    // Menus
     private Menu mainMenu;
+    private PauseMenu pauseMenu;
 
     private static final Color BACKGROUND_COLOR = Color.rgb(20, 20, 40);
     private static final Color UI_TEXT_COLOR = Color.WHITE;
@@ -42,6 +43,7 @@ public class GameView {
         root.getChildren().add(canvas);
 
         mainMenu = new Menu(width, height);
+        pauseMenu = new PauseMenu(width, height);
 
         clear();
     }
@@ -77,6 +79,7 @@ public class GameView {
 
             case PAUSED:
                 renderGameplay(gameManager);
+                renderPauseMenu();
                 break;
 
             case GAME_OVER:
@@ -90,6 +93,13 @@ public class GameView {
      */
     private void renderMainMenu() {
         mainMenu.render(gc);
+    }
+
+    /**
+     * Renders the pause menu overlay.
+     */
+    private void renderPauseMenu() {
+        pauseMenu.render(gc);
     }
 
     /**
@@ -161,14 +171,6 @@ public class GameView {
                 gc.fillText("Press SPACE to start", centerX, centerY);
                 gc.setFont(Font.font("Arial", 14));
                 gc.fillText("Use LEFT/RIGHT arrows or A/D to move", centerX, centerY + 30);
-                break;
-
-            case PAUSED:
-                gc.setFont(TITLE_FONT);
-                gc.setFill(Color.ORANGE);
-                gc.fillText("PAUSED", centerX, centerY - 20);
-                gc.setFont(MESSAGE_FONT);
-                gc.fillText("Press SPACE to continue", centerX, centerY + 30);
                 break;
 
             case GAME_OVER:
