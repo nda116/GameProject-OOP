@@ -3,6 +3,7 @@ package com.arkanoid.core;
 import com.arkanoid.entities.*;
 import com.arkanoid.entities.balls.*;
 import com.arkanoid.entities.bricks.*;
+import com.arkanoid.entities.bullets.Bullet;
 import com.arkanoid.powerups.*;
 
 import javafx.animation.AnimationTimer;
@@ -175,6 +176,16 @@ public class GameManager {
             }
         }
 
+        // Check collision between bullet and bricks
+        for (Brick brick : brickmanager.getBricksList()) {
+            for (Bullet bullet : paddle.getBullets().getBulletsList()){
+                if (checkCollision(brick, bullet)) {
+                    brickmanager.updateBrickHP(brick);
+                    bullet.deActive();
+                }
+            }
+        }
+
         // Check collision between powerups and paddle
         for (PowerUp powerup : powerupmanager.getPowerupList()) {
             if (checkCollision(powerup, paddle)) {
@@ -197,7 +208,9 @@ public class GameManager {
             if (lives <= 0) {
                 gameOver();
             } else {
+                paddle.setDefault();
                 ballmanager.setDefault(paddle);
+                powerupmanager.getPowerupList().clear();
                 gameState = GameState.READY;
             }
         }
