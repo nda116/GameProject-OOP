@@ -3,11 +3,14 @@ package com.arkanoid.entities.bricks;
 import javafx.scene.canvas.GraphicsContext;
 import com.arkanoid.powerups.PowerUpManager;
 
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import static com.arkanoid.Main.WINDOW_WIDTH;
 
 /**
  * void addBrick(Bricks) add new brick to brickList.
@@ -45,8 +48,8 @@ public class BrickManager {
      * @param resourcePath type String
      */
     public void createBricksFromFile(String resourcePath) {
-        double brickWidth = 16 * 5;
-        double brickHeight = 8 * 5;
+        double brickWidth = WINDOW_WIDTH / 10.0;
+        double brickHeight = brickWidth / 2;
         double offsetX = 0;
         double offsetY = 60;
 

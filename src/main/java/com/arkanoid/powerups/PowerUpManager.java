@@ -1,7 +1,5 @@
 package com.arkanoid.powerups;
 
-import com.arkanoid.entities.Paddle;
-import com.arkanoid.entities.balls.BallManager;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;

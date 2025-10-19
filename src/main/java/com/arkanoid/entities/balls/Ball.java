@@ -229,7 +229,5 @@ public class Ball extends MovableObject {
     @Override
     public void render(GraphicsContext gc) {
         gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
-
-        //System.out.println("Paddle: (" + getX() + ", " + getY() + ")");
     }
 }
