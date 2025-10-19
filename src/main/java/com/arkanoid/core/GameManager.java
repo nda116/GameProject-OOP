@@ -264,7 +264,10 @@ public class GameManager {
                     gameState = GameState.PAUSED;
                 } else if (gameState == GameState.PAUSED) {
                     gameState = GameState.MENU;
+                } else if (gameState == GameState.MENU) {
+                    System.exit(0);
                 }
+
             }
         } else {
             pressedKeys.remove(key);

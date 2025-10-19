@@ -86,7 +86,7 @@ public class Menu {
         gc.setFill(Color.rgb(255, 255, 255, 0.7));
         gc.setFont(SUBTITLE_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("Click a button or press ENTER to start",
+        gc.fillText("Click a button or press ENTER to start or press ESC to exit",
                 screenWidth / 2, screenHeight - 30);
     }
 
