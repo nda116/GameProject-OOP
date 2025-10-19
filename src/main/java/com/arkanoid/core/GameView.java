@@ -1,5 +1,6 @@
 package com.arkanoid.core;
 
+import com.arkanoid.menu.Menu;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
@@ -17,6 +18,9 @@ public class GameView {
     private StackPane root;
     private Canvas canvas;
     private GraphicsContext gc;
+
+    //Menu
+    private Menu mainMenu;
 
     private static final Color BACKGROUND_COLOR = Color.rgb(20, 20, 40);
     private static final Color UI_TEXT_COLOR = Color.WHITE;
@@ -37,6 +41,8 @@ public class GameView {
 
         root.getChildren().add(canvas);
 
+        mainMenu = new Menu(width, height);
+
         clear();
     }
 
@@ -49,37 +55,92 @@ public class GameView {
     }
 
     /**
-     * Renders the user interface (score, lives, level, messages).
+     * Main render method that delegates to appropriate renderer.
      *
-     * @param score current score
-     * @param lives remaining lives
-     * @param level current level
-     * @param gameState current game state
-     * @param powerUpTimer remaining power-up time
+     * @param gameManager the game manager with game state
      */
-    public void renderUI(int score, int lives, int level,
-                         GameManager.GameState gameState, double powerUpTimer) {
+    public void render(GameManager gameManager) {
+        clear();
+
+        GameState state = gameManager.getGameState();
+
+        switch (state) {
+            case MENU:
+                renderMainMenu();
+                break;
+
+            case READY:
+            case PLAYING:
+            case LEVEL_COMPLETE:
+                renderGameplay(gameManager);
+                break;
+
+            case PAUSED:
+                renderGameplay(gameManager);
+                break;
+
+            case GAME_OVER:
+                renderGameplay(gameManager);
+                break;
+        }
+    }
+
+    /**
+     * Renders the main menu.
+     */
+    private void renderMainMenu() {
+        mainMenu.render(gc);
+    }
+
+    /**
+     * Renders gameplay (bricks, paddle, ball, UI).
+     *
+     * @param gameManager the game manager
+     */
+    private void renderGameplay(GameManager gameManager) {
+        // Render bricks
+        gameManager.getBrickManager().renderBrickList(gc);
+
+        // Render power-ups
+        gameManager.getPowerupManager().renderPowerUpList(gc);
+
+        // Render paddle and ball
+        gameManager.getPaddle().render(gc);
+        gameManager.getBallManager().renderBallList(gc);
+
+        // Render UI
+        renderGameUI(gameManager);
+
+        // Render state-specific messages
+        renderGameStateMessage(gameManager.getGameState());
+    }
+
+    /**
+     * Renders the game UI (score, lives, level, power-up timer).
+     *
+     * @param gameManager the game manager
+     */
+    private void renderGameUI(GameManager gameManager) {
         gc.setFill(UI_TEXT_COLOR);
         gc.setFont(UI_FONT);
 
         // Score
         gc.setTextAlign(TextAlignment.LEFT);
-        gc.fillText("Score: " + score, 10, 25);
+        gc.fillText("Score: " + gameManager.getScore(), 10, 25);
 
         // Lives
-        gc.fillText("Lives: " + lives, 10, 45);
+        gc.fillText("Lives: " + gameManager.getLives(), 10, 45);
 
         // Level
         gc.setTextAlign(TextAlignment.RIGHT);
-        gc.fillText("Level: " + level, canvas.getWidth() - 10, 25);
+        gc.fillText("Level: " + gameManager.getLevel(), canvas.getWidth() - 10, 25);
 
         // Power-up timer
+        double powerUpTimer = gameManager.getPowerUpTimer();
         if (powerUpTimer > 0) {
             gc.fillText(String.format("Power-up: %.1fs", powerUpTimer),
                     canvas.getWidth() - 10, 45);
         }
-
-        renderGameStateMessage(gameState);
     }
 
     /**
@@ -87,7 +148,7 @@ public class GameView {
      *
      * @param gameState current game state
      */
-    private void renderGameStateMessage(GameManager.GameState gameState) {
+    private void renderGameStateMessage(GameState gameState) {
         double centerX = canvas.getWidth() / 2;
         double centerY = canvas.getHeight() / 2;
 

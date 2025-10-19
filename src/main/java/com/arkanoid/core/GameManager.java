@@ -76,10 +76,8 @@ public class GameManager {
     public void init(GameView view) {
         this.gameView = view;
 
-        score = 0;
-        lives = LIVES;
-        level = 1;
-        gameState = GameState.READY;
+        // Start at main menu
+        gameState = GameState.MENU;
 
         initGameObjects(level);
     }
@@ -104,10 +102,25 @@ public class GameManager {
     }
 
     /**
+     * Starts a new game from main menu.
+     */
+    public void startNewGame() {
+        score = 0;
+        lives = LIVES;
+        level = 1;
+
+        initGameObjects(level);
+        gameState = GameState.READY;
+        start();
+    }
+
+    /**
      * Starts the game loop.
      */
     public void start() {
-        gameState = GameState.MENU;
+        if (gameLoop != null) {
+            gameLoop.stop();
+        }
 
         gameLoop = new AnimationTimer() {
             @Override
@@ -229,25 +242,23 @@ public class GameManager {
     public void handleInput(KeyCode key, boolean pressed) {
         if (pressed) {
             pressedKeys.add(key);
-            if (key == KeyCode.P) {
-                if (gameState == GameState.MENU) {
-                    gameState = GameState.READY;
-                }
-            }
+
             // Handle special keys
             if (key == KeyCode.SPACE) {
                 if (gameState == GameState.READY) {
                     gameState = GameState.PLAYING;
                     for (Ball ball : ballManager.getBallsList()) {
-                        ball.setDirectionY(-1); // Bắt đầu bay lên
+                        ball.setDirectionY(-1);
                     }
                 } else if (gameState == GameState.PLAYING) {
                     gameState = GameState.PAUSED;
                 } else if (gameState == GameState.PAUSED) {
                     gameState = GameState.PLAYING;
                 }
+            } else if (key == KeyCode.ENTER && gameState == GameState.MENU) {
+                startNewGame();
             } else if (key == KeyCode.R && gameState == GameState.GAME_OVER) {
-                reset();
+                startNewGame();
             }
         } else {
             pressedKeys.remove(key);
@@ -297,34 +308,12 @@ public class GameManager {
     }
 
     /**
-     * Resets the game to initial state.
-     */
-    private void reset() {
-        score = 0;
-        lives = LIVES;
-        level = 1;
-        initGameObjects(level);
-        start();
-    }
-
-    /**
      * Renders all game objects.
      */
     private void render() {
         gameView.clear();
 
-        // Render bricks
-        brickManager.renderBrickList(gameView.getGraphicsContext());
-
-        // Render power-ups
-        powerupManager.renderPowerUpList(gameView.getGraphicsContext());
-
-        // Render paddle and ball
-        paddle.render(gameView.getGraphicsContext());
-        ballManager.renderBallList(gameView.getGraphicsContext());
-
-        // Render UI
-        gameView.renderUI(score, lives, level, gameState, powerUpTimer);
+        gameView.render(this);
     }
 
     public int getScore() {

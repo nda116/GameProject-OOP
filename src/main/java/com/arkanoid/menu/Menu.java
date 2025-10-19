@@ -43,7 +43,7 @@ public class Menu {
      */
     private void loadImages() {
         try {
-            backgroundImage = new Image("/images/menu.png");
+            backgroundImage = new Image("/images/menu/menu.png");
         } catch (Exception e) {
             System.out.println("Background image not found");
             backgroundImage = null;
@@ -60,15 +60,12 @@ public class Menu {
         double startY = screenHeight / 2 + 50;
         double spacing = 80;
 
-        try {
-            buttons.add(new Button(startX, startY, buttonWidth, buttonHeight,
-                    "/images/new_game_button.png"));
-            buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight,
-                    "/images/exit_button.png"));
-        } catch (Exception e) {
-            buttons.add(new Button(startX, startY, buttonWidth, buttonHeight, "NEW GAME"));
-            buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "EXIT"));
-        }
+        /*buttons.add(new Button(startX, startY, buttonWidth, buttonHeight,
+                "/images/menu/new_game_button.png"));
+        buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight,
+                "/images/menu/exit_button.png"));*/
+        buttons.add(new Button(startX, startY, buttonWidth, buttonHeight, "NEW GAME"));
+        buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "EXIT"));
     }
 
     /**
@@ -79,9 +76,6 @@ public class Menu {
     public void render(GraphicsContext gc) {
         // Draw background
         gc.drawImage(backgroundImage, 0, 0, screenWidth, screenHeight);
-
-        // Draw logo or title
-        drawTitle(gc);
 
         // Draw buttons
         for (Button button : buttons) {
@@ -94,29 +88,6 @@ public class Menu {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("Click a button or press ENTER to start",
                 screenWidth / 2, screenHeight - 30);
-    }
-
-    /**
-     * Draws the game title.
-     *
-     * @param gc graphics context
-     */
-    private void drawTitle(GraphicsContext gc) {
-        gc.setFont(TITLE_FONT);
-        gc.setTextAlign(TextAlignment.CENTER);
-
-        // Draw title shadow
-        gc.setFill(Color.rgb(0, 0, 0, 0.5));
-        gc.fillText("ARKANOID", screenWidth / 2 + 4, 154);
-
-        // Draw title with gradient effect
-        gc.setFill(Color.CYAN);
-        gc.fillText("ARKANOID", screenWidth / 2, 150);
-
-        // Draw subtitle
-        gc.setFont(SUBTITLE_FONT);
-        gc.setFill(Color.LIGHTGRAY);
-        gc.fillText("Classic Brick Breaking Game", screenWidth / 2, 190);
     }
 
     /**
