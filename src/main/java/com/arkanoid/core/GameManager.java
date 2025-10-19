@@ -259,12 +259,17 @@ public class GameManager {
                 startNewGame();
             } else if (key == KeyCode.R && gameState == GameState.GAME_OVER) {
                 startNewGame();
+            } else if (key == KeyCode.ESCAPE) {
+                if (gameState == GameState.PLAYING) {
+                    gameState = GameState.PAUSED;
+                } else if (gameState == GameState.PAUSED) {
+                    gameState = GameState.MENU;
+                }
             }
         } else {
             pressedKeys.remove(key);
         }
     }
-
 
     /**
      * Checks if the current level is complete.
@@ -305,6 +310,17 @@ public class GameManager {
     private void gameOver() {
         gameState = GameState.GAME_OVER;
         stop();
+    }
+
+    /**
+     * Resets the game to initial state.
+     */
+    private void reset() {
+        score = 0;
+        lives = LIVES;
+        level = 1;
+        initGameObjects(level);
+        gameState = GameState.PLAYING;
     }
 
     /**

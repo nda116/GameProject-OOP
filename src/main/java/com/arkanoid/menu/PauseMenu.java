@@ -93,7 +93,7 @@ public class PauseMenu {
         // Draw instructions
         gc.setFont(Font.font("Arial", 14));
         gc.setFill(Color.LIGHTGRAY);
-        gc.fillText("Press SPACE to resume", screenWidth / 2, panelY + panelHeight - 20);
+        gc.fillText("Press SPACE to resume or ESC to return to Menu", screenWidth / 2, panelY + panelHeight - 20);
     }
 
     /**
