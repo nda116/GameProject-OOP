@@ -26,9 +26,9 @@ public class GameManager {
 
     // Game objects
     private Paddle paddle;
-    private BallManager ballmanager;
-    private BrickManager brickmanager;
-    private PowerUpManager powerupmanager;
+    private BallManager ballManager;
+    private BrickManager brickManager;
+    private PowerUpManager powerupManager;
 
     // Game state
     private int score;
@@ -49,19 +49,6 @@ public class GameManager {
     private double powerUpTimer;
 
     private static final int LIVES = 3;
-
-
-    /**
-     * Enum representing different game states.
-     */
-    public enum GameState {
-        MENU,
-        READY,
-        PLAYING,
-        PAUSED,
-        GAME_OVER,
-        LEVEL_COMPLETE
-    }
 
     /**
      * Private constructor for Singleton pattern.
@@ -108,12 +95,12 @@ public class GameManager {
         double paddleY = WINDOW_HEIGHT - 50;
         paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 5);
 
-        ballmanager = new BallManager();
-        powerupmanager = new PowerUpManager();
+        ballManager = new BallManager();
+        powerupManager = new PowerUpManager();
 
         // createBricks();
-        brickmanager = new BrickManager();
-        brickmanager.createBricksFromFile("/maps/level" + level + ".txt");
+        brickManager = new BrickManager();
+        brickManager.createBricksFromFile("/maps/level" + level + ".txt");
     }
 
     /**
@@ -153,69 +140,69 @@ public class GameManager {
         }
 
         if (gameState == GameState.READY) {
-            if (ballmanager.getBallsList().isEmpty()) {
-                ballmanager.addBall(new Ball(0, 0, 12,3));
+            if (ballManager.getBallsList().isEmpty()) {
+                ballManager.addBall(new Ball(0, 0, 12,3));
             }
-            ballmanager.setDefault(paddle);
+            ballManager.setDefault(paddle);
         }
 
         // Check collision between balls and paddle
-        for (Ball ball : ballmanager.getBallsList()){
+        for (Ball ball : ballManager.getBallsList()){
             if (checkCollision(ball, paddle)) {
                 ball.bounceOffPaddle(paddle);
             }
         }
 
         // Check collision between balls and bricks
-        for (Brick brick : brickmanager.getBricksList()) {
-            for (Ball ball : ballmanager.getBallsList()){
+        for (Brick brick : brickManager.getBricksList()) {
+            for (Ball ball : ballManager.getBallsList()){
                 if (checkCollision(brick, ball)) {
-                    brickmanager.updateBrickHP(brick);
+                    brickManager.updateBrickHP(brick);
                     ball.bounceOff(brick);
                 }
             }
         }
 
         // Check collision between bullet and bricks
-        for (Brick brick : brickmanager.getBricksList()) {
+        for (Brick brick : brickManager.getBricksList()) {
             for (Bullet bullet : paddle.getBullets().getBulletsList()){
                 if (checkCollision(brick, bullet)) {
-                    brickmanager.updateBrickHP(brick);
+                    brickManager.updateBrickHP(brick);
                     bullet.deActive();
                 }
             }
         }
 
         // Check collision between powerups and paddle
-        for (PowerUp powerup : powerupmanager.getPowerupList()) {
+        for (PowerUp powerup : powerupManager.getPowerupList()) {
             if (checkCollision(powerup, paddle)) {
-                powerup.applyEffect(paddle, ballmanager);
+                powerup.applyEffect(paddle, ballManager);
                 powerup.stopFalling();
             }
         }
 
         paddle.update();
-        ballmanager.updateBall();
-        powerupmanager.updatePowerUp();
+        ballManager.updateBall();
+        powerupManager.updatePowerUp();
 
-        score += brickmanager.updateBrickList(powerupmanager);
-        ballmanager.updateBallList();
-        powerupmanager.updatePowerUpList();
+        score += brickManager.updateBrickList(powerupManager);
+        ballManager.updateBallList();
+        powerupManager.updatePowerUpList();
 
         // Check if ball is lost
-        if (ballmanager.getBallsList().isEmpty()) {
+        if (ballManager.getBallsList().isEmpty()) {
             lives--;
             if (lives <= 0) {
                 gameOver();
             } else {
                 paddle.setDefault();
-                ballmanager.setDefault(paddle);
-                powerupmanager.getPowerupList().clear();
+                ballManager.setDefault(paddle);
+                powerupManager.getPowerupList().clear();
                 gameState = GameState.READY;
             }
         }
 
-        if (brickmanager.getTotalScore() == 0) {
+        if (brickManager.getTotalScore() == 0) {
             levelComplete();
         }
     }
@@ -251,7 +238,7 @@ public class GameManager {
             if (key == KeyCode.SPACE) {
                 if (gameState == GameState.READY) {
                     gameState = GameState.PLAYING;
-                    for (Ball ball : ballmanager.getBallsList()) {
+                    for (Ball ball : ballManager.getBallsList()) {
                         ball.setDirectionY(-1); // Bắt đầu bay lên
                     }
                 } else if (gameState == GameState.PLAYING) {
@@ -327,14 +314,14 @@ public class GameManager {
         gameView.clear();
 
         // Render bricks
-        brickmanager.renderBrickList(gameView.getGraphicsContext());
+        brickManager.renderBrickList(gameView.getGraphicsContext());
 
         // Render power-ups
-        powerupmanager.renderPowerUpList(gameView.getGraphicsContext());
+        powerupManager.renderPowerUpList(gameView.getGraphicsContext());
 
         // Render paddle and ball
         paddle.render(gameView.getGraphicsContext());
-        ballmanager.renderBallList(gameView.getGraphicsContext());
+        ballManager.renderBallList(gameView.getGraphicsContext());
 
         // Render UI
         gameView.renderUI(score, lives, level, gameState, powerUpTimer);
@@ -352,7 +339,31 @@ public class GameManager {
         return gameState;
     }
 
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
     public int getLevel() {
         return level;
+    }
+
+    public double getPowerUpTimer() {
+        return powerUpTimer;
+    }
+
+    public Paddle getPaddle() {
+        return paddle;
+    }
+
+    public BallManager getBallManager() {
+        return ballManager;
+    }
+
+    public BrickManager getBrickManager() {
+        return brickManager;
+    }
+
+    public PowerUpManager getPowerupManager() {
+        return powerupManager;
     }
 }
