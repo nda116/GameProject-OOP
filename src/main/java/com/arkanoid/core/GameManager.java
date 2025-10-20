@@ -34,7 +34,7 @@ public class GameManager {
     private int score;
     private int lives;
     private GameState gameState;
-    private int level = 1;
+    private int level;
 
     private GameView gameView;
 
@@ -78,8 +78,6 @@ public class GameManager {
 
         // Start at main menu
         gameState = GameState.MENU;
-
-        initGameObjects(level);
     }
 
     /**

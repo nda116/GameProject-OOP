@@ -8,7 +8,6 @@ import com.arkanoid.powerups.PowerUpManager;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -96,7 +95,7 @@ public class BrickManager {
                             addBrick(new ExplosionBrick(x, y, brickWidth, brickHeight));
                             break;
                         case "06":
-                            addBrick(new InvisibleBrick(x, y, brickWidth, brickHeight));
+                            addBrick(new GlassBrick(x, y, brickWidth, brickHeight));
                             break;
                         case "00":
                         default:

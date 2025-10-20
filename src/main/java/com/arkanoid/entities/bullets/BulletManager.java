@@ -31,7 +31,7 @@ public class BulletManager {
      * @param paddle paddle to shoot.
      */
     public void spawnBullets(Paddle paddle) {
-        int totalShots = 7;
+        int totalShots = 10;
         double spawnDelay = 0.2;
 
         bulletTimeline = new Timeline(new KeyFrame(Duration.seconds(spawnDelay), event -> {
