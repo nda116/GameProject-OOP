@@ -34,7 +34,7 @@ public class GameManager {
     private int score;
     private int lives;
     private GameState gameState;
-    private int level;
+    private int level = 1;
 
     private GameView gameView;
 

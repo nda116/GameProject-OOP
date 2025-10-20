@@ -1,6 +1,6 @@
 package com.arkanoid.entities.bricks;
 
-import javafx.scene.canvas.GraphicsContext;
+
 
 /**
  * Constructor for ExplosionBricks
@@ -13,10 +13,5 @@ public class ExplosionBrick extends Brick {
         setBrickHP(1);
         setBrickScore(20);
         setObjectImage("/images/bricks/explosion_brick.png");
-    }
-
-    @Override
-    public void render(GraphicsContext gc) {
-        gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
     }
 }

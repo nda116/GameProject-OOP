@@ -1,7 +1,6 @@
 package com.arkanoid.entities.bricks;
 
 import com.arkanoid.powerups.*;
-import javafx.scene.canvas.GraphicsContext;
 
 import java.util.Random;
 
@@ -31,6 +30,7 @@ public class NormalBrick extends Brick {
      * @return string imagePath.
      */
     private String setBrickstat(String color) {
+
         if (color.equals(RED)) {
             setBrickScore(50);
             return "/images/bricks/normal_red_brick.png";
@@ -46,14 +46,6 @@ public class NormalBrick extends Brick {
 
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     /**
      * randomly drop powerup, the type powerup is random, add to powerupsList.
      * increase chance if last brick didnt drop powerup.
@@ -61,6 +53,7 @@ public class NormalBrick extends Brick {
      */
     public int dropPowerUp(PowerUpManager powerupmanager, int numberPowerUp, int numberNormalBrick) {
         double powerUpDropChance = (double) numberPowerUp / numberNormalBrick;
+
         if (rand.nextFloat() < powerUpDropChance) {
             int type = rand.nextInt(6); //set up power
             if (type == PowerUp.EXPAND) {
@@ -78,11 +71,7 @@ public class NormalBrick extends Brick {
             }
             numberPowerUp--;
         }
-        return numberPowerUp;
-    }
 
-    @Override
-    public void render(GraphicsContext gc) {
-        gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
+        return numberPowerUp;
     }
 }

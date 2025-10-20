@@ -17,7 +17,7 @@ public class InvisibleBrick extends Brick {
     @Override
     public void render(GraphicsContext gc) {
         if (getBrickHP() == 1) {
-            gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
+            super.render(gc);
         }
     }
 }
