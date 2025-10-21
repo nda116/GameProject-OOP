@@ -33,6 +33,9 @@ public class Main extends Application {
         // Set up input handling
         scene.setOnKeyPressed(event -> gameManager.handleInput(event.getCode(), true));
         scene.setOnKeyReleased(event -> gameManager.handleInput(event.getCode(), false));
+        scene.setOnKeyTyped(event -> {
+            gameManager.handleTextInput(event.getCharacter());
+        });
 
         // Configure stage
         primaryStage.setTitle(GAME_TITLE);

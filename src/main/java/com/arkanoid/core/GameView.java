@@ -15,13 +15,13 @@ import javafx.scene.text.TextAlignment;
  */
 public class GameView {
 
-    private StackPane root;
-    private Canvas canvas;
-    private GraphicsContext gc;
+    private final StackPane root;
+    private final Canvas canvas;
+    private final GraphicsContext gc;
 
     // Menus
-    private Menu mainMenu;
-    private PauseMenu pauseMenu;
+    private final Menu mainMenu;
+    private final PauseMenu pauseMenu;
 
     private static final Color BACKGROUND_COLOR = Color.rgb(20, 20, 40);
     private static final Color UI_TEXT_COLOR = Color.WHITE;
@@ -84,68 +84,52 @@ public class GameView {
 
             case GAME_OVER:
                 renderGameplay(gameManager);
+                gc.setFill(Color.rgb(0, 0, 0, 0.6)); // 0.6 = độ trong suốt (0.0 -> trong suốt, 1.0 -> đen đặc)
+                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+                gameManager.getGameOverScreen().render(gc);
                 break;
         }
     }
 
-    /**
-     * Renders the main menu.
-     */
+    /** Renders the main menu. */
     private void renderMainMenu() {
         mainMenu.render(gc);
     }
 
-    /**
-     * Renders the pause menu overlay.
-     */
+    /** Renders the pause menu overlay. */
     private void renderPauseMenu() {
         pauseMenu.render(gc);
     }
 
-    /**
-     * Renders gameplay (bricks, paddle, ball, UI).
-     *
-     * @param gameManager the game manager
-     */
+    /** Renders the game over screen. */
+    private void renderGameOver(GameManager gameManager) {
+        renderGameplay(gameManager);
+        gameManager.getGameOverScreen().render(gc);
+    }
+
+    /** Renders gameplay (bricks, paddle, ball, UI). */
     private void renderGameplay(GameManager gameManager) {
-        // Render bricks
         gameManager.getBrickManager().renderBrickList(gc);
-
-        // Render power-ups
         gameManager.getPowerupManager().renderPowerUpList(gc);
-
-        // Render paddle and ball
         gameManager.getPaddle().render(gc);
         gameManager.getBallManager().renderBallList(gc);
-
-        // Render UI
         renderGameUI(gameManager);
-
-        // Render state-specific messages
         renderGameStateMessage(gameManager.getGameState());
     }
 
-    /**
-     * Renders the game UI (score, lives, level, power-up timer).
-     *
-     * @param gameManager the game manager
-     */
+    /** Renders the game UI (score, lives, level, etc). */
     private void renderGameUI(GameManager gameManager) {
         gc.setFill(UI_TEXT_COLOR);
         gc.setFont(UI_FONT);
 
-        // Score
         gc.setTextAlign(TextAlignment.LEFT);
         gc.fillText("Score: " + gameManager.getScore(), 10, 25);
-
-        // Lives
         gc.fillText("Lives: " + gameManager.getLives(), 10, 45);
 
-        // Level
         gc.setTextAlign(TextAlignment.RIGHT);
         gc.fillText("Level: " + gameManager.getLevel(), canvas.getWidth() - 10, 25);
 
-        // Power-up timer
         double powerUpTimer = gameManager.getPowerUpTimer();
         if (powerUpTimer > 0) {
             gc.fillText(String.format("Power-up: %.1fs", powerUpTimer),
@@ -153,11 +137,7 @@ public class GameView {
         }
     }
 
-    /**
-     * Renders messages based on game state.
-     *
-     * @param gameState current game state
-     */
+    /** Renders state-specific messages (READY, LEVEL COMPLETE). */
     private void renderGameStateMessage(GameState gameState) {
         double centerX = canvas.getWidth() / 2;
         double centerY = canvas.getHeight() / 2;
@@ -173,20 +153,6 @@ public class GameView {
                 gc.fillText("Use LEFT/RIGHT arrows or A/D to move", centerX, centerY + 30);
                 break;
 
-            case GAME_OVER:
-                // Semi-transparent overlay
-                gc.setFill(Color.rgb(0, 0, 0, 0.7));
-                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-                gc.setFont(TITLE_FONT);
-                gc.setFill(Color.RED);
-                gc.fillText("GAME OVER", centerX, centerY - 40);
-
-                gc.setFont(MESSAGE_FONT);
-                gc.setFill(Color.WHITE);
-                gc.fillText("Press R to restart", centerX, centerY + 20);
-                break;
-
             case LEVEL_COMPLETE:
                 gc.setFont(TITLE_FONT);
                 gc.setFill(Color.LIGHTGREEN);
@@ -196,25 +162,12 @@ public class GameView {
                 gc.fillText("Next level starting...", centerX, centerY + 30);
                 break;
 
-            case PLAYING:
-
+            default:
                 break;
         }
     }
 
     public StackPane getRoot() {
         return root;
-    }
-
-    public GraphicsContext getGraphicsContext() {
-        return gc;
-    }
-
-    public double getWidth() {
-        return canvas.getWidth();
-    }
-
-    public double getHeight() {
-        return canvas.getHeight();
     }
 }

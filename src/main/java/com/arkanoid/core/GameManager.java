@@ -4,7 +4,10 @@ import com.arkanoid.entities.*;
 import com.arkanoid.entities.balls.*;
 import com.arkanoid.entities.bricks.*;
 import com.arkanoid.entities.bullets.Bullet;
+import com.arkanoid.menu.*;
 import com.arkanoid.powerups.*;
+
+
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
@@ -29,6 +32,9 @@ public class GameManager {
     private BallManager ballManager;
     private BrickManager brickManager;
     private PowerUpManager powerupManager;
+
+    private GameOverScreen gameOverScreen;
+
 
     // Game state
     private int score;
@@ -75,6 +81,7 @@ public class GameManager {
      */
     public void init(GameView view) {
         this.gameView = view;
+        gameOverScreen = new GameOverScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
 
         // Start at main menu
         gameState = GameState.MENU;
@@ -205,6 +212,7 @@ public class GameManager {
             lives--;
             if (lives <= 0) {
                 gameOver();
+                return;
             } else {
                 paddle.setDefault();
                 ballManager.setDefault(paddle);
@@ -255,8 +263,21 @@ public class GameManager {
                 }
             } else if (key == KeyCode.ENTER && gameState == GameState.MENU) {
                 startNewGame();
-            } else if (key == KeyCode.R && gameState == GameState.GAME_OVER) {
-                startNewGame();
+            } else if (gameState == GameState.GAME_OVER) {
+                if (!gameOverScreen.isNameConfirmed()) {
+                    // ENTER or BACKSPACE handled by KeyCode
+                    if (key == KeyCode.ENTER) {
+                        gameOverScreen.handleInput("ENTER");
+                    } else if (key == KeyCode.BACK_SPACE) {
+                        gameOverScreen.handleInput("BACKSPACE");
+                    }
+                } else {
+                    if (key == KeyCode.R) {
+                        startNewGame();
+                    } else if (key == KeyCode.M) {
+                        gameState = GameState.MENU;
+                    }
+                }
             } else if (key == KeyCode.ESCAPE) {
                 if (gameState == GameState.PLAYING) {
                     gameState = GameState.PAUSED;
@@ -310,7 +331,9 @@ public class GameManager {
      */
     private void gameOver() {
         gameState = GameState.GAME_OVER;
-        stop();
+
+        gameOverScreen = new GameOverScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+        gameOverScreen.setScore(score);
     }
 
     /**
@@ -329,9 +352,10 @@ public class GameManager {
      */
     private void render() {
         gameView.clear();
-
         gameView.render(this);
     }
+
+
 
     public int getScore() {
         return score;
@@ -372,4 +396,17 @@ public class GameManager {
     public PowerUpManager getPowerupManager() {
         return powerupManager;
     }
+
+    public void handleTextInput(String character) {
+        if (gameState == GameState.GAME_OVER && !gameOverScreen.isNameConfirmed()) {
+            gameOverScreen.handleInput(character);
+            gameView.render(this);
+        }
+    }
+
+    public GameOverScreen getGameOverScreen() {
+        return gameOverScreen;
+    }
+
+
 }
