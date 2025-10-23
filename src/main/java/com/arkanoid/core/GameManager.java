@@ -91,7 +91,7 @@ public class GameManager {
         double paddleHeight = 25;
         double paddleX = (WINDOW_WIDTH - paddleWidth) / 2;
         double paddleY = WINDOW_HEIGHT - 50;
-        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 4);
+        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 5);
 
         ballManager = new BallManager();
         powerupManager = new PowerUpManager();
