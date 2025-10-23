@@ -18,8 +18,10 @@ public class Button {
     private double height;
     private String text;
     private Image image;
+    private boolean selected;
 
     private static final Color NORMAL_COLOR = Color.rgb(70, 130, 180);
+    private static final Color SELECTED_COLOR = Color.rgb(100, 160, 210);
     private static final Color TEXT_COLOR = Color.WHITE;
     private static final Font BUTTON_FONT = Font.font("Arial", FontWeight.BOLD, 24);
 
@@ -38,6 +40,7 @@ public class Button {
         this.width = width;
         this.height = height;
         this.text = text;
+        this.selected = false;
     }
 
     /**
@@ -47,7 +50,7 @@ public class Button {
      */
     public void render(GraphicsContext gc) {
         // Draw text button
-        Color buttonColor = NORMAL_COLOR;
+        Color buttonColor = selected ? SELECTED_COLOR : NORMAL_COLOR;
 
         // Draw button background with shadow
         gc.setFill(Color.rgb(0, 0, 0, 0.3));
@@ -60,6 +63,14 @@ public class Button {
         gc.setStroke(Color.rgb(50, 100, 150));
         gc.setLineWidth(2);
         gc.strokeRoundRect(x, y, width, height, 10, 10);
+
+        // Draw selected
+        if (selected) {
+            gc.setFill(Color.YELLOW);
+            gc.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+            gc.setTextAlign(TextAlignment.LEFT);
+            gc.fillText(">>", x - 40, y + height / 2 + 10);
+        }
 
         // Draw text
         gc.setFill(TEXT_COLOR);
@@ -86,5 +97,13 @@ public class Button {
 
     public double getHeight() {
         return height;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }
