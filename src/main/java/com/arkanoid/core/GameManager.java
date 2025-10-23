@@ -241,35 +241,108 @@ public class GameManager {
         if (pressed) {
             pressedKeys.add(key);
 
-            // Handle special keys
-            if (key == KeyCode.SPACE) {
-                if (gameState == GameState.READY) {
-                    gameState = GameState.PLAYING;
-                    for (Ball ball : ballManager.getBallsList()) {
-                        ball.setDirectionY(-1);
-                    }
-                } else if (gameState == GameState.PLAYING) {
-                    gameState = GameState.PAUSED;
-                } else if (gameState == GameState.PAUSED) {
-                    gameState = GameState.PLAYING;
-                }
-            } else if (key == KeyCode.ENTER && gameState == GameState.MENU) {
-                startNewGame();
-            } else if (key == KeyCode.R && gameState == GameState.GAME_OVER) {
-                startNewGame();
-            } else if (key == KeyCode.ESCAPE) {
-                if (gameState == GameState.PLAYING) {
-                    gameState = GameState.PAUSED;
-                } else if (gameState == GameState.PAUSED) {
-                    gameState = GameState.MENU;
-                } else if (gameState == GameState.MENU) {
-                    System.exit(0);
-                }
-
+            // Handle menu navigation
+            if (gameState == GameState.MENU) {
+                handleMenuInput(key);
+            } else if (gameState == GameState.PAUSED) {
+                handlePauseMenuInput(key);
+            } else if (gameState == GameState.GAME_OVER) {
+                handleGameOverInput(key);
+            } else if (gameState == GameState.READY || gameState == GameState.PLAYING) {
+                handleGameplayInput(key);
             }
         } else {
             pressedKeys.remove(key);
         }
+    }
+
+    /**
+     * Handles main menu input.
+     *
+     * @param key the key code
+     */
+    private void handleMenuInput(KeyCode key) {
+        if (key == KeyCode.UP) {
+            gameView.getMainMenu().selectPrevious();
+        } else if (key == KeyCode.DOWN) {
+            gameView.getMainMenu().selectNext();
+        } else if (key == KeyCode.ENTER) {
+            int selection = gameView.getMainMenu().getSelectedIndex();
+            if (selection == 0) { // New Game
+                startNewGame();
+            } else if (selection == 1) { // Exit
+                System.exit(0);
+            }
+        }
+    }
+
+    /**
+     * Handles pause menu input.
+     *
+     * @param key the key code
+     */
+    private void handlePauseMenuInput(KeyCode key) {
+        if (key == KeyCode.UP) {
+            gameView.getPauseMenu().selectPrevious();
+        } else if (key == KeyCode.DOWN) {
+            gameView.getPauseMenu().selectNext();
+        } else if (key == KeyCode.ENTER) {
+            int selection = gameView.getPauseMenu().getSelectedIndex();
+            if (selection == 0) { // Resume
+                resumeGame();
+            } else if (selection == 1) { // Main Menu
+                returnToMainMenu();
+            }
+        } else if (key == KeyCode.ESCAPE || key == KeyCode.SPACE) {
+            resumeGame();
+        }
+    }
+
+    /**
+     * Handles game over input.
+     *
+     * @param key the key code
+     */
+    private void handleGameOverInput(KeyCode key) {
+
+    }
+
+    /**
+     * Handles gameplay input.
+     *
+     * @param key the key code
+     */
+    private void handleGameplayInput(KeyCode key) {
+        if (key == KeyCode.SPACE) {
+            if (gameState == GameState.READY) {
+                gameState = GameState.PLAYING;
+                for (Ball ball : ballManager.getBallsList()) {
+                    ball.setDirectionY(-1);
+                }
+            } else if (gameState == GameState.PLAYING) {
+                gameState = GameState.PAUSED;
+                gameView.getPauseMenu().resetSelection();
+            }
+        } else if (key == KeyCode.ESCAPE && gameState == GameState.PLAYING) {
+            gameState = GameState.PAUSED;
+            gameView.getPauseMenu().resetSelection();
+        }
+    }
+
+    /**
+     * Returns to main menu.
+     */
+    public void returnToMainMenu() {
+        stop();
+        gameState = GameState.MENU;
+        start(); // Restart loop for menu rendering
+    }
+
+    /**
+     * Resumes the game from pause.
+     */
+    public void resumeGame() {
+        gameState = GameState.PLAYING;
     }
 
     /**

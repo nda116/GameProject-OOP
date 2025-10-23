@@ -217,4 +217,12 @@ public class GameView {
     public double getHeight() {
         return canvas.getHeight();
     }
+
+    public Menu getMainMenu() {
+        return mainMenu;
+    }
+
+    public PauseMenu getPauseMenu() {
+        return pauseMenu;
+    }
 }
