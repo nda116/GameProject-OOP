@@ -49,19 +49,15 @@ public class Button {
      * @param gc graphics context
      */
     public void render(GraphicsContext gc) {
-        // Draw text button
         Color buttonColor = selected ? SELECTED_COLOR : NORMAL_COLOR;
 
-        // Draw button background with shadow
-        gc.setFill(Color.rgb(0, 0, 0, 0.3));
-        gc.fillRoundRect(x + 5, y + 5, width, height, 10, 10);
-
+        // Draw button background
         gc.setFill(buttonColor);
         gc.fillRoundRect(x, y, width, height, 10, 10);
 
-        // Draw border
-        gc.setStroke(Color.rgb(50, 100, 150));
-        gc.setLineWidth(2);
+        // Draw border (highlight when selected)
+        gc.setStroke(selected ? Color.YELLOW : Color.rgb(50, 100, 150));
+        gc.setLineWidth(selected ? 4 : 2);
         gc.strokeRoundRect(x, y, width, height, 10, 10);
 
         // Draw selected

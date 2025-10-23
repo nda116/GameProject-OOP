@@ -304,7 +304,9 @@ public class GameManager {
      * @param key the key code
      */
     private void handleGameOverInput(KeyCode key) {
-
+        if (key == KeyCode.R) {
+            startNewGame();
+        }
     }
 
     /**
