@@ -17,6 +17,7 @@ import java.util.List;
 public class PauseMenu {
 
     private List<Button> buttons;
+    private int selectedIndex;
     private double screenWidth;
     private double screenHeight;
 
@@ -48,6 +49,54 @@ public class PauseMenu {
 
         buttons.add(new Button(startX, startY, buttonWidth, buttonHeight, "RESUME"));
         buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "MAIN MENU"));
+    }
+
+    /**
+     * Moves selection up.
+     */
+    public void selectPrevious() {
+        selectedIndex--;
+        if (selectedIndex < 0) {
+            selectedIndex = buttons.size() - 1;
+        }
+        updateSelection();
+    }
+
+    /**
+     * Moves selection down.
+     */
+    public void selectNext() {
+        selectedIndex++;
+        if (selectedIndex >= buttons.size()) {
+            selectedIndex = 0;
+        }
+        updateSelection();
+    }
+
+    /**
+     * Updates button selection states.
+     */
+    private void updateSelection() {
+        for (int i = 0; i < buttons.size(); i++) {
+            buttons.get(i).setSelected(i == selectedIndex);
+        }
+    }
+
+    /**
+     * Gets the currently selected option index.
+     *
+     * @return selected index (0 = Resume, 1 = Main Menu)
+     */
+    public int getSelectedIndex() {
+        return selectedIndex;
+    }
+
+    /**
+     * Resets selection to first button.
+     */
+    public void resetSelection() {
+        selectedIndex = 0;
+        updateSelection();
     }
 
     /**
@@ -93,7 +142,8 @@ public class PauseMenu {
         // Draw instructions
         gc.setFont(Font.font("Arial", 14));
         gc.setFill(Color.LIGHTGRAY);
-        gc.fillText("Press SPACE to resume or ESC to return to Menu", screenWidth / 2, panelY + panelHeight - 20);
+        gc.fillText("Use ↑↓ to navigate, ENTER to select, ESC to resume", screenWidth / 2,
+                panelY + panelHeight - 20);
     }
 
     /**

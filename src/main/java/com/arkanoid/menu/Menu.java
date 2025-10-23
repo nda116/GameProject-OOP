@@ -15,8 +15,8 @@ import java.util.List;
 public class Menu {
 
     private List<Button> buttons;
+    private int selectedIndex;
     private Image backgroundImage;
-    private Image logoImage;
     private double screenWidth;
     private double screenHeight;
 
@@ -69,6 +69,46 @@ public class Menu {
     }
 
     /**
+     * Moves selection up.
+     */
+    public void selectPrevious() {
+        selectedIndex--;
+        if (selectedIndex < 0) {
+            selectedIndex = buttons.size() - 1;
+        }
+        updateSelection();
+    }
+
+    /**
+     * Moves selection down.
+     */
+    public void selectNext() {
+        selectedIndex++;
+        if (selectedIndex >= buttons.size()) {
+            selectedIndex = 0;
+        }
+        updateSelection();
+    }
+
+    /**
+     * Updates button selection states.
+     */
+    private void updateSelection() {
+        for (int i = 0; i < buttons.size(); i++) {
+            buttons.get(i).setSelected(i == selectedIndex);
+        }
+    }
+
+    /**
+     * Gets the currently selected option index.
+     *
+     * @return selected index (0 = New Game, 1 = Exit)
+     */
+    public int getSelectedIndex() {
+        return selectedIndex;
+    }
+
+    /**
      * Renders the main menu.
      *
      * @param gc graphics context
@@ -86,7 +126,7 @@ public class Menu {
         gc.setFill(Color.rgb(255, 255, 255, 0.7));
         gc.setFont(SUBTITLE_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("Click a button or press ENTER to start or press ESC to exit",
+        gc.fillText("Use ↑↓ arrows to navigate, ENTER to select",
                 screenWidth / 2, screenHeight - 30);
     }
 
