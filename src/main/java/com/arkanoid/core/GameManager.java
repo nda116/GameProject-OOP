@@ -4,7 +4,9 @@ import com.arkanoid.entities.*;
 import com.arkanoid.entities.balls.*;
 import com.arkanoid.entities.bricks.*;
 import com.arkanoid.entities.bullets.Bullet;
+import com.arkanoid.menu.*;
 import com.arkanoid.powerups.*;
+
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
@@ -89,7 +91,7 @@ public class GameManager {
         double paddleHeight = 25;
         double paddleX = (WINDOW_WIDTH - paddleWidth) / 2;
         double paddleY = WINDOW_HEIGHT - 50;
-        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 5);
+        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 4);
 
         ballManager = new BallManager();
         powerupManager = new PowerUpManager();
@@ -146,13 +148,17 @@ public class GameManager {
     public void update() {
         if (gameState == GameState.PLAYING || gameState == GameState.READY) {
             handleContinuousInput();
+        } else if (gameState == GameState.GAME_OVER) {
+            render();
+            return;
         } else {
             return;
         }
 
+
         if (gameState == GameState.READY) {
             if (ballManager.getBallsList().isEmpty()) {
-                ballManager.addBall(new Ball(0, 0, 12,3));
+                ballManager.addBall(new Ball(0, 0, 12,7));
             }
             ballManager.setDefault(paddle);
         }
@@ -304,16 +310,36 @@ public class GameManager {
      * @param key the key code
      */
     private void handleGameOverInput(KeyCode key) {
-        if (key == KeyCode.R) {
-            startNewGame();
+        GameOver go = gameView.getGameOverMenu();
+
+        boolean wasNameEntered = go.isNameEntered();
+        go.handleInput(key);
+        render();
+
+        if (!wasNameEntered && go.isNameEntered()) {
+            return;
+        }
+
+        if (go.isNameEntered() && key == KeyCode.ENTER) {
+            String selection = go.confirmSelection();
+            if (selection != null) {
+                if (selection.equalsIgnoreCase("RESTART")) {
+                    startNewGame();
+                } else if (selection.equalsIgnoreCase("BACK TO MENU")) {
+                    returnToMainMenu();
+                }
+            }
         }
     }
 
+
+
+
     /**
-     * Handles gameplay input.
-     *
-     * @param key the key code
-     */
+         * Handles gameplay input.
+         *
+         * @param key the key code
+         */
     private void handleGameplayInput(KeyCode key) {
         if (key == KeyCode.SPACE) {
             if (gameState == GameState.READY) {
@@ -385,7 +411,7 @@ public class GameManager {
      */
     private void gameOver() {
         gameState = GameState.GAME_OVER;
-        stop();
+        gameView.resetGameOverMenu(score);
     }
 
     /**
