@@ -22,6 +22,7 @@ public class GameView {
     // Menus
     private Menu mainMenu;
     private PauseMenu pauseMenu;
+    private GameOver gameOverMenu;
 
     private static final Color BACKGROUND_COLOR = Color.rgb(20, 20, 40);
     private static final Color UI_TEXT_COLOR = Color.WHITE;
@@ -44,6 +45,7 @@ public class GameView {
 
         mainMenu = new Menu(width, height);
         pauseMenu = new PauseMenu(width, height);
+        gameOverMenu = new GameOver(width, height);
 
         clear();
     }
@@ -84,6 +86,7 @@ public class GameView {
 
             case GAME_OVER:
                 renderGameplay(gameManager);
+                gameOverMenu.render(gc);
                 break;
         }
     }
@@ -122,7 +125,10 @@ public class GameView {
         renderGameUI(gameManager);
 
         // Render state-specific messages
-        renderGameStateMessage(gameManager.getGameState());
+        if (gameManager.getGameState() != GameState.GAME_OVER) {
+            renderGameStateMessage(gameManager.getGameState());
+        }
+
     }
 
     /**
@@ -174,17 +180,6 @@ public class GameView {
                 break;
 
             case GAME_OVER:
-                // Semi-transparent overlay
-                gc.setFill(Color.rgb(0, 0, 0, 0.7));
-                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-                gc.setFont(TITLE_FONT);
-                gc.setFill(Color.RED);
-                gc.fillText("GAME OVER", centerX, centerY - 40);
-
-                gc.setFont(MESSAGE_FONT);
-                gc.setFill(Color.WHITE);
-                gc.fillText("Press R to restart", centerX, centerY + 20);
                 break;
 
             case LEVEL_COMPLETE:
@@ -217,4 +212,22 @@ public class GameView {
     public double getHeight() {
         return canvas.getHeight();
     }
+
+    public Menu getMainMenu() {
+        return mainMenu;
+    }
+
+    public PauseMenu getPauseMenu() {
+        return pauseMenu;
+    }
+
+    public GameOver getGameOverMenu() {
+        return gameOverMenu;
+    }
+
+    public void resetGameOverMenu(int score) {
+        gameOverMenu = new GameOver(getWidth(), getHeight());
+        gameOverMenu.setScore(score);
+    }
+
 }
