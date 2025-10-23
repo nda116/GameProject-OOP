@@ -1,6 +1,5 @@
 package com.arkanoid.entities.bricks;
 
-import javafx.scene.canvas.GraphicsContext;
 
 /**
  * Constructor for InvincibleBricks.
@@ -12,11 +11,5 @@ public class InvincibleBrick extends Brick {
         setBrickHP(1000);
         setBrickScore(0);
         setObjectImage("/images/bricks/invincible_brick.png");
-    }
-
-    @Override
-    public void render(GraphicsContext gc) {
-        gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
-
     }
 }

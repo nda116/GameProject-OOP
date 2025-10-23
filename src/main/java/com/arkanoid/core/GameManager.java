@@ -78,8 +78,6 @@ public class GameManager {
 
         // Start at main menu
         gameState = GameState.MENU;
-
-        initGameObjects(level);
     }
 
     /**

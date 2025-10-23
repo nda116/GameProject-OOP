@@ -1,12 +1,13 @@
-package com.arkanoid.entities.bricks;
+    package com.arkanoid.entities.bricks;
 
+
+import javafx.animation.PauseTransition;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.util.Duration;
 import com.arkanoid.powerups.PowerUpManager;
-
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -37,9 +38,11 @@ public class BrickManager {
 
     private void addBrick (Brick newBrick) {
         bricksList.add(newBrick);
+
         if (newBrick.getType() == Brick.NORMAL) {
             numberNormalBrick++;
         }
+
         totalScore += newBrick.getBrickScore();
     }
 
@@ -92,7 +95,7 @@ public class BrickManager {
                             addBrick(new ExplosionBrick(x, y, brickWidth, brickHeight));
                             break;
                         case "06":
-                            addBrick(new InvisibleBrick(x, y, brickWidth, brickHeight));
+                            addBrick(new GlassBrick(x, y, brickWidth, brickHeight));
                             break;
                         case "00":
                         default:
@@ -114,30 +117,41 @@ public class BrickManager {
      */
     public void updateBrickHP(Brick brick) {
         brick.HPlost();
+
         if (brick.getType() == Brick.EXPLOSION) {
-            explosionTrigger(brick);
+            ArrayList<Brick> startWave = new ArrayList<>();
+            startWave.add(brick);
+            explosionTrigger(startWave);
         }
     }
 
     /**
      * Triggers a chain explosion starting from the specified brick.
-     * @param start start of the chain explosion.
+     * find Bricks surround explosive Brick and remove them at the same time.
+     * @param currentWave ArrayList contains Bricks from current wave.
      */
-    private void explosionTrigger (Brick start) {
-        Queue<Brick> explosionQueue = new ArrayDeque<>();
-        explosionQueue.add(start);
+    private void explosionTrigger(ArrayList<Brick> currentWave) {
+        if (currentWave.isEmpty()) return;
 
-        while (!explosionQueue.isEmpty()) {
-            Brick current = explosionQueue.poll();
+        ArrayList<Brick> nextWave = new ArrayList<>();
 
-            for (Brick brick : bricksList){
-                if(brick.getBrickHP() > 0 && current.isAdjacent(brick)) {
+        for (Brick current : currentWave) {
+            for (Brick brick : bricksList) {
+                if (brick.getBrickHP() > 0 && current.isAdjacent(brick)) {
+                    brick.triggerFlash();
                     brick.HPlost();
-                    if(brick.getType() == Brick.EXPLOSION) {
-                        explosionQueue.add(brick);
+
+                    if (brick.getType() == Brick.EXPLOSION && !nextWave.contains(brick)) {
+                        nextWave.add(brick);
                     }
                 }
             }
+        }
+
+        if (!nextWave.isEmpty()) {
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+            pause.setOnFinished(e -> explosionTrigger(nextWave));
+            pause.play();
         }
     }
 
@@ -150,10 +164,12 @@ public class BrickManager {
 
         while(it.hasNext()) {
             Brick brick = it.next();
-            if (brick.getBrickHP() <= 0) {
+
+            if (brick.getBrickHP() <= 0 && !brick.isFlashing()) {
                 score += brick.getBrickScore();
                 totalScore -= brick.getBrickScore();
                 it.remove();
+
                 if (brick.getType() == Brick.NORMAL) {
                     numberPowerUp = ((NormalBrick) brick).dropPowerUp(powerupmanager,
                             numberPowerUp, numberNormalBrick);
@@ -169,7 +185,11 @@ public class BrickManager {
      * @param gc GraphicContext.
      */
     public void renderBrickList(GraphicsContext gc) {
-        for (Brick brick : bricksList) {
+        //copy to avoid errors when bricksList changes while render
+        ArrayList<Brick> copy = new ArrayList<>(bricksList);
+
+        //render from copy
+        for (Brick brick : copy) {
             brick.render(gc);
         }
     }

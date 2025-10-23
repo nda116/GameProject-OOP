@@ -5,8 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 /**
  * Constructor for ExplosionBricks
  */
-public class InvisibleBrick extends Brick {
-    public InvisibleBrick(double x, double y, double width, double height) {
+public class GlassBrick extends Brick {
+    public GlassBrick(double x, double y, double width, double height) {
         super(x, y, width, height, Brick.INVISIBLE);
 
         setBrickHP(2);
@@ -17,7 +17,7 @@ public class InvisibleBrick extends Brick {
     @Override
     public void render(GraphicsContext gc) {
         if (getBrickHP() == 1) {
-            gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
+            super.render(gc);
         }
     }
 }
