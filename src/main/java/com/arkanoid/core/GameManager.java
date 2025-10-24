@@ -61,7 +61,6 @@ public class GameManager {
 
     /**
      * Gets the singleton instance of GameManager.
-     *
      * @return the GameManager instance
      */
     public static GameManager getInstance() {
@@ -96,7 +95,7 @@ public class GameManager {
         ballManager = new BallManager();
         powerupManager = new PowerUpManager();
 
-        // createBricks();
+        // create Bricks
         brickManager = new BrickManager();
         brickManager.createBricksFromFile("/maps/level" + level + ".txt");
     }
@@ -149,7 +148,6 @@ public class GameManager {
         if (gameState == GameState.PLAYING || gameState == GameState.READY) {
             handleContinuousInput();
         } else if (gameState == GameState.GAME_OVER) {
-            render();
             return;
         } else {
             return;
@@ -158,7 +156,7 @@ public class GameManager {
 
         if (gameState == GameState.READY) {
             if (ballManager.getBallsList().isEmpty()) {
-                ballManager.addBall(new Ball(0, 0, 12,7));
+                ballManager.addBall(new Ball(0, 0, 12,3));
             }
             ballManager.setDefault(paddle);
         }
@@ -264,7 +262,6 @@ public class GameManager {
 
     /**
      * Handles main menu input.
-     *
      * @param key the key code
      */
     private void handleMenuInput(KeyCode key) {
@@ -284,7 +281,6 @@ public class GameManager {
 
     /**
      * Handles pause menu input.
-     *
      * @param key the key code
      */
     private void handlePauseMenuInput(KeyCode key) {
@@ -306,7 +302,6 @@ public class GameManager {
 
     /**
      * Handles game over input.
-     *
      * @param key the key code
      */
     private void handleGameOverInput(KeyCode key) {
@@ -314,7 +309,6 @@ public class GameManager {
 
         boolean wasNameEntered = go.isNameEntered();
         go.handleInput(key);
-        render();
 
         if (!wasNameEntered && go.isNameEntered()) {
             return;
@@ -336,10 +330,9 @@ public class GameManager {
 
 
     /**
-         * Handles gameplay input.
-         *
-         * @param key the key code
-         */
+     * Handles gameplay input.
+     * @param key the key code
+     */
     private void handleGameplayInput(KeyCode key) {
         if (key == KeyCode.SPACE) {
             if (gameState == GameState.READY) {
@@ -374,15 +367,6 @@ public class GameManager {
     }
 
     /**
-     * Checks if the current level is complete.
-     *
-     * @return true if all bricks are destroyed
-     */
-    private boolean isLevelComplete() {
-        return true;
-    }
-
-    /**
      * Handles level completion.
      */
     private void levelComplete() {
@@ -412,17 +396,6 @@ public class GameManager {
     private void gameOver() {
         gameState = GameState.GAME_OVER;
         gameView.resetGameOverMenu(score);
-    }
-
-    /**
-     * Resets the game to initial state.
-     */
-    private void reset() {
-        score = 0;
-        lives = LIVES;
-        level = 1;
-        initGameObjects(level);
-        gameState = GameState.PLAYING;
     }
 
     /**
