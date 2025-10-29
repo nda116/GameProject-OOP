@@ -5,22 +5,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Pause menu overlay with resume and exit options.
- *
- * @author Arkanoid Team
- * @version 1.0
  */
-public class PauseMenu {
-
-    private List<Button> buttons;
-    private int selectedIndex;
-    private double screenWidth;
-    private double screenHeight;
-
+public class PauseMenu extends Menu {
     private static final Font TITLE_FONT = Font.font("Arial", FontWeight.BOLD, 56);
 
     /**
@@ -30,9 +19,7 @@ public class PauseMenu {
      * @param screenHeight screen height
      */
     public PauseMenu(double screenWidth, double screenHeight) {
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
-        this.buttons = new ArrayList<>();
+        super(screenWidth, screenHeight);
 
         createButtons();
     }
@@ -40,63 +27,18 @@ public class PauseMenu {
     /**
      * Creates pause menu buttons.
      */
-    private void createButtons() {
+    @Override
+    public void createButtons() {
+        getButtons().clear();
+
         double buttonWidth = 250;
         double buttonHeight = 60;
         double startX = (screenWidth - buttonWidth) / 2;
         double startY = (screenHeight - buttonHeight) / 2;
         double spacing = 80;
 
-        buttons.add(new Button(startX, startY, buttonWidth, buttonHeight, "RESUME"));
-        buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "MAIN MENU"));
-    }
-
-    /**
-     * Moves selection up.
-     */
-    public void selectPrevious() {
-        selectedIndex--;
-        if (selectedIndex < 0) {
-            selectedIndex = buttons.size() - 1;
-        }
-        updateSelection();
-    }
-
-    /**
-     * Moves selection down.
-     */
-    public void selectNext() {
-        selectedIndex++;
-        if (selectedIndex >= buttons.size()) {
-            selectedIndex = 0;
-        }
-        updateSelection();
-    }
-
-    /**
-     * Updates button selection states.
-     */
-    private void updateSelection() {
-        for (int i = 0; i < buttons.size(); i++) {
-            buttons.get(i).setSelected(i == selectedIndex);
-        }
-    }
-
-    /**
-     * Gets the currently selected option index.
-     *
-     * @return selected index (0 = Resume, 1 = Main Menu)
-     */
-    public int getSelectedIndex() {
-        return selectedIndex;
-    }
-
-    /**
-     * Resets selection to first button.
-     */
-    public void resetSelection() {
-        selectedIndex = 0;
-        updateSelection();
+        getButtons().add(new Button(startX, startY, buttonWidth, buttonHeight, "RESUME"));
+        getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "MAIN MENU"));
     }
 
     /**
@@ -104,6 +46,7 @@ public class PauseMenu {
      *
      * @param gc graphics context
      */
+    @Override
     public void render(GraphicsContext gc) {
         // Draw semi-transparent overlay
         gc.setFill(Color.rgb(0, 0, 0, 0.7));
@@ -135,7 +78,7 @@ public class PauseMenu {
         gc.fillText("PAUSED", screenWidth / 2, panelY + 80);
 
         // Draw buttons
-        for (Button button : buttons) {
+        for (Button button : getButtons()) {
             button.render(gc);
         }
 
@@ -144,14 +87,5 @@ public class PauseMenu {
         gc.setFill(Color.LIGHTGRAY);
         gc.fillText("Use ↑↓ to navigate, ENTER to select, ESC to resume", screenWidth / 2,
                 panelY + panelHeight - 20);
-    }
-
-    /**
-     * Gets the list of buttons.
-     *
-     * @return list of menu buttons
-     */
-    public List<Button> getButtons() {
-        return buttons;
     }
 }

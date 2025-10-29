@@ -43,7 +43,7 @@ public class GameView {
 
         root.getChildren().add(canvas);
 
-        mainMenu = new Menu(width, height);
+        mainMenu = new StartMenu(width, height);
         pauseMenu = new PauseMenu(width, height);
         gameOverMenu = new GameOver(width, height);
 
