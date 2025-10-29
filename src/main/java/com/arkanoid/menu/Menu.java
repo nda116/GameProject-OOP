@@ -10,21 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Main menu screen with background and buttons.
+ * Abstract base class for all menu types.
  */
-public class Menu {
+public abstract class Menu {
 
     private List<Button> buttons;
     private int selectedIndex;
     private Image backgroundImage;
-    private double screenWidth;
-    private double screenHeight;
 
-    private static final Font TITLE_FONT = Font.font("Arial", FontWeight.BOLD, 72);
-    private static final Font SUBTITLE_FONT = Font.font("Arial", FontWeight.NORMAL, 20);
+    protected double screenWidth;
+    protected double screenHeight;
 
     /**
-     * Creates the main menu.
+     * Base constructor for all menus.
      *
      * @param screenWidth screen width
      * @param screenHeight screen height
@@ -33,40 +31,23 @@ public class Menu {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         this.buttons = new ArrayList<>();
-
-        loadImages();
-        createButtons();
     }
 
     /**
-     * Loads menu images (background, logo).
+     * set ObjectImage from new image path.
+     * @param imagePath path to image.
      */
-    private void loadImages() {
+    protected void setObjectImage(String imagePath) {
         try {
-            backgroundImage = new Image("/images/menu/menu.png");
+            backgroundImage = new Image(getClass().getResourceAsStream(imagePath));
         } catch (Exception e) {
-            System.out.println("Background image not found");
-            backgroundImage = null;
+            System.out.println("Can not find" + imagePath);
         }
     }
 
-    /**
-     * Creates menu buttons.
-     */
-    private void createButtons() {
-        double buttonWidth = 300;
-        double buttonHeight = 60;
-        double startX = (screenWidth - buttonWidth) / 2;
-        double startY = screenHeight / 2 + 50;
-        double spacing = 80;
+    public abstract void createButtons();
 
-        /*buttons.add(new Button(startX, startY, buttonWidth, buttonHeight,
-                "/images/menu/new_game_button.png"));
-        buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight,
-                "/images/menu/exit_button.png"));*/
-        buttons.add(new Button(startX, startY, buttonWidth, buttonHeight, "NEW GAME"));
-        buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "EXIT"));
-    }
+    public abstract void render(GraphicsContext gc);
 
     /**
      * Moves selection up.
@@ -109,33 +90,18 @@ public class Menu {
     }
 
     /**
-     * Renders the main menu.
-     *
-     * @param gc graphics context
+     * Resets selection to first button.
      */
-    public void render(GraphicsContext gc) {
-        // Draw background
-        gc.drawImage(backgroundImage, 0, 0, screenWidth, screenHeight);
-
-        // Draw buttons
-        for (Button button : buttons) {
-            button.render(gc);
-        }
-
-        // Draw instructions
-        gc.setFill(Color.rgb(255, 255, 255, 0.7));
-        gc.setFont(SUBTITLE_FONT);
-        gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("Use ↑↓ arrows to navigate, ENTER to select",
-                screenWidth / 2, screenHeight - 30);
+    public void resetSelection() {
+        selectedIndex = 0;
+        updateSelection();
     }
 
-    /**
-     * Gets the list of buttons.
-     *
-     * @return list of menu buttons
-     */
     public List<Button> getButtons() {
         return buttons;
+    }
+
+    public Image getBackgroundImage() {
+        return backgroundImage;
     }
 }
