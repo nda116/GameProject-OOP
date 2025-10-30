@@ -147,7 +147,7 @@ public class GameManager {
     public void update() {
         if (gameState == GameState.PLAYING || gameState == GameState.READY) {
             handleContinuousInput();
-        } else if (gameState == GameState.GAME_OVER) {
+        } else if (gameState == GameState.GAME_OVER || gameState == GameState.HIGH_SCORES) {
             return;
         } else {
             return;
@@ -174,6 +174,7 @@ public class GameManager {
                 if (checkCollision(brick, ball)) {
                     brickManager.updateBrickHP(brick);
                     ball.bounceOff(brick);
+                    SoundManager.getInstance().playSound(SoundManager.Sound.BRICK_BREAK);
                 }
             }
         }
@@ -252,6 +253,8 @@ public class GameManager {
                 handlePauseMenuInput(key);
             } else if (gameState == GameState.GAME_OVER) {
                 handleGameOverInput(key);
+            } else if (gameState == GameState.HIGH_SCORES) {
+                handleHighScoreInput(key);
             } else if (gameState == GameState.READY || gameState == GameState.PLAYING) {
                 handleGameplayInput(key);
             }
@@ -273,7 +276,9 @@ public class GameManager {
             int selection = gameView.getMainMenu().getSelectedIndex();
             if (selection == 0) { // New Game
                 startNewGame();
-            } else if (selection == 1) { // Exit
+            } else if (selection == 1) { // High Scores
+                showHighScores();
+            } else if (selection == 2) { // Exit
                 System.exit(0);
             }
         }
@@ -326,8 +331,22 @@ public class GameManager {
         }
     }
 
+    /**
+     * Handles high score menu input.
+     * @param key the key code
+     */
+    private void handleHighScoreInput(KeyCode key) {
+        if (key == KeyCode.ENTER || key == KeyCode.ESCAPE) {
+            returnToMainMenu();
+        }
+    }
 
-
+    /**
+     * Shows the high score menu.
+     */
+    public void showHighScores() {
+        gameState = GameState.HIGH_SCORES;
+    }
 
     /**
      * Handles gameplay input.
@@ -356,6 +375,7 @@ public class GameManager {
     public void returnToMainMenu() {
         stop();
         gameState = GameState.MENU;
+        gameView.getMainMenu().resetSelection();
         start(); // Restart loop for menu rendering
     }
 
