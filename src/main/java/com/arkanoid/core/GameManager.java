@@ -198,6 +198,7 @@ public class GameManager {
                 if (powerup.isFalling()) {
                     powerup.applyEffect(paddle, ballManager, bulletManager);
                     powerup.stopFalling();
+                    SoundManager.getInstance().playSound(SoundManager.Sound.POWER_UP);
                 }
             }
         }
