@@ -17,16 +17,7 @@ public class ExpandPowerUp extends PowerUp {
 
     @Override
     public void applyEffect (Paddle paddle, BallManager ballManager) {
-        new Thread(() -> {
-            double originalWidth = paddle.getWidth();
-            paddle.setWidth(originalWidth * 1.5);
-            try {
-                Thread.sleep(EFFECT_DURATION);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            paddle.setWidth(originalWidth);
-        }).start();
+        paddle.expand();
     }
 
     @Override

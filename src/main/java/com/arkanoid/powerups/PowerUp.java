@@ -14,12 +14,11 @@ public abstract class PowerUp extends MovableObject {
     private boolean falling = true;
     private static final int WIDTH = 30;
     private static final int HEIGHT = 30;
-    public static final int EXPAND = 0;
+    public static final int SPLITBALL = 0;
     public static final int SLOWBALL = 1;
     public static final int FASTBALL = 2;
-    public static final int EXTRABALL = 3;
-    public static final int SPLITBALL = 4;
-    public static final int FIREBULLET = 5;
+    public static final int FIREBULLET = 3;
+    public static final int EXPAND = 4;
 
 
     public PowerUp(double x, double y, int type) {
