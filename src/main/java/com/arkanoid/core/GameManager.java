@@ -81,6 +81,7 @@ public class GameManager {
 
         // Start at main menu
         gameState = GameState.MENU;
+        SoundManager.getInstance().playMenuMusic();
     }
 
     /**
@@ -114,6 +115,8 @@ public class GameManager {
         initGameObjects(level);
         gameState = GameState.READY;
         start();
+        SoundManager.getInstance().stopMenuMusic();
+        SoundManager.getInstance().playBackgroundMusic();
     }
 
     /**
@@ -151,7 +154,7 @@ public class GameManager {
     public void update() {
         if (gameState == GameState.PLAYING || gameState == GameState.READY) {
             handleContinuousInput();
-        } else if (gameState == GameState.GAME_OVER) {
+        } else if (gameState == GameState.GAME_OVER || gameState == GameState.HIGH_SCORES) {
             return;
         } else {
             return;
@@ -169,6 +172,7 @@ public class GameManager {
         for (Ball ball : ballManager.getBallsList()){
             if (checkCollision(ball, paddle)) {
                 ball.bounceOffPaddle(paddle);
+                SoundManager.getInstance().playSound(SoundManager.Sound.PADDLE_HIT);
             }
         }
 
@@ -178,6 +182,13 @@ public class GameManager {
                 if (checkCollision(brick, ball)) {
                     brickManager.updateBrickHP(brick);
                     ball.bounceOff(brick);
+                    if (brick.getType() == Brick.EXPLOSION) {
+                        SoundManager.getInstance().playSound(SoundManager.Sound.EXPLOSION_BRICK);
+                    } else if (brick.getType() == Brick.GLASS) {
+                        SoundManager.getInstance().playSound(SoundManager.Sound.GLASS_BRICK);
+                    } else {
+                        SoundManager.getInstance().playSound(SoundManager.Sound.BRICK_BREAK);
+                    }
                 }
             }
         }
@@ -217,11 +228,14 @@ public class GameManager {
             lives--;
             if (lives <= 0) {
                 gameOver();
+                SoundManager.getInstance().pauseBackgroundMusic();
+                SoundManager.getInstance().playSound(SoundManager.Sound.GAME_OVER);
             } else {
                 powerupManager.clearPowerUpList(paddle, ballManager, bulletManager);
                 paddle.setDefault();
                 ballManager.setDefault(paddle);
                 gameState = GameState.READY;
+                SoundManager.getInstance().playSound(SoundManager.Sound.LOSE_LIFE);
             }
         }
 
@@ -260,6 +274,8 @@ public class GameManager {
                 handlePauseMenuInput(key);
             } else if (gameState == GameState.GAME_OVER) {
                 handleGameOverInput(key);
+            } else if (gameState == GameState.HIGH_SCORES) {
+                handleHighScoreInput(key);
             } else if (gameState == GameState.READY || gameState == GameState.PLAYING) {
                 handleGameplayInput(key);
             }
@@ -281,10 +297,14 @@ public class GameManager {
             int selection = gameView.getMainMenu().getSelectedIndex();
             if (selection == 0) { // New Game
                 startNewGame();
-            } else if (selection == 1) { // Exit
+            } else if (selection == 1) { // High Scores
+                showHighScores();
+            } else if (selection == 2) { // Exit
+                SoundManager.getInstance().dispose();
                 System.exit(0);
             }
         }
+        SoundManager.getInstance().playSound(SoundManager.Sound.BUTTON);
     }
 
     /**
@@ -334,8 +354,22 @@ public class GameManager {
         }
     }
 
+    /**
+     * Handles high score menu input.
+     * @param key the key code
+     */
+    private void handleHighScoreInput(KeyCode key) {
+        if (key == KeyCode.ENTER || key == KeyCode.ESCAPE) {
+            returnToMainMenu();
+        }
+    }
 
-
+    /**
+     * Shows the high score menu.
+     */
+    public void showHighScores() {
+        gameState = GameState.HIGH_SCORES;
+    }
 
     /**
      * Handles gameplay input.
@@ -351,10 +385,12 @@ public class GameManager {
             } else if (gameState == GameState.PLAYING) {
                 gameState = GameState.PAUSED;
                 gameView.getPauseMenu().resetSelection();
+                SoundManager.getInstance().pauseBackgroundMusic();
             }
         } else if (key == KeyCode.ESCAPE && gameState == GameState.PLAYING) {
             gameState = GameState.PAUSED;
             gameView.getPauseMenu().resetSelection();
+            SoundManager.getInstance().pauseBackgroundMusic();
         }
     }
 
@@ -364,7 +400,9 @@ public class GameManager {
     public void returnToMainMenu() {
         stop();
         gameState = GameState.MENU;
-        start(); // Restart loop for menu rendering
+        gameView.getMainMenu().resetSelection();
+        start();
+        SoundManager.getInstance().playMenuMusic();
     }
 
     /**
@@ -372,6 +410,7 @@ public class GameManager {
      */
     public void resumeGame() {
         gameState = GameState.PLAYING;
+        SoundManager.getInstance().resumeBackgroundMusic();
     }
 
     /**
@@ -380,6 +419,10 @@ public class GameManager {
     private void levelComplete() {
         gameState = GameState.LEVEL_COMPLETE;
         level++;
+
+        SoundManager.getInstance().pauseBackgroundMusic();
+        SoundManager.getInstance().playSound(SoundManager.Sound.LEVEL_COMPLETE);
+        SoundManager.getInstance().playBackgroundMusic();
 
         // Wait 2 seconds then start next level
         new Timer().schedule(new TimerTask() {

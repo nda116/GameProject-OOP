@@ -33,7 +33,7 @@ public class StartMenu extends Menu {
         double buttonWidth = 300;
         double buttonHeight = 60;
         double startX = (screenWidth - buttonWidth) / 2;
-        double startY = screenHeight / 2 + 50;
+        double startY = screenHeight / 2;
         double spacing = 80;
 
         /*buttons.add(new Button(startX, startY, buttonWidth, buttonHeight,
@@ -41,7 +41,8 @@ public class StartMenu extends Menu {
         buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight,
                 "/images/menu/exit_button.png"));*/
         getButtons().add(new Button(startX, startY, buttonWidth, buttonHeight, "NEW GAME"));
-        getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "EXIT"));
+        getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "HIGH SCORES"));
+        getButtons().add(new Button(startX, startY + spacing * 2, buttonWidth, buttonHeight, "EXIT"));
     }
 
     /**

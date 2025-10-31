@@ -3,6 +3,7 @@ package com.arkanoid.core;
 import com.arkanoid.menu.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -23,6 +24,7 @@ public class GameView {
     private Menu mainMenu;
     private PauseMenu pauseMenu;
     private GameOver gameOverMenu;
+    private HighScoreMenu highScoreMenu;
 
     private static final Color BACKGROUND_COLOR = Color.rgb(20, 20, 40);
     private static final Color UI_TEXT_COLOR = Color.WHITE;
@@ -46,6 +48,7 @@ public class GameView {
         mainMenu = new StartMenu(width, height);
         pauseMenu = new PauseMenu(width, height);
         gameOverMenu = new GameOver(width, height);
+        highScoreMenu = new HighScoreMenu(width, height);
 
         clear();
     }
@@ -73,6 +76,10 @@ public class GameView {
                 renderMainMenu();
                 break;
 
+            case HIGH_SCORES:
+                renderHighScores();
+                break;
+
             case READY:
             case PLAYING:
             case LEVEL_COMPLETE:
@@ -96,6 +103,13 @@ public class GameView {
      */
     private void renderMainMenu() {
         mainMenu.render(gc);
+    }
+
+    /**
+     * Renders the high score menu.
+     */
+    private void renderHighScores() {
+        highScoreMenu.render(gc);
     }
 
     /**
@@ -149,7 +163,16 @@ public class GameView {
         gc.fillText("Score: " + gameManager.getScore(), 10, 25);
 
         // Lives
-        gc.fillText("Lives: " + gameManager.getLives(), 10, 45);
+        int lives = gameManager.getLives();
+        Image paddleIcon = gameManager.getPaddle().getObjectImage();
+        double iconWidth = 40;
+        double iconHeight = 10;
+        double startX = 10;
+        double startY = 35;
+
+        for (int i = 0; i < lives; i++) {
+            gc.drawImage(paddleIcon, startX + i * (iconWidth + 8), startY, iconWidth, iconHeight);
+        }
 
         // Level
         gc.setTextAlign(TextAlignment.RIGHT);
@@ -196,7 +219,6 @@ public class GameView {
                 break;
 
             case PLAYING:
-
                 break;
         }
     }
@@ -227,6 +249,10 @@ public class GameView {
 
     public GameOver getGameOverMenu() {
         return gameOverMenu;
+    }
+
+    public HighScoreMenu getHighScoreMenu() {
+        return highScoreMenu;
     }
 
     public void resetGameOverMenu(int score) {

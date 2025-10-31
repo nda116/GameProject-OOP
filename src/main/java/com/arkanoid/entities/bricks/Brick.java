@@ -19,7 +19,7 @@ public abstract class Brick extends GameObject {
     public static final int NORMAL = 0;
     public static final int INVINCIBLE = 1;
     public static final int EXPLOSION = 2;
-    public static final int INVISIBLE = 3;
+    public static final int GLASS = 3;
 
 
     public Brick(double x, double y, double width, double height, int type) {

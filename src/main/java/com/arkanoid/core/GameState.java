@@ -20,5 +20,7 @@ public enum GameState {
     GAME_OVER,
 
     /** Level completed */
-    LEVEL_COMPLETE
+    LEVEL_COMPLETE,
+
+    HIGH_SCORES
 }
