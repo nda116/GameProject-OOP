@@ -53,6 +53,7 @@ public class GameManager {
     private double powerUpTimer;
 
     private static final int LIVES = 3;
+    private static final int NUMBER_OF_LEVEL = 4;
 
     /**
      * Private constructor for Singleton pattern.
@@ -438,7 +439,7 @@ public class GameManager {
      * Starts the next level.
      */
     private void startNextLevel() {
-        initGameObjects(level);
+        initGameObjects((level - 1) % NUMBER_OF_LEVEL + 1);
         gameState = GameState.READY;
     }
 
