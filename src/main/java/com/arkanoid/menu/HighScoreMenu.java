@@ -1,14 +1,13 @@
 package com.arkanoid.menu;
 
-import com.arkanoid.core.HighScoreManager;
-import com.arkanoid.core.HighScoreManager.HighScoreEntry;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 /**
  * High score menu displaying top 10 scores.
@@ -20,7 +19,8 @@ public class HighScoreMenu extends Menu {
     private static final Font SCORE_FONT = Font.font("Arial", FontWeight.NORMAL, 20);
     private static final Font SUBTITLE_FONT = Font.font("Arial", FontWeight.NORMAL, 18);
 
-    private HighScoreManager highScoreManager;
+    private static final String HIGHSCORE_FILE = "/highscores.txt";
+    private List<HighScoreEntry> highScores;
 
     /**
      * Creates the high score menu.
@@ -31,13 +31,78 @@ public class HighScoreMenu extends Menu {
     public HighScoreMenu(double screenWidth, double screenHeight) {
         super(screenWidth, screenHeight);
         setObjectImage("/images/menu/menu.png");
-        highScoreManager = new HighScoreManager();
+        highScores = new ArrayList<>();
+        loadHighScores();
         createButtons();
     }
 
     /**
-     * Creates back button.
+     * Loads high scores from file.
      */
+    private void loadHighScores() {
+        try (InputStream is = getClass().getResourceAsStream(HIGHSCORE_FILE)) {
+            if (is == null) {
+                System.out.println("High score file not found");
+                return;
+            }
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (!line.isEmpty() && line.contains(":")) {
+                    String[] parts = line.split(":");
+                    if (parts.length == 2) {
+                        try {
+                            String name = parts[0].trim();
+                            int score = Integer.parseInt(parts[1].trim());
+                            highScores.add(new HighScoreEntry(name, score));
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid score format: " + line);
+                        }
+                    }
+                }
+            }
+
+            // Sort by score descending
+            highScores.sort((a, b) -> Integer.compare(b.getScore(), a.getScore()));
+
+        } catch (IOException e) {
+            System.out.println("Error loading high scores: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Gets top N high scores.
+     * @param count number of scores to return
+     * @return list of top high scores
+     */
+    public List<HighScoreEntry> getTopScores(int count) {
+        int limit = Math.min(count, highScores.size());
+        return new ArrayList<>(highScores.subList(0, limit));
+    }
+
+    /**
+     * Gets all high scores.
+     * @return list of all high scores
+     */
+    public List<HighScoreEntry> getAllScores() {
+        return new ArrayList<>(highScores);
+    }
+
+    /**
+     * Checks if a score qualifies for top 10.
+     * @param score the score to check
+     * @return true if score is in top 10
+     */
+    public boolean isTopScore(int score) {
+        if (highScores.size() < 10) {
+            return true;
+        }
+        return score > highScores.get(9).getScore();
+    }
+    
     @Override
     public void createButtons() {
 
@@ -88,7 +153,7 @@ public class HighScoreMenu extends Menu {
         gc.strokeLine(columnX1 - 10, startY + 10, columnX3 + 110, startY + 10);
 
         // Draw high scores
-        List<HighScoreEntry> topScores = highScoreManager.getTopScores(10);
+        List<HighScoreEntry> topScores = getTopScores(10);
         gc.setFont(SCORE_FONT);
 
         double rowHeight = 35;
@@ -138,5 +203,26 @@ public class HighScoreMenu extends Menu {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("Press ENTER or ESC to return to menu",
                 screenWidth / 2, screenHeight - 30);
+    }
+
+    /**
+     * Inner class representing a high score entry.
+     */
+    public static class HighScoreEntry {
+        private String name;
+        private int score;
+
+        public HighScoreEntry(String name, int score) {
+            this.name = name;
+            this.score = score;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getScore() {
+            return score;
+        }
     }
 }

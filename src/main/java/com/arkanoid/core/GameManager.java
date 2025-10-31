@@ -415,6 +415,7 @@ public class GameManager {
 
         SoundManager.getInstance().pauseBackgroundMusic();
         SoundManager.getInstance().playSound(SoundManager.Sound.LEVEL_COMPLETE);
+        SoundManager.getInstance().playBackgroundMusic();
 
         // Wait 2 seconds then start next level
         new Timer().schedule(new TimerTask() {
