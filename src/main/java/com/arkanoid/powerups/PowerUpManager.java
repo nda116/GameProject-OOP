@@ -1,11 +1,13 @@
 package com.arkanoid.powerups;
 
+import com.arkanoid.entities.Paddle;
+import com.arkanoid.entities.balls.BallManager;
+import com.arkanoid.entities.bullets.BulletManager;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Manage power-ups for the game.
@@ -46,10 +48,16 @@ public class PowerUpManager {
     public void updatePowerUpList() {
         Iterator<PowerUp> it = powerupList.iterator();
         while (it.hasNext()) {
-            PowerUp p = it.next();
-            if (!p.isFalling()) {
+            PowerUp powerup = it.next();
+            if (powerup.isRemove()) {
                 it.remove();
             }
+        }
+    }
+
+    public void clearPowerUpList(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
+        for (PowerUp powerup : powerupList) {
+            powerup.removeEffect(paddle, ballManager, bulletManager);
         }
     }
 
@@ -59,7 +67,9 @@ public class PowerUpManager {
      */
     public void renderPowerUpList(GraphicsContext gc) {
         for (PowerUp powerUp : powerupList) {
-            powerUp.render(gc);
+            if (powerUp.isFalling()) {
+                powerUp.render(gc);
+            }
         }
     }
 }

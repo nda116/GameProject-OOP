@@ -52,10 +52,9 @@ public class NormalBrick extends Brick {
      * @param powerupmanager powerupManager with powerupsList.
      * @param numberNormalBrick Normal Brick in level left.
      * @param numberPowerUp PowerUp in level left.
-     * @param paddleAppliedPowerUp power up state of paddle.
      */
     public int dropPowerUp(PowerUpManager powerupmanager, int numberPowerUp,
-                           int numberNormalBrick, boolean paddleAppliedPowerUp) {
+                           int numberNormalBrick) {
         double powerUpDropChance = (double) numberPowerUp / numberNormalBrick;
 
         if (rand.nextFloat() < powerUpDropChance) {
@@ -67,7 +66,7 @@ public class NormalBrick extends Brick {
                     break;
                 }
             }
-            if (paddleAppliedPowerUp || paddlePowerUpInList) {  // if paddle or list have powerup already, drop other powerup
+            if (paddlePowerUpInList) {  // if paddle or list have powerup already, drop other powerup
                 type = rand.nextInt(3);
             } else {
                 type = rand.nextInt(5);
@@ -80,7 +79,7 @@ public class NormalBrick extends Brick {
             } else if (type == PowerUp.FASTBALL){
                 powerupmanager.addPowerUps(new FastBallPowerUp(getX(), getY()));
             } else if (type == PowerUp.FIREBULLET){
-            powerupmanager.addPowerUps(new FireBulletsPowerUp(getX(), getY()));
+                powerupmanager.addPowerUps(new FireBulletsPowerUp(getX(), getY()));
             } else {
                 powerupmanager.addPowerUps(new ExpandPowerUp(getX(), getY()));
             }

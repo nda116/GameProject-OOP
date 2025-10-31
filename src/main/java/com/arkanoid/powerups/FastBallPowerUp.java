@@ -3,6 +3,7 @@ package com.arkanoid.powerups;
 import com.arkanoid.entities.balls.Ball;
 import com.arkanoid.entities.Paddle;
 import com.arkanoid.entities.balls.BallManager;
+import com.arkanoid.entities.bullets.BulletManager;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -17,7 +18,7 @@ public class FastBallPowerUp extends PowerUp{
     }
 
     @Override
-    public void applyEffect(Paddle paddle, BallManager ballManager) {
+    public void applyEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
         new Thread(() -> {
             for (Ball ball : ballManager.getBallsList()) {
                 ball.setSpeed(ball.getSpeed() * 1.4);
@@ -31,10 +32,13 @@ public class FastBallPowerUp extends PowerUp{
                 ball.setSpeed(ball.getSpeed() / 1.4);
             }
         }).start();
+        setRemove(true);
     }
 
     @Override
-    public void removeEffect(Paddle paddle, BallManager ballManager) { }
+    public void removeEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
+        // No removal needed
+    }
 
     @Override
     public void render(GraphicsContext gc) {

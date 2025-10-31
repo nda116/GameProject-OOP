@@ -4,6 +4,7 @@ import com.arkanoid.entities.*;
 import com.arkanoid.entities.balls.*;
 import com.arkanoid.entities.bricks.*;
 import com.arkanoid.entities.bullets.Bullet;
+import com.arkanoid.entities.bullets.BulletManager;
 import com.arkanoid.menu.*;
 import com.arkanoid.powerups.*;
 
@@ -23,7 +24,7 @@ import static com.arkanoid.core.GameObject.checkCollision;
  *
  */
 public class GameManager {
-
+    public long frame = 0;
     private static GameManager instance;
 
     // Game objects
@@ -31,6 +32,7 @@ public class GameManager {
     private BallManager ballManager;
     private BrickManager brickManager;
     private PowerUpManager powerupManager;
+    private BulletManager bulletManager;
 
     // Game state
     private int score;
@@ -94,6 +96,7 @@ public class GameManager {
 
         ballManager = new BallManager();
         powerupManager = new PowerUpManager();
+        bulletManager = new BulletManager();
 
         // create Bricks
         brickManager = new BrickManager();
@@ -124,6 +127,7 @@ public class GameManager {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                frame ++;
                 update();
                 render();
             }
@@ -180,7 +184,7 @@ public class GameManager {
 
         // Check collision between bullet and bricks
         for (Brick brick : brickManager.getBricksList()) {
-            for (Bullet bullet : paddle.getBullets().getBulletsList()){
+            for (Bullet bullet : bulletManager.getBulletsList()){
                 if (checkCollision(brick, bullet)) {
                     brickManager.updateBrickHP(brick);
                     bullet.deActive();
@@ -191,18 +195,22 @@ public class GameManager {
         // Check collision between powerups and paddle
         for (PowerUp powerup : powerupManager.getPowerupList()) {
             if (checkCollision(powerup, paddle)) {
-                powerup.applyEffect(paddle, ballManager);
-                powerup.stopFalling();
+                if (powerup.isFalling()) {
+                    powerup.applyEffect(paddle, ballManager, bulletManager);
+                    powerup.stopFalling();
+                }
             }
         }
 
         paddle.update();
         ballManager.updateBall();
         powerupManager.updatePowerUp();
+        bulletManager.updateBullet();
 
-        score += brickManager.updateBrickList(powerupManager, paddle.isAppliedPowerUp());
+        score += brickManager.updateBrickList(powerupManager);
         ballManager.updateBallList();
         powerupManager.updatePowerUpList();
+        bulletManager.updateBulletList();
 
         // Check if ball is lost
         if (ballManager.getBallsList().isEmpty()) {
@@ -210,9 +218,9 @@ public class GameManager {
             if (lives <= 0) {
                 gameOver();
             } else {
+                powerupManager.clearPowerUpList(paddle, ballManager, bulletManager);
                 paddle.setDefault();
                 ballManager.setDefault(paddle);
-                powerupManager.getPowerupList().clear();
                 gameState = GameState.READY;
             }
         }
@@ -445,5 +453,9 @@ public class GameManager {
 
     public PowerUpManager getPowerupManager() {
         return powerupManager;
+    }
+
+    public BulletManager getBulletManager() {
+        return bulletManager;
     }
 }

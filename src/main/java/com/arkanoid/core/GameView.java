@@ -117,6 +117,10 @@ public class GameView {
         // Render power-ups
         gameManager.getPowerupManager().renderPowerUpList(gc);
 
+        // Render bullets
+        gameManager.getBulletManager().renderBulletList(gc);
+
+
         // Render paddle and ball
         gameManager.getPaddle().render(gc);
         gameManager.getBallManager().renderBallList(gc);
