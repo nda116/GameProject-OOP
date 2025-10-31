@@ -31,8 +31,10 @@ public class BulletManager {
      * @param paddle paddle to shoot.
      */
     public void spawnBullets(Paddle paddle) {
+        paddle.setAppliedPowerUp(true);
         int totalShots = 10;
         double spawnDelay = 0.2;
+        paddle.setObjectImage("/images/paddle/fire_bullet_paddle.png");
 
         bulletTimeline = new Timeline(new KeyFrame(Duration.seconds(spawnDelay), event -> {
             double leftPaddleX = paddle.getX();
@@ -43,6 +45,12 @@ public class BulletManager {
         }));
 
         bulletTimeline.setCycleCount(totalShots);
+
+        bulletTimeline.setOnFinished(e -> {
+            paddle.setObjectImage("/images/paddle/normal_paddle.png");
+            paddle.setAppliedPowerUp(false);
+        });
+
         bulletTimeline.play();
     }
 

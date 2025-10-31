@@ -50,14 +50,31 @@ public class NormalBrick extends Brick {
      * randomly drop powerup, the type powerup is random, add to powerupsList.
      * increase chance if last brick didnt drop powerup.
      * @param powerupmanager powerupManager with powerupsList.
+     * @param numberNormalBrick Normal Brick in level left.
+     * @param numberPowerUp PowerUp in level left.
+     * @param paddleAppliedPowerUp power up state of paddle.
      */
-    public int dropPowerUp(PowerUpManager powerupmanager, int numberPowerUp, int numberNormalBrick) {
+    public int dropPowerUp(PowerUpManager powerupmanager, int numberPowerUp,
+                           int numberNormalBrick, boolean paddleAppliedPowerUp) {
         double powerUpDropChance = (double) numberPowerUp / numberNormalBrick;
 
         if (rand.nextFloat() < powerUpDropChance) {
-            int type = rand.nextInt(5); //set up power
-            if (type == PowerUp.EXPAND) {
-                powerupmanager.addPowerUps(new ExpandPowerUp(getX(), getY()));
+            int type;
+            boolean paddlePowerUpInList = false;
+            for (PowerUp powerUp : powerupmanager.getPowerupList()) {
+                if (powerUp.getType() == PowerUp.EXPAND || powerUp.getType() == PowerUp.FIREBULLET) {
+                    paddlePowerUpInList = true;
+                    break;
+                }
+            }
+            if (paddleAppliedPowerUp || paddlePowerUpInList) {  // if paddle or list have powerup already, drop other powerup
+                type = rand.nextInt(3);
+            } else {
+                type = rand.nextInt(5);
+            }
+             //set up power
+            if (type == PowerUp.SPLITBALL) {
+                powerupmanager.addPowerUps(new SplitBallPowerUp(getX(), getY()));
             } else if (type == PowerUp.SLOWBALL) {
                 powerupmanager.addPowerUps(new SlowBallPowerUp(getX(), getY()));
             } else if (type == PowerUp.FASTBALL){
@@ -65,7 +82,7 @@ public class NormalBrick extends Brick {
             } else if (type == PowerUp.FIREBULLET){
             powerupmanager.addPowerUps(new FireBulletsPowerUp(getX(), getY()));
             } else {
-                powerupmanager.addPowerUps(new SplitBallPowerUp(getX(), getY()));
+                powerupmanager.addPowerUps(new ExpandPowerUp(getX(), getY()));
             }
             numberPowerUp--;
         }
