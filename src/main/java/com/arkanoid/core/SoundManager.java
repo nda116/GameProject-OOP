@@ -2,7 +2,6 @@ package com.arkanoid.core;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -20,11 +19,13 @@ public class SoundManager {
     public enum Sound {
         PADDLE_HIT,
         BRICK_BREAK,
-        WALL_HIT,
+        EXPLOSION_BRICK,
+        GLASS_BRICK,
         POWER_UP,
         GAME_OVER,
         LEVEL_COMPLETE,
-        LOSE_LIFE
+        LOSE_LIFE,
+        BUTTON
     }
 
     // Storage for sound effects
@@ -32,6 +33,9 @@ public class SoundManager {
 
     // Background music player
     private MediaPlayer backgroundMusic;
+
+    // Menu music player
+    private MediaPlayer menuMusic;
 
     // Volume controls
     private double masterVolume = 1.0;
@@ -66,16 +70,21 @@ public class SoundManager {
     private void loadSounds() {
         try {
             // Load sound effects
-            loadSoundEffect(Sound.PADDLE_HIT, "/sounds/paddle_hit.wav");
-            loadSoundEffect(Sound.BRICK_BREAK, "/sounds/arkanoid-sfx-1.mp3");
-            loadSoundEffect(Sound.WALL_HIT, "/sounds/wall_hit.wav");
-            loadSoundEffect(Sound.POWER_UP, "/sounds/powerup.wav");
-            loadSoundEffect(Sound.GAME_OVER, "/sounds/game_over.wav");
-            loadSoundEffect(Sound.LEVEL_COMPLETE, "/sounds/level_complete.wav");
-            loadSoundEffect(Sound.LOSE_LIFE, "/sounds/lose_life.wav");
+            loadSoundEffect(Sound.PADDLE_HIT, "/sounds/paddle_hit.mp3");
+            loadSoundEffect(Sound.BRICK_BREAK, "/sounds/brick_break.mp3");
+            loadSoundEffect(Sound.EXPLOSION_BRICK, "/sounds/explosion_brick.mp3");
+            loadSoundEffect(Sound.GLASS_BRICK, "/sounds/glass_brick.mp3");
+            loadSoundEffect(Sound.POWER_UP, "/sounds/powerup.mp3");
+            loadSoundEffect(Sound.GAME_OVER, "/sounds/game_over.mp3");
+            loadSoundEffect(Sound.LEVEL_COMPLETE, "/sounds/level_complete.mp3");
+            loadSoundEffect(Sound.LOSE_LIFE, "/sounds/lose_life.mp3");
+            loadSoundEffect(Sound.BUTTON, "/sounds/button.wav");
 
             // Load background music
-            loadBackgroundMusic("/sounds/7-2-player-battle.mp3");
+            loadBackgroundMusic("/sounds/background_music.mp3");
+
+            // Load menu music
+            loadMenuMusic("/sounds/menu.mp3");
 
         } catch (Exception e) {
             System.err.println("Error loading sounds: " + e.getMessage());
@@ -128,6 +137,28 @@ public class SoundManager {
     }
 
     /**
+     * Loads menu music from file.
+     * @param filepath path to the music file
+     */
+    private void loadMenuMusic(String filepath) {
+        try {
+            URL resource = getClass().getResource(filepath);
+            if (resource == null) {
+                System.err.println("Could not find music file: " + filepath);
+                return;
+            }
+
+            Media media = new Media(resource.toString());
+            menuMusic = new MediaPlayer(media);
+            menuMusic.setVolume(musicVolume * masterVolume);
+            menuMusic.setCycleCount(MediaPlayer.INDEFINITE); // Loop forever
+
+        } catch (Exception e) {
+            System.err.println("Error loading menu music: " + e.getMessage());
+        }
+    }
+
+    /**
      * Plays a sound effect.
      * @param sound the sound to play
      */
@@ -152,11 +183,29 @@ public class SoundManager {
     }
 
     /**
+     * Plays menu music.
+     */
+    public void playMenuMusic() {
+        if (!musicEnabled || menuMusic == null) return;
+
+        menuMusic.play();
+    }
+
+    /**
      * Stops background music.
      */
     public void stopBackgroundMusic() {
         if (backgroundMusic != null) {
             backgroundMusic.stop();
+        }
+    }
+
+    /**
+     * Stops background music.
+     */
+    public void stopMenuMusic() {
+        if (menuMusic != null) {
+            menuMusic.stop();
         }
     }
 
