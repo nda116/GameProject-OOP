@@ -79,6 +79,7 @@ public class GameManager {
 
         // Start at main menu
         gameState = GameState.MENU;
+        SoundManager.getInstance().playMenuMusic();
     }
 
     /**
@@ -111,6 +112,8 @@ public class GameManager {
         initGameObjects(level);
         gameState = GameState.READY;
         start();
+        SoundManager.getInstance().stopMenuMusic();
+        SoundManager.getInstance().playBackgroundMusic();
     }
 
     /**
@@ -165,6 +168,7 @@ public class GameManager {
         for (Ball ball : ballManager.getBallsList()){
             if (checkCollision(ball, paddle)) {
                 ball.bounceOffPaddle(paddle);
+                SoundManager.getInstance().playSound(SoundManager.Sound.PADDLE_HIT);
             }
         }
 
@@ -174,7 +178,13 @@ public class GameManager {
                 if (checkCollision(brick, ball)) {
                     brickManager.updateBrickHP(brick);
                     ball.bounceOff(brick);
-                    SoundManager.getInstance().playSound(SoundManager.Sound.BRICK_BREAK);
+                    if (brick.getType() == Brick.EXPLOSION) {
+                        SoundManager.getInstance().playSound(SoundManager.Sound.EXPLOSION_BRICK);
+                    } else if (brick.getType() == Brick.GLASS) {
+                        SoundManager.getInstance().playSound(SoundManager.Sound.GLASS_BRICK);
+                    } else {
+                        SoundManager.getInstance().playSound(SoundManager.Sound.BRICK_BREAK);
+                    }
                 }
             }
         }
@@ -194,6 +204,7 @@ public class GameManager {
             if (checkCollision(powerup, paddle)) {
                 powerup.applyEffect(paddle, ballManager);
                 powerup.stopFalling();
+                SoundManager.getInstance().playSound(SoundManager.Sound.POWER_UP);
             }
         }
 
@@ -210,11 +221,14 @@ public class GameManager {
             lives--;
             if (lives <= 0) {
                 gameOver();
+                SoundManager.getInstance().pauseBackgroundMusic();
+                SoundManager.getInstance().playSound(SoundManager.Sound.GAME_OVER);
             } else {
                 paddle.setDefault();
                 ballManager.setDefault(paddle);
                 powerupManager.getPowerupList().clear();
                 gameState = GameState.READY;
+                SoundManager.getInstance().playSound(SoundManager.Sound.LOSE_LIFE);
             }
         }
 
@@ -279,9 +293,11 @@ public class GameManager {
             } else if (selection == 1) { // High Scores
                 showHighScores();
             } else if (selection == 2) { // Exit
+                SoundManager.getInstance().dispose();
                 System.exit(0);
             }
         }
+        SoundManager.getInstance().playSound(SoundManager.Sound.BUTTON);
     }
 
     /**
@@ -362,10 +378,12 @@ public class GameManager {
             } else if (gameState == GameState.PLAYING) {
                 gameState = GameState.PAUSED;
                 gameView.getPauseMenu().resetSelection();
+                SoundManager.getInstance().pauseBackgroundMusic();
             }
         } else if (key == KeyCode.ESCAPE && gameState == GameState.PLAYING) {
             gameState = GameState.PAUSED;
             gameView.getPauseMenu().resetSelection();
+            SoundManager.getInstance().pauseBackgroundMusic();
         }
     }
 
@@ -376,7 +394,8 @@ public class GameManager {
         stop();
         gameState = GameState.MENU;
         gameView.getMainMenu().resetSelection();
-        start(); // Restart loop for menu rendering
+        start();
+        SoundManager.getInstance().playMenuMusic();
     }
 
     /**
@@ -384,6 +403,7 @@ public class GameManager {
      */
     public void resumeGame() {
         gameState = GameState.PLAYING;
+        SoundManager.getInstance().resumeBackgroundMusic();
     }
 
     /**
@@ -392,6 +412,9 @@ public class GameManager {
     private void levelComplete() {
         gameState = GameState.LEVEL_COMPLETE;
         level++;
+
+        SoundManager.getInstance().pauseBackgroundMusic();
+        SoundManager.getInstance().playSound(SoundManager.Sound.LEVEL_COMPLETE);
 
         // Wait 2 seconds then start next level
         new Timer().schedule(new TimerTask() {

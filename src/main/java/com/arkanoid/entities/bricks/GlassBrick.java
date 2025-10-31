@@ -7,7 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class GlassBrick extends Brick {
     public GlassBrick(double x, double y, double width, double height) {
-        super(x, y, width, height, Brick.INVISIBLE);
+        super(x, y, width, height, Brick.GLASS);
 
         setBrickHP(2);
         setBrickScore(30);
