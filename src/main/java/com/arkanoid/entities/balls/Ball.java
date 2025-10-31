@@ -230,4 +230,21 @@ public class Ball extends MovableObject {
     public void render(GraphicsContext gc) {
         gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
     }
+
+    /**
+     * Returns the X of the ball's velocity.
+     * @return horizontal velocity (dx)
+     */
+    public double getSpeedX() {
+        return getDx();
+    }
+
+    /**
+     * Returns the Y of the ball's velocity.
+     * @return vertical velocity (dy)
+     */
+    public double getSpeedY() {
+        return getDy();
+    }
+
 }

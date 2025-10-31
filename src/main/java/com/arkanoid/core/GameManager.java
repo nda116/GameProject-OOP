@@ -6,6 +6,7 @@ import com.arkanoid.entities.bricks.*;
 import com.arkanoid.entities.bullets.Bullet;
 import com.arkanoid.menu.*;
 import com.arkanoid.powerups.*;
+import com.arkanoid.saveload.*;
 
 
 import javafx.animation.AnimationTimer;
@@ -273,7 +274,9 @@ public class GameManager {
             int selection = gameView.getMainMenu().getSelectedIndex();
             if (selection == 0) { // New Game
                 startNewGame();
-            } else if (selection == 1) { // Exit
+            } else if (selection == 1) {
+                continueGame();
+            } else if (selection == 2) {
                 System.exit(0);
             }
         }
@@ -397,6 +400,21 @@ public class GameManager {
         gameState = GameState.GAME_OVER;
         gameView.resetGameOverMenu(score);
     }
+
+    /**
+     * Handles continue game.
+     */
+    public void continueGame() {
+        boolean success = GameLoadManager.loadGame(this);
+        if (success) {
+            gameState = GameState.READY;
+            start();
+        } else {
+            System.out.println("[GameManager] No valid save found. Starting new game.");
+            startNewGame();
+        }
+    }
+
 
     /**
      * Renders all game objects.

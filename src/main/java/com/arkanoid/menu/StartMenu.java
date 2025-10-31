@@ -41,7 +41,8 @@ public class StartMenu extends Menu {
         buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight,
                 "/images/menu/exit_button.png"));*/
         getButtons().add(new Button(startX, startY, buttonWidth, buttonHeight, "NEW GAME"));
-        getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "EXIT"));
+        getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "CONTINUE GAME"));
+        getButtons().add(new Button(startX, startY + 2 * spacing, buttonWidth, buttonHeight, "EXIT"));
     }
 
     /**
