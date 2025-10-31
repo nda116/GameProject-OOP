@@ -158,9 +158,8 @@ public class BrickManager {
     /**
      * update brickList, remove bricks which have HP <= 0.
      * @param powerupmanager current powerupmanager.
-     * @param paddleAppliedPowerUp powerup applied to paddle or not.
      */
-    public int updateBrickList(PowerUpManager powerupmanager, boolean paddleAppliedPowerUp) {
+    public int updateBrickList(PowerUpManager powerupmanager) {
         Iterator<Brick> it = bricksList.iterator();
         int score = 0;
 
@@ -174,7 +173,7 @@ public class BrickManager {
 
                 if (brick.getType() == Brick.NORMAL) {
                     numberPowerUp = ((NormalBrick) brick).dropPowerUp(powerupmanager,
-                            numberPowerUp, numberNormalBrick, paddleAppliedPowerUp);
+                            numberPowerUp, numberNormalBrick);
                     numberNormalBrick--;
                 }
             }

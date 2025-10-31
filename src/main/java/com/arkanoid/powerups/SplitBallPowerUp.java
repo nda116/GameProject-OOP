@@ -3,6 +3,7 @@ package com.arkanoid.powerups;
 import com.arkanoid.entities.Paddle;
 import com.arkanoid.entities.balls.Ball;
 import com.arkanoid.entities.balls.BallManager;
+import com.arkanoid.entities.bullets.BulletManager;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class SplitBallPowerUp extends PowerUp {
      * @param ballManager the manager responsible for all active balls
      */
     @Override
-    public void applyEffect(Paddle paddle, BallManager ballManager) {
+    public void applyEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
         if (ballManager == null) return;
 
         List<Ball> newBalls = new ArrayList<>();
@@ -64,13 +65,14 @@ public class SplitBallPowerUp extends PowerUp {
         for (Ball b : newBalls) {
             ballManager.addBall(b);
         }
+        setRemove(true);
     }
 
     /**
      * This effect is permanent; no removal is required.
      */
     @Override
-    public void removeEffect(Paddle paddle, BallManager ballManager) {
+    public void removeEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
         // No removal needed
     }
 

@@ -3,6 +3,7 @@ package com.arkanoid.powerups;
 import com.arkanoid.core.MovableObject;
 import com.arkanoid.entities.Paddle;
 import com.arkanoid.entities.balls.BallManager;
+import com.arkanoid.entities.bullets.BulletManager;
 
 import static com.arkanoid.Main.WINDOW_HEIGHT;
 
@@ -12,6 +13,7 @@ import static com.arkanoid.Main.WINDOW_HEIGHT;
 public abstract class PowerUp extends MovableObject {
     private int type;
     private boolean falling = true;
+    private boolean remove = false;
     private static final int WIDTH = 30;
     private static final int HEIGHT = 30;
     public static final int SPLITBALL = 0;
@@ -20,6 +22,13 @@ public abstract class PowerUp extends MovableObject {
     public static final int FIREBULLET = 3;
     public static final int EXPAND = 4;
 
+    public boolean isRemove() {
+        return remove;
+    }
+
+    public void setRemove(boolean remove) {
+        this.remove = remove;
+    }
 
     public PowerUp(double x, double y, int type) {
         super(x, y, WIDTH, HEIGHT, 0, 1);
@@ -31,9 +40,11 @@ public abstract class PowerUp extends MovableObject {
      * Stop falling if out of bounds.
      */
     public void update() {
-        move();
+        if (isFalling()) {
+            move();
+        }
         if (getY() > WINDOW_HEIGHT) {
-            stopFalling();
+            remove = true;
         }
     }
 
@@ -52,10 +63,11 @@ public abstract class PowerUp extends MovableObject {
     /**
      * Apply the power-up effect.
      */
-    public abstract void applyEffect(Paddle paddle, BallManager ballManager);
+    public abstract void applyEffect(Paddle paddle, BallManager ballManager,
+                                     BulletManager bulletManager);
 
     /**
      * Remove (revert) the power-up effect after it expires.
      */
-    public abstract void removeEffect(Paddle paddle, BallManager ballManager);
+    public abstract void removeEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager);
 }

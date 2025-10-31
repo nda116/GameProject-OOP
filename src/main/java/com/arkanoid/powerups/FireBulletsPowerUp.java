@@ -2,6 +2,7 @@ package com.arkanoid.powerups;
 
 import com.arkanoid.entities.Paddle;
 import com.arkanoid.entities.balls.BallManager;
+import com.arkanoid.entities.bullets.BulletManager;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -14,13 +15,14 @@ public class FireBulletsPowerUp extends PowerUp {
     }
 
     @Override
-    public void applyEffect(Paddle paddle, BallManager ballManager) {
-        paddle.fireBullet();
+    public void applyEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
+        bulletManager.spawnBullets(paddle, this);
     }
 
     @Override
-    public void removeEffect(Paddle paddle, BallManager ballManager) {
-
+    public void removeEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
+        bulletManager.stopPowerUp();
+        setRemove(true);
     }
 
     public void render(GraphicsContext gc) {
