@@ -2,7 +2,6 @@ package com.arkanoid.entities;
 
 import com.arkanoid.core.MovableObject;
 
-import com.arkanoid.entities.bullets.BulletManager;
 import javafx.scene.canvas.GraphicsContext;
 
 import static com.arkanoid.Main.WINDOW_HEIGHT;
@@ -15,7 +14,6 @@ import static com.arkanoid.Main.WINDOW_WIDTH;
  */
 public class Paddle extends MovableObject {
     private double speed;
-    private BulletManager bullets = new BulletManager();
 
     public Paddle(double x, double y, double width, double height,
                   double speed) {
@@ -23,10 +21,6 @@ public class Paddle extends MovableObject {
         this.speed = speed;
 
         setObjectImage("/images/paddle/normal_paddle.png");
-    }
-
-    public BulletManager getBullets() {
-        return bullets;
     }
 
     public double getSpeed() {
@@ -53,7 +47,7 @@ public class Paddle extends MovableObject {
     public void setDefault() {
         setX((WINDOW_WIDTH - getWidth()) / 2);
         setY(WINDOW_HEIGHT - 50);
-        bullets.stopPowerUp();
+        setObjectImage("/images/paddle/normal_paddle.png");
     }
 
     /**
@@ -61,13 +55,6 @@ public class Paddle extends MovableObject {
      */
     public void stop() {
         setDx(0);
-    }
-
-    /**
-     * Create bullets and start fire them.
-     */
-    public void fireBullet() {
-        bullets.spawnBullets(this);
     }
 
     @Override
@@ -78,13 +65,10 @@ public class Paddle extends MovableObject {
         if (getX() + getWidth() > WINDOW_WIDTH) {
             setX(WINDOW_WIDTH - getWidth());
         }
-        bullets.updateBullet();
-        bullets.updateBulletList();
     }
 
     @Override
     public void render(GraphicsContext gc) {
         gc.drawImage(getObjectImage(), getX(), getY(), getWidth(), getHeight());
-        bullets.renderBulletList(gc);
     }
 }

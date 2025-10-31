@@ -157,6 +157,7 @@ public class BrickManager {
 
     /**
      * update brickList, remove bricks which have HP <= 0.
+     * @param powerupmanager current powerupmanager.
      */
     public int updateBrickList(PowerUpManager powerupmanager) {
         Iterator<Brick> it = bricksList.iterator();

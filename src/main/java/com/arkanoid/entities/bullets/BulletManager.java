@@ -1,6 +1,7 @@
 package com.arkanoid.entities.bullets;
 
 import com.arkanoid.entities.Paddle;
+import com.arkanoid.powerups.PowerUp;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
@@ -30,9 +31,10 @@ public class BulletManager {
      * create bullets and shoot from side of the paddle.
      * @param paddle paddle to shoot.
      */
-    public void spawnBullets(Paddle paddle) {
+    public void spawnBullets(Paddle paddle, PowerUp powerUp) {
         int totalShots = 10;
         double spawnDelay = 0.2;
+        paddle.setObjectImage("/images/paddle/fire_bullet_paddle.png");
 
         bulletTimeline = new Timeline(new KeyFrame(Duration.seconds(spawnDelay), event -> {
             double leftPaddleX = paddle.getX();
@@ -43,6 +45,12 @@ public class BulletManager {
         }));
 
         bulletTimeline.setCycleCount(totalShots);
+
+        bulletTimeline.setOnFinished(e -> {
+            paddle.setObjectImage("/images/paddle/normal_paddle.png");
+            powerUp.setRemove(true);
+        });
+
         bulletTimeline.play();
     }
 
