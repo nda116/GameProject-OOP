@@ -23,7 +23,7 @@ public class GameOver extends Menu {
     private boolean isNameEntered = false;
     private int score;
 
-    private static final String FILE_PATH = System.getProperty("user.dir") + "/highscores.txt";
+    private static final String FILE_PATH = "highscores.txt";
 
     public GameOver(double width, double height) {
         super(width, height);
