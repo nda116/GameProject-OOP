@@ -35,9 +35,9 @@ public class PowerUpManager {
     /**
      * update powerups from powerupsList.
      */
-    public void updatePowerUp() {
+    public void updatePowerUp(double deltaTime) {
         for (PowerUp powerup : powerupList) {
-            powerup.update();
+            powerup.update(deltaTime);
         }
     }
 

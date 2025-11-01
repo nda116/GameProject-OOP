@@ -192,24 +192,9 @@ public class Ball extends MovableObject {
         return getY() > WINDOW_HEIGHT;
     }
 
-    /**
-     * Resets the ball to a starting position.
-     *
-     * @param startX The x-coordinate for the reset position
-     * @param startY The y-coordinate for the reset position
-     */
-    public void reset(double startX, double startY) {
-        setX(startX);
-        setY(startY);
-
-        directionX = 0;
-        directionY = 1;
-        updateVelocity();
-    }
-
     @Override
-    public void update() {
-        move();
+    public void update(double deltaTime) {
+        move(deltaTime);
 
         // Collision with left and right walls
         if (getX() <= 0 || getX() + getWidth() >= WINDOW_WIDTH) {
