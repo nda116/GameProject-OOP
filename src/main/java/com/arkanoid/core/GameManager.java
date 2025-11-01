@@ -370,8 +370,10 @@ public class GameManager {
      * Shows the high score menu.
      */
     public void showHighScores() {
+        gameView.getHighScoreMenu().reloadHighScores();
         gameState = GameState.HIGH_SCORES;
     }
+
 
     /**
      * Handles gameplay input.

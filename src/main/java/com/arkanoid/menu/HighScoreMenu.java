@@ -19,7 +19,8 @@ public class HighScoreMenu extends Menu {
     private static final Font SCORE_FONT = Font.font("Arial", FontWeight.NORMAL, 20);
     private static final Font SUBTITLE_FONT = Font.font("Arial", FontWeight.NORMAL, 18);
 
-    private static final String HIGHSCORE_FILE = "/highscores.txt";
+    private static final String HIGHSCORE_FILE = System.getProperty("user.dir") + "/highscores.txt";
+
     private List<HighScoreEntry> highScores;
 
     /**
@@ -40,15 +41,14 @@ public class HighScoreMenu extends Menu {
      * Loads high scores from file.
      */
     private void loadHighScores() {
-        try (InputStream is = getClass().getResourceAsStream(HIGHSCORE_FILE)) {
-            if (is == null) {
-                System.out.println("High score file not found");
-                return;
-            }
+        File file = new File(HIGHSCORE_FILE);
+        if (!file.exists()) {
+            System.out.println("High score file not found: " + file.getAbsolutePath());
+            return;
+        }
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
-
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (!line.isEmpty() && line.contains(":")) {
@@ -65,13 +65,12 @@ public class HighScoreMenu extends Menu {
                 }
             }
 
-            // Sort by score descending
             highScores.sort((a, b) -> Integer.compare(b.getScore(), a.getScore()));
-
         } catch (IOException e) {
             System.out.println("Error loading high scores: " + e.getMessage());
         }
     }
+
 
     /**
      * Gets top N high scores.
@@ -225,4 +224,10 @@ public class HighScoreMenu extends Menu {
             return score;
         }
     }
+
+    public void reloadHighScores() {
+        highScores.clear();
+        loadHighScores();
+    }
+
 }
