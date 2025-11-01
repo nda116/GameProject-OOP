@@ -4,13 +4,17 @@ import com.arkanoid.entities.balls.Ball;
 import com.arkanoid.entities.Paddle;
 import com.arkanoid.entities.balls.BallManager;
 import com.arkanoid.entities.bullets.BulletManager;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.util.Duration;
 
 /**
  * Constructor for SlowBallPowerUp
  */
 public class SlowBallPowerUp extends PowerUp{
-    private static final long EFFECT_DURATION = 5000;
+    private Timeline timeline;
+    private static final long EFFECT_DURATION = 8;
 
     public SlowBallPowerUp (double x, double y) {
         super(x, y, SLOWBALL);
@@ -19,25 +23,29 @@ public class SlowBallPowerUp extends PowerUp{
 
     @Override
     public void applyEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
-        new Thread(() -> {
-            for (Ball ball : ballManager.getBallsList()) {
-                ball.setSpeed(ball.getSpeed() * 0.6);
-            }
-            try {
-                Thread.sleep(EFFECT_DURATION);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        for (Ball ball : ballManager.getBallsList()) {
+            ball.setSpeed(ball.getSpeed() * 0.6);
+        }
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(EFFECT_DURATION), e -> {
             for (Ball ball : ballManager.getBallsList()) {
                 ball.setSpeed(ball.getSpeed() / 0.6);
             }
-        }).start();
-        setRemove(true);
+            setRemove(true);
+        }));
+
+        timeline.play();
     }
 
     @Override
     public void removeEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
-        // No removal needed
+        if (timeline != null) {
+            timeline.stop();
+        }
+        for (Ball ball : ballManager.getBallsList()) {
+            ball.setSpeed(ball.getSpeed() / 0.6);
+        }
+        setRemove(true);
     }
 
     @Override
