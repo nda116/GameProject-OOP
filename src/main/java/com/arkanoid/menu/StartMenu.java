@@ -30,11 +30,11 @@ public class StartMenu extends Menu {
      */
     @Override
     public void createButtons() {
-        double buttonWidth = 300;
-        double buttonHeight = 60;
+        double buttonWidth = 200;
+        double buttonHeight = 40;
         double startX = (screenWidth - buttonWidth) / 2;
         double startY = screenHeight / 2;
-        double spacing = 80;
+        double spacing = 60;
 
         /*buttons.add(new Button(startX, startY, buttonWidth, buttonHeight,
                 "/images/menu/new_game_button.png"));
@@ -42,7 +42,8 @@ public class StartMenu extends Menu {
                 "/images/menu/exit_button.png"));*/
         getButtons().add(new Button(startX, startY, buttonWidth, buttonHeight, "NEW GAME"));
         getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "HIGH SCORES"));
-        getButtons().add(new Button(startX, startY + spacing * 2, buttonWidth, buttonHeight, "EXIT"));
+        getButtons().add(new Button(startX, startY + spacing * 2, buttonWidth, buttonHeight, "SETTINGS"));
+        getButtons().add(new Button(startX, startY + spacing * 3, buttonWidth, buttonHeight, "EXIT"));
     }
 
     /**

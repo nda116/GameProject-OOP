@@ -23,7 +23,7 @@ public class Button {
     private static final Color NORMAL_COLOR = Color.rgb(70, 130, 180);
     private static final Color SELECTED_COLOR = Color.rgb(100, 160, 210);
     private static final Color TEXT_COLOR = Color.WHITE;
-    private static final Font BUTTON_FONT = Font.font("Arial", FontWeight.BOLD, 24);
+    private static final Font BUTTON_FONT = Font.font("Arial", FontWeight.BOLD, 20);
 
     /**
      * Creates a text-based button.
