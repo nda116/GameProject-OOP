@@ -23,7 +23,7 @@ public class GameOver extends Menu {
     private boolean isNameEntered = false;
     private int score;
 
-    private static final String FILE_PATH = "highscores.txt";
+    private static final String FILE_PATH = System.getProperty("user.dir") + "/highscores.txt";
 
     public GameOver(double width, double height) {
         super(width, height);
@@ -45,6 +45,7 @@ public class GameOver extends Menu {
         getButtons().add(new Button(startX, startY + spacing, btnWidth, btnHeight, "BACK TO MENU"));
     }
 
+    /** Set the final score before showing the Game Over screen. */
     public void setScore(int score) {
         this.score = score;
         this.playerName.setLength(0);
@@ -52,6 +53,7 @@ public class GameOver extends Menu {
         resetSelection();
     }
 
+    /** Render Game Over screen with overlay and input/buttons. */
     @Override
     public void render(GraphicsContext gc) {
         if (getBackgroundImage() != null) {
