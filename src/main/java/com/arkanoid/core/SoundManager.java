@@ -245,6 +245,9 @@ public class SoundManager {
         if (backgroundMusic != null) {
             backgroundMusic.setVolume(musicVolume * masterVolume);
         }
+        if (menuMusic != null) {
+            menuMusic.setVolume(musicVolume * masterVolume);
+        }
     }
 
     /**
@@ -264,6 +267,10 @@ public class SoundManager {
     private void updateAllVolumes() {
         if (backgroundMusic != null) {
             backgroundMusic.setVolume(musicVolume * masterVolume);
+        }
+
+        if (menuMusic != null) {
+            menuMusic.setVolume(musicVolume * masterVolume);
         }
 
         for (MediaPlayer player : soundEffects.values()) {
