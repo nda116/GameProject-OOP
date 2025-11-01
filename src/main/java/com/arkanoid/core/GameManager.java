@@ -301,9 +301,10 @@ public class GameManager {
         if (pressed) {
             pressedKeys.add(key);
 
-            // Handle menu navigation
             if (gameState == GameState.MENU) {
                 handleMenuInput(key);
+            } else if (gameState == GameState.SETTINGS) {
+                handleSettingsInput(key);
             } else if (gameState == GameState.PAUSED) {
                 handlePauseMenuInput(key);
             } else if (gameState == GameState.GAME_OVER) {
@@ -333,7 +334,9 @@ public class GameManager {
                 startNewGame();
             } else if (selection == 1) { // High Scores
                 showHighScores();
-            } else if (selection == 2) { // Exit
+            } else if (selection == 2) { // Settings
+                showSettings();
+            } else if (selection == 3) { // Exit
                 SoundManager.getInstance().dispose();
                 System.exit(0);
             }
@@ -399,6 +402,22 @@ public class GameManager {
     }
 
     /**
+     * Handles settings menu input.
+     * @param key the key code
+     */
+    private void handleSettingsInput(KeyCode key) {
+        gameView.getSettingsMenu().handleInput(key);
+
+        if (key == KeyCode.ENTER && gameView.getSettingsMenu().isBackSelected()) {
+            returnToMainMenu();
+        } else if (key == KeyCode.ESCAPE) {
+            returnToMainMenu();
+        }
+
+        SoundManager.getInstance().playSound(SoundManager.Sound.BUTTON);
+    }
+
+    /**
      * Shows the high score menu.
      */
     public void showHighScores() {
@@ -406,6 +425,13 @@ public class GameManager {
         gameState = GameState.HIGH_SCORES;
     }
 
+    /**
+     * Shows the settings menu.
+     */
+    public void showSettings() {
+        gameView.getSettingsMenu().resetSelection();
+        gameState = GameState.SETTINGS;
+    }
 
     /**
      * Handles gameplay input.

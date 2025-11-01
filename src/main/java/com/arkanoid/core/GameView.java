@@ -25,6 +25,7 @@ public class GameView {
     private PauseMenu pauseMenu;
     private GameOver gameOverMenu;
     private HighScoreMenu highScoreMenu;
+    private SettingsMenu settingsMenu;
 
     private static final Color BACKGROUND_COLOR = Color.rgb(20, 20, 40);
     private static final Color UI_TEXT_COLOR = Color.WHITE;
@@ -49,6 +50,7 @@ public class GameView {
         pauseMenu = new PauseMenu(width, height);
         gameOverMenu = new GameOver(width, height);
         highScoreMenu = new HighScoreMenu(width, height);
+        settingsMenu = new SettingsMenu(width, height);
 
         clear();
     }
@@ -74,6 +76,10 @@ public class GameView {
         switch (state) {
             case MENU:
                 renderMainMenu();
+                break;
+
+            case SETTINGS:
+                renderSettingsMenu();
                 break;
 
             case HIGH_SCORES:
@@ -106,6 +112,13 @@ public class GameView {
     }
 
     /**
+     * Renders the pause menu overlay.
+     */
+    private void renderPauseMenu() {
+        pauseMenu.render(gc);
+    }
+
+    /**
      * Renders the high score menu.
      */
     private void renderHighScores() {
@@ -113,10 +126,10 @@ public class GameView {
     }
 
     /**
-     * Renders the pause menu overlay.
+     * Renders the settings menu.
      */
-    private void renderPauseMenu() {
-        pauseMenu.render(gc);
+    private void renderSettingsMenu() {
+        settingsMenu.render(gc);
     }
 
     /**
@@ -253,6 +266,10 @@ public class GameView {
 
     public HighScoreMenu getHighScoreMenu() {
         return highScoreMenu;
+    }
+
+    public SettingsMenu getSettingsMenu() {
+        return settingsMenu;
     }
 
     public void resetGameOverMenu(int score) {
