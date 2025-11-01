@@ -31,8 +31,8 @@ public abstract class MovableObject extends GameObject{
         this.dy = dy;
     }
 
-    public void move() {
-        setX(getX() + dx);
-        setY(getY() + dy);
+    public void move(double deltaTime) {
+        setX(getX() + dx * deltaTime);
+        setY(getY() + dy * deltaTime);
     }
 }

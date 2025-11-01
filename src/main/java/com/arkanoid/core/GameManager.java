@@ -44,6 +44,9 @@ public class GameManager {
 
     // Game loop
     private AnimationTimer gameLoop;
+    private static final double FIXED_TIME_STEP = 1.0 / 60.0; // 60 FPS
+    private static final double MAX_ACCUMULATED_TIME = 0.25;
+    private double accumulatedTime = 0.0;
 
     // Input handling
     private Set<KeyCode> pressedKeys;
@@ -94,7 +97,7 @@ public class GameManager {
         double paddleHeight = 25;
         double paddleX = (WINDOW_WIDTH - paddleWidth) / 2;
         double paddleY = WINDOW_HEIGHT - 50;
-        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 5);
+        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 550);
 
         ballManager = new BallManager();
         powerupManager = new PowerUpManager();
@@ -129,10 +132,32 @@ public class GameManager {
         }
 
         gameLoop = new AnimationTimer() {
+            private long lastTime = 0;
+
             @Override
             public void handle(long now) {
-                frame ++;
-                update();
+                if (lastTime == 0) {
+                    lastTime = now;
+                    return;
+                }
+
+                // calculate delta time between 2 frames and convert from ms to second
+                double deltaTime = (now - lastTime) / 1_000_000_000.0;
+                lastTime = now;
+
+                // avoid spiral of death
+                if (deltaTime > MAX_ACCUMULATED_TIME) {
+                    deltaTime = MAX_ACCUMULATED_TIME;
+                }
+
+                accumulatedTime += deltaTime;
+
+                // Update with fixed time step
+                while (accumulatedTime >= FIXED_TIME_STEP) {
+                    update(FIXED_TIME_STEP);
+                    accumulatedTime -= FIXED_TIME_STEP;
+                }
+
                 render();
             }
         };
@@ -152,9 +177,9 @@ public class GameManager {
     /**
      * Updates all game objects and logic.
      */
-    public void update() {
+    public void update(double deltaTime) {
         if (gameState == GameState.PLAYING || gameState == GameState.READY) {
-            handleContinuousInput();
+            handleContinuousInput(deltaTime);
         } else if (gameState == GameState.GAME_OVER || gameState == GameState.HIGH_SCORES) {
             return;
         } else {
@@ -164,7 +189,7 @@ public class GameManager {
 
         if (gameState == GameState.READY) {
             if (ballManager.getBallsList().isEmpty()) {
-                ballManager.addBall(new Ball(0, 0, 12,3));
+                ballManager.addBall(new Ball(0, 0, 12,330));
             }
             ballManager.setDefault(paddle);
         }
@@ -200,6 +225,13 @@ public class GameManager {
                 if (checkCollision(brick, bullet)) {
                     brickManager.updateBrickHP(brick);
                     bullet.deActive();
+                    if (brick.getType() == Brick.EXPLOSION) {
+                        SoundManager.getInstance().playSound(SoundManager.Sound.EXPLOSION_BRICK);
+                    } else if (brick.getType() == Brick.GLASS) {
+                        SoundManager.getInstance().playSound(SoundManager.Sound.GLASS_BRICK);
+                    } else {
+                        SoundManager.getInstance().playSound(SoundManager.Sound.BRICK_BREAK);
+                    }
                 }
             }
         }
@@ -215,10 +247,10 @@ public class GameManager {
             }
         }
 
-        paddle.update();
-        ballManager.updateBall();
-        powerupManager.updatePowerUp();
-        bulletManager.updateBullet();
+        paddle.update(deltaTime);
+        ballManager.updateBall(deltaTime);
+        powerupManager.updatePowerUp(deltaTime);
+        bulletManager.updateBullet(deltaTime);
 
         score += brickManager.updateBrickList(powerupManager);
         ballManager.updateBallList();
@@ -249,11 +281,11 @@ public class GameManager {
     /**
      * Handles continuous key input (for paddle movement).
      */
-    private void handleContinuousInput() {
+    private void handleContinuousInput(double deltaTime) {
         if (pressedKeys.contains(KeyCode.LEFT)) {
-            paddle.moveLeft();
+            paddle.moveLeft(deltaTime);
         } else if (pressedKeys.contains(KeyCode.RIGHT)) {
-            paddle.moveRight();
+            paddle.moveRight(deltaTime);
         } else {
             paddle.stop();
         }
@@ -457,8 +489,6 @@ public class GameManager {
      * Renders all game objects.
      */
     private void render() {
-        gameView.clear();
-
         gameView.render(this);
     }
 

@@ -10,7 +10,7 @@ public class Bullet extends MovableObject {
     private boolean active;
 
     public Bullet(double x, double y, double width, double height) {
-        super(x, y, width, height, 0, -3);
+        super(x, y, width, height, 0, -330);
         setObjectImage("/images/bullet.png");
         this.active = true;
     }
@@ -24,8 +24,8 @@ public class Bullet extends MovableObject {
     }
 
     @Override
-    public void update() {
-        move();
+    public void update(double deltaTime) {
+        move(deltaTime);
         if (getY() < 0) {
             deActive();
         }

@@ -30,9 +30,9 @@ public class BallManager {
         }
     }
 
-    public void updateBall() {
+    public void updateBall(double deltaTime) {
         for (Ball ball : ballsList) {
-            ball.update();
+            ball.update(deltaTime);
         }
     }
 

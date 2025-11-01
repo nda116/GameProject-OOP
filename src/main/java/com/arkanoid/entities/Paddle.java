@@ -31,14 +31,14 @@ public class Paddle extends MovableObject {
         this.speed = speed;
     }
 
-    public void moveLeft() {
+    public void moveLeft(double deltatime) {
         setDx(-speed);
-        move();
+        move(deltatime);
     }
 
-    public void moveRight() {
+    public void moveRight(double deltatime) {
         setDx(speed);
-        move();
+        move(deltatime);
     }
 
     /**
@@ -58,7 +58,7 @@ public class Paddle extends MovableObject {
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
         if (getX() < 0) {
             setX(0);
         }
