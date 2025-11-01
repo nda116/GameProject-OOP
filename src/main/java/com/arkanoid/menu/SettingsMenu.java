@@ -1,5 +1,6 @@
 package com.arkanoid.menu;
 
+import com.arkanoid.core.GameState;
 import com.arkanoid.core.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -17,11 +18,13 @@ public class SettingsMenu extends Menu {
     private static final Font SETTING_FONT = Font.font("Arial", FontWeight.BOLD, 24);
     private static final Font VALUE_FONT = Font.font("Arial", FontWeight.NORMAL, 20);
 
-    private int selectedSetting = 0; // 0=Master, 1=Music, 2=SFX, 3=Back
+    private int selectedSetting = 0;
 
     private double masterVolume;
     private double musicVolume;
     private double sfxVolume;
+
+    private GameState previousState;
 
     /**
      * Creates the settings menu.
@@ -55,7 +58,7 @@ public class SettingsMenu extends Menu {
         double startX = (screenWidth - buttonWidth) / 2;
         double startY = screenHeight - 120;
 
-        getButtons().add(new Button(startX, startY, buttonWidth, buttonHeight, "BACK TO MENU"));
+        getButtons().add(new Button(startX, startY, buttonWidth, buttonHeight, "BACK"));
     }
 
     /**
@@ -213,5 +216,21 @@ public class SettingsMenu extends Menu {
     @Override
     public void resetSelection() {
         selectedSetting = 0;
+    }
+
+    /**
+     * Sets the previous state to return to when exiting settings.
+     * @param state the previous game state
+     */
+    public void setPreviousState(GameState state) {
+        this.previousState = state;
+    }
+
+    /**
+     * Gets the previous state.
+     * @return the previous game state
+     */
+    public GameState getPreviousState() {
+        return previousState;
     }
 }
