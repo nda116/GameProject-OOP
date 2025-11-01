@@ -19,7 +19,7 @@ public class HighScoreMenu extends Menu {
     private static final Font SCORE_FONT = Font.font("Arial", FontWeight.NORMAL, 20);
     private static final Font SUBTITLE_FONT = Font.font("Arial", FontWeight.NORMAL, 18);
 
-    private static final String HIGHSCORE_FILE = System.getProperty("user.dir") + "/highscores.txt";
+    private static final String HIGHSCORE_FILE = "highscores.txt";
 
     private List<HighScoreEntry> highScores;
 
