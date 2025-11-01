@@ -31,7 +31,7 @@ public abstract class PowerUp extends MovableObject {
     }
 
     public PowerUp(double x, double y, int type) {
-        super(x, y, WIDTH, HEIGHT, 0, 1);
+        super(x, y, WIDTH, HEIGHT, 0, 110);
         this.type = type;
     }
 
@@ -39,9 +39,9 @@ public abstract class PowerUp extends MovableObject {
      * Update position of powerup.
      * Stop falling if out of bounds.
      */
-    public void update() {
+    public void update(double deltaTime) {
         if (isFalling()) {
-            move();
+            move(deltaTime);
         }
         if (getY() > WINDOW_HEIGHT) {
             remove = true;

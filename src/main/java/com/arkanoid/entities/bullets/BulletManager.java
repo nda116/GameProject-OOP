@@ -67,9 +67,9 @@ public class BulletManager {
     /**
      * update bullets from bulletsList.
      */
-    public void updateBullet() {
+    public void updateBullet(double deltaTime) {
         for (Bullet bullet : bulletsList) {
-            bullet.update();
+            bullet.update(deltaTime);
         }
     }
 
