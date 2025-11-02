@@ -15,8 +15,8 @@ import java.util.List;
  * Game Over screen with name input, leaderboard save, and button navigation.
  */
 public class GameOver extends Menu {
-    private static final Font TITLE_FONT = Font.font("Arial", FontWeight.BOLD, 64);
-    private static final Font MESSAGE_FONT = Font.font("Arial", FontWeight.BOLD, 22);
+    private static final Font TITLE_FONT = Font.font("Impact", FontWeight.BOLD, 64);
+    private static final Font MESSAGE_FONT = Font.font("Impact", FontWeight.BOLD, 22);
     private static final Font INPUT_FONT = Font.font("Consolas", FontWeight.NORMAL, 26);
 
     private final StringBuilder playerName = new StringBuilder();
