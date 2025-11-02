@@ -301,9 +301,10 @@ public class GameManager {
         if (pressed) {
             pressedKeys.add(key);
 
-            // Handle menu navigation
             if (gameState == GameState.MENU) {
                 handleMenuInput(key);
+            } else if (gameState == GameState.SETTINGS) {
+                handleSettingsInput(key);
             } else if (gameState == GameState.PAUSED) {
                 handlePauseMenuInput(key);
             } else if (gameState == GameState.GAME_OVER) {
@@ -333,7 +334,9 @@ public class GameManager {
                 startNewGame();
             } else if (selection == 1) { // High Scores
                 showHighScores();
-            } else if (selection == 2) { // Exit
+            } else if (selection == 2) { // Settings
+                showSettings();
+            } else if (selection == 3) { // Exit
                 SoundManager.getInstance().dispose();
                 System.exit(0);
             }
@@ -354,7 +357,10 @@ public class GameManager {
             int selection = gameView.getPauseMenu().getSelectedIndex();
             if (selection == 0) { // Resume
                 resumeGame();
-            } else if (selection == 1) { // Main Menu
+            } else if (selection == 1) { // Settings
+                showSettingsFromPause();
+            }
+            else if (selection == 2) { // Main Menu
                 returnToMainMenu();
             }
         } else if (key == KeyCode.ESCAPE || key == KeyCode.SPACE) {
@@ -406,6 +412,53 @@ public class GameManager {
         gameState = GameState.HIGH_SCORES;
     }
 
+    /**
+     * Handles settings menu input.
+     * @param key the key code
+     */
+    private void handleSettingsInput(KeyCode key) {
+        gameView.getSettingsMenu().handleInput(key);
+
+        if (key == KeyCode.ENTER && gameView.getSettingsMenu().isBackSelected()) {
+            returnFromSettings();
+        } else if (key == KeyCode.ESCAPE) {
+            returnFromSettings();
+        }
+
+        SoundManager.getInstance().playSound(SoundManager.Sound.BUTTON);
+    }
+
+    /**
+     * Shows the settings menu.
+     */
+    public void showSettings() {
+        gameView.getSettingsMenu().setPreviousState(GameState.MENU);
+        gameView.getSettingsMenu().resetSelection();
+        gameState = GameState.SETTINGS;
+    }
+
+    /**
+     * Shows the settings from pause.
+     */
+    public void showSettingsFromPause() {
+        gameView.getSettingsMenu().setPreviousState(GameState.PAUSED);
+        gameView.getSettingsMenu().resetSelection();
+        gameState = GameState.SETTINGS;
+    }
+
+    /**
+     * Check back in settings return to which state.
+     */
+    public void returnFromSettings() {
+        GameState previous = gameView.getSettingsMenu().getPreviousState();
+
+        if (previous == GameState.PAUSED) {
+            gameState = GameState.PAUSED;
+            gameView.getPauseMenu().resetSelection();
+        } else {
+            returnToMainMenu();
+        }
+    }
 
     /**
      * Handles gameplay input.
