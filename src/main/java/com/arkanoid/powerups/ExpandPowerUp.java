@@ -46,6 +46,8 @@ public class ExpandPowerUp extends PowerUp {
             timeline.stop();
         }
         paddle.setWidth(originalWidth);
+        paddle.setObjectImage("/images/paddle/normal_paddle.png");
+        setRemove(true);
     }
 
     @Override
