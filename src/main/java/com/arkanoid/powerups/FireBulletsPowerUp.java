@@ -22,6 +22,7 @@ public class FireBulletsPowerUp extends PowerUp {
     @Override
     public void removeEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
         bulletManager.stopPowerUp();
+        setObjectImage("/images/paddle/normal_paddle.png");
         setRemove(true);
     }
 
