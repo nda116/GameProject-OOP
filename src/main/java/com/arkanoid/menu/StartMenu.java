@@ -1,17 +1,11 @@
 package com.arkanoid.menu;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 
 /**
  * Start menu screen with background and buttons.
  */
 public class StartMenu extends Menu {
-
-    private static final Font SUBTITLE_FONT = Font.font("Arial", FontWeight.NORMAL, 20);
 
     /**
      * Creates the start menu.
@@ -21,7 +15,7 @@ public class StartMenu extends Menu {
      */
     public StartMenu(double screenWidth, double screenHeight) {
         super(screenWidth, screenHeight);
-        setObjectImage("/images/menu/menu.png");
+        setObjectImage("/images/menu/menu.jpg");
         createButtons();
     }
 
@@ -32,14 +26,10 @@ public class StartMenu extends Menu {
     public void createButtons() {
         double buttonWidth = 200;
         double buttonHeight = 40;
-        double startX = (screenWidth - buttonWidth) / 2;
-        double startY = screenHeight / 2;
+        double startX = 200 + (screenWidth - buttonWidth) / 2;
+        double startY = (screenHeight / 2) - 80;
         double spacing = 60;
 
-        /*buttons.add(new Button(startX, startY, buttonWidth, buttonHeight,
-                "/images/menu/new_game_button.png"));
-        buttons.add(new Button(startX, startY + spacing, buttonWidth, buttonHeight,
-                "/images/menu/exit_button.png"));*/
         getButtons().add(new Button(startX, startY, buttonWidth, buttonHeight, "NEW GAME"));
         getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "HIGH SCORES"));
         getButtons().add(new Button(startX, startY + spacing * 2, buttonWidth, buttonHeight, "SETTINGS"));
@@ -53,24 +43,10 @@ public class StartMenu extends Menu {
      */
     @Override
     public void render(GraphicsContext gc) {
-        // Draw background if available
-        if (getBackgroundImage() != null) {
-            gc.drawImage(getBackgroundImage(), 0, 0, screenWidth, screenHeight);
-        } else {
-            gc.setFill(Color.DARKBLUE);
-            gc.fillRect(0, 0, screenWidth, screenHeight);
-        }
+        gc.drawImage(getBackgroundImage(), 0, 0, screenWidth, screenHeight);
 
-        // Draw buttons
         for (Button button : getButtons()) {
             button.render(gc);
         }
-
-        // Draw instructions
-        gc.setFill(Color.rgb(255, 255, 255, 0.7));
-        gc.setFont(SUBTITLE_FONT);
-        gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("Use ↑↓ arrows to navigate, ENTER to select",
-                screenWidth / 2, screenHeight - 30);
     }
 }

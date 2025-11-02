@@ -50,7 +50,6 @@ public class GameManager {
 
     // Power-up timing
     private PowerUp powerUp;
-    private double powerUpTimer;
 
     private static final int LIVES = 3;
     private static final int NUMBER_OF_LEVEL = 4;
@@ -533,10 +532,6 @@ public class GameManager {
 
     public int getLevel() {
         return level;
-    }
-
-    public double getPowerUpTimer() {
-        return powerUpTimer;
     }
 
     public Paddle getPaddle() {

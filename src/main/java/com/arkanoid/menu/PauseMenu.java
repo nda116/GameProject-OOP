@@ -10,7 +10,7 @@ import javafx.scene.text.TextAlignment;
  * Pause menu overlay with resume and exit options.
  */
 public class PauseMenu extends Menu {
-    private static final Font TITLE_FONT = Font.font("Arial", FontWeight.BOLD, 56);
+    private static final Font TITLE_FONT = Font.font("Impact", FontWeight.BOLD, 40);
 
     /**
      * Creates the pause menu.
@@ -20,7 +20,7 @@ public class PauseMenu extends Menu {
      */
     public PauseMenu(double screenWidth, double screenHeight) {
         super(screenWidth, screenHeight);
-
+        setObjectImage("/images/menu/pauseMenu.png");
         createButtons();
     }
 
@@ -49,44 +49,23 @@ public class PauseMenu extends Menu {
      */
     @Override
     public void render(GraphicsContext gc) {
-        // Draw semi-transparent overlay
         gc.setFill(Color.rgb(0, 0, 0, 0.7));
         gc.fillRect(0, 0, screenWidth, screenHeight);
 
-        // Draw pause panel
         double panelWidth = 400;
         double panelHeight = 350;
         double panelX = (screenWidth - panelWidth) / 2;
-        double panelY = (screenHeight - panelHeight) / 2;
+        double panelY = 35 + (screenHeight - panelHeight) / 2;
 
-        // Panel shadow
-        gc.setFill(Color.rgb(0, 0, 0, 0.5));
-        gc.fillRoundRect(panelX + 5, panelY + 5, panelWidth, panelHeight, 20, 20);
+        gc.drawImage(getBackgroundImage(), panelX, panelY, panelWidth, panelHeight);
 
-        // Panel background
-        gc.setFill(Color.rgb(30, 30, 60));
-        gc.fillRoundRect(panelX, panelY, panelWidth, panelHeight, 20, 20);
-
-        // Panel border
-        gc.setStroke(Color.rgb(70, 130, 180));
-        gc.setLineWidth(3);
-        gc.strokeRoundRect(panelX, panelY, panelWidth, panelHeight, 20, 20);
-
-        // Draw "PAUSED" title
         gc.setFont(TITLE_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
-        gc.setFill(Color.ORANGE);
-        gc.fillText("PAUSED", screenWidth / 2, panelY + 80);
+        gc.setFill(Color.CYAN);
+        gc.fillText("PAUSED", screenWidth / 2, panelY + 40);
 
-        // Draw buttons
         for (Button button : getButtons()) {
             button.render(gc);
         }
-
-        // Draw instructions
-        gc.setFont(Font.font("Arial", 14));
-        gc.setFill(Color.LIGHTGRAY);
-        gc.fillText("Use ↑↓ to navigate, ENTER to select, ESC to resume", screenWidth / 2,
-                panelY + panelHeight - 20);
     }
 }
