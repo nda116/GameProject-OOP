@@ -14,9 +14,9 @@ import javafx.scene.text.TextAlignment;
  */
 public class SettingsMenu extends Menu {
 
-    private static final Font TITLE_FONT = Font.font("Arial", FontWeight.BOLD, 48);
-    private static final Font SETTING_FONT = Font.font("Arial", FontWeight.BOLD, 24);
-    private static final Font VALUE_FONT = Font.font("Arial", FontWeight.NORMAL, 20);
+    private static final Font TITLE_FONT = Font.font("Impact", FontWeight.BOLD, 48);
+    private static final Font SETTING_FONT = Font.font("Impact", FontWeight.BOLD, 24);
+    private static final Font VALUE_FONT = Font.font("Consolas", FontWeight.NORMAL, 20);
 
     private int selectedSetting = 0;
 
@@ -34,6 +34,7 @@ public class SettingsMenu extends Menu {
      */
     public SettingsMenu(double screenWidth, double screenHeight) {
         super(screenWidth, screenHeight);
+        setObjectImage("/images/menu/menu.jpg");
         loadCurrentSettings();
         createButtons();
     }
@@ -124,12 +125,14 @@ public class SettingsMenu extends Menu {
      */
     @Override
     public void render(GraphicsContext gc) {
-        // Draw semi-transparent background
-        gc.setFill(Color.rgb(20, 20, 40, 0.95));
+        gc.drawImage(getBackgroundImage(), 0, 0, screenWidth, screenHeight);
+
+        // Draw semi-transparent overlay
+        gc.setFill(Color.rgb(0, 0, 0, 0.7));
         gc.fillRect(0, 0, screenWidth, screenHeight);
 
         // Draw title
-        gc.setFill(Color.YELLOW);
+        gc.setFill(Color.CYAN);
         gc.setFont(TITLE_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("SETTINGS", screenWidth / 2, 100);
@@ -150,7 +153,8 @@ public class SettingsMenu extends Menu {
         // Draw instructions
         gc.setFill(Color.rgb(255, 255, 255, 0.7));
         gc.setFont(VALUE_FONT);
-        gc.fillText("Use ↑↓ to select, ←→ to adjust volume", screenWidth / 2 - 170, startY + spacing * 3);
+        gc.fillText("Use ↑↓ to select, ←→ to adjust volume", screenWidth / 2 - 170,
+                startY + spacing * 3);
 
         // Draw Back button
         for (Button button : getButtons()) {
@@ -174,9 +178,9 @@ public class SettingsMenu extends Menu {
         // Draw selection indicator
         if (isSelected) {
             gc.setFill(Color.YELLOW);
-            gc.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+            gc.setFont(Font.font("Impact", FontWeight.BOLD, 30));
             gc.setTextAlign(TextAlignment.RIGHT);
-            gc.fillText(">>", screenWidth / 2 - 280, y + 10);
+            gc.fillText("►", screenWidth / 2 - 280, y);
         }
 
         // Draw label

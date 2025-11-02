@@ -17,16 +17,15 @@ public class Button {
     private double width;
     private double height;
     private String text;
-    private Image image;
+    private Image buttonImage;
     private boolean selected;
 
-    private static final Color NORMAL_COLOR = Color.rgb(70, 130, 180);
-    private static final Color SELECTED_COLOR = Color.rgb(100, 160, 210);
-    private static final Color TEXT_COLOR = Color.WHITE;
-    private static final Font BUTTON_FONT = Font.font("Arial", FontWeight.BOLD, 20);
+    private static final Color NORMAL_COLOR = Color.rgb(255, 255, 255);
+    private static final Color SELECTED_COLOR = Color.rgb(0, 255, 255);
+    private static final Font BUTTON_FONT = Font.font("Impact", FontWeight.NORMAL, 24);
 
     /**
-     * Creates a text-based button.
+     * Creates a text-based button with image background.
      *
      * @param x x-coordinate
      * @param y y-coordinate
@@ -41,6 +40,12 @@ public class Button {
         this.height = height;
         this.text = text;
         this.selected = false;
+
+        try {
+            this.buttonImage = new Image(getClass().getResourceAsStream("/images/menu/button.png"));
+        } catch (Exception e) {
+            System.err.println("Could not load button.png: " + e.getMessage());
+        }
     }
 
     /**
@@ -49,27 +54,26 @@ public class Button {
      * @param gc graphics context
      */
     public void render(GraphicsContext gc) {
-        Color buttonColor = selected ? SELECTED_COLOR : NORMAL_COLOR;
-
-        // Draw button background
-        gc.setFill(buttonColor);
-        gc.fillRoundRect(x, y, width, height, 10, 10);
+        gc.drawImage(buttonImage, x, y, width, height);
 
         // Draw border (highlight when selected)
-        gc.setStroke(selected ? Color.YELLOW : Color.rgb(50, 100, 150));
-        gc.setLineWidth(selected ? 4 : 2);
-        gc.strokeRoundRect(x, y, width, height, 10, 10);
+        if (selected) {
+            gc.setStroke(Color.rgb(0, 255, 255));
+            gc.setLineWidth(4);
+            gc.strokeRoundRect(x, y, width, height, 10, 10);
+        }
 
         // Draw selected
         if (selected) {
-            gc.setFill(Color.YELLOW);
-            gc.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+            gc.setFill(Color.rgb(0, 255, 255));
+            gc.setFont(Font.font("Impact", FontWeight.BOLD, 32));
             gc.setTextAlign(TextAlignment.LEFT);
-            gc.fillText(">>", x - 40, y + height / 2 + 10);
+            gc.fillText("►", x - 45, y + height / 2 + 10);
         }
 
-        // Draw text
-        gc.setFill(TEXT_COLOR);
+        // Draw text with color based on selection
+        Color textColor = selected ? SELECTED_COLOR : NORMAL_COLOR;
+        gc.setFill(textColor);
         gc.setFont(BUTTON_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText(text, x + width / 2, y + height / 2 + 8);

@@ -28,10 +28,10 @@ public class GameView {
     private SettingsMenu settingsMenu;
 
     private static final Color BACKGROUND_COLOR = Color.rgb(20, 20, 40);
-    private static final Color UI_TEXT_COLOR = Color.WHITE;
-    private static final Font UI_FONT = Font.font("Arial", FontWeight.BOLD, 18);
-    private static final Font TITLE_FONT = Font.font("Arial", FontWeight.BOLD, 48);
-    private static final Font MESSAGE_FONT = Font.font("Arial", FontWeight.BOLD, 24);
+    private static final Color UI_TEXT_COLOR = Color.CYAN;
+    private static final Font UI_FONT = Font.font("Consolas", FontWeight.BOLD, 22);
+    private static final Font TITLE_FONT = Font.font("Impact", FontWeight.BOLD, 48);
+    private static final Font MESSAGE_FONT = Font.font("Impact", FontWeight.BOLD, 24);
 
     /**
      * Constructs a GameView with specified dimensions.
@@ -159,11 +159,10 @@ public class GameView {
         if (gameManager.getGameState() != GameState.GAME_OVER) {
             renderGameStateMessage(gameManager.getGameState());
         }
-
     }
 
     /**
-     * Renders the game UI (score, lives, level, power-up timer).
+     * Renders the game UI (score, lives, level).
      *
      * @param gameManager the game manager
      */
@@ -173,13 +172,13 @@ public class GameView {
 
         // Score
         gc.setTextAlign(TextAlignment.LEFT);
-        gc.fillText("Score: " + gameManager.getScore(), 10, 25);
+        gc.fillText("" + gameManager.getScore(), 10, 25);
 
         // Lives
         int lives = gameManager.getLives();
         Image paddleIcon = gameManager.getPaddle().getObjectImage();
-        double iconWidth = 40;
-        double iconHeight = 10;
+        double iconWidth = 44;
+        double iconHeight = 11;
         double startX = 10;
         double startY = 35;
 
@@ -190,13 +189,6 @@ public class GameView {
         // Level
         gc.setTextAlign(TextAlignment.RIGHT);
         gc.fillText("Level: " + gameManager.getLevel(), canvas.getWidth() - 10, 25);
-
-        // Power-up timer
-        double powerUpTimer = gameManager.getPowerUpTimer();
-        if (powerUpTimer > 0) {
-            gc.fillText(String.format("Power-up: %.1fs", powerUpTimer),
-                    canvas.getWidth() - 10, 45);
-        }
     }
 
     /**
@@ -214,9 +206,9 @@ public class GameView {
             case READY:
                 gc.setFont(MESSAGE_FONT);
                 gc.setFill(Color.YELLOW);
-                gc.fillText("Press SPACE to start", centerX, centerY);
-                gc.setFont(Font.font("Arial", 14));
-                gc.fillText("Use LEFT/RIGHT arrows or A/D to move", centerX, centerY + 30);
+                gc.fillText("Press SPACE to start", centerX, centerY + 80);
+                gc.setFont(Font.font("Impact", 14));
+                gc.fillText("Use LEFT/RIGHT arrows to move", centerX, centerY + 100);
                 break;
 
             case GAME_OVER:
@@ -276,5 +268,4 @@ public class GameView {
         gameOverMenu = new GameOver(getWidth(), getHeight());
         gameOverMenu.setScore(score);
     }
-
 }

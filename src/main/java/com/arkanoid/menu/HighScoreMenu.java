@@ -14,12 +14,12 @@ import java.util.*;
  */
 public class HighScoreMenu extends Menu {
 
-    private static final Font TITLE_FONT = Font.font("Arial", FontWeight.BOLD, 48);
-    private static final Font HEADER_FONT = Font.font("Arial", FontWeight.BOLD, 24);
-    private static final Font SCORE_FONT = Font.font("Arial", FontWeight.NORMAL, 20);
-    private static final Font SUBTITLE_FONT = Font.font("Arial", FontWeight.NORMAL, 18);
+    private static final Font TITLE_FONT = Font.font("Impact", FontWeight.BOLD, 48);
+    private static final Font HEADER_FONT = Font.font("Consolas", FontWeight.BOLD, 24);
+    private static final Font SCORE_FONT = Font.font("Consolas", FontWeight.NORMAL, 20);
+    private static final Font SUBTITLE_FONT = Font.font("Consolas", FontWeight.NORMAL, 18);
 
-    private static final String HIGHSCORE_FILE = "highscores.txt";
+    private static final String FILE_PATH = "highscores.txt";
 
     private List<HighScoreEntry> highScores;
 
@@ -31,7 +31,7 @@ public class HighScoreMenu extends Menu {
      */
     public HighScoreMenu(double screenWidth, double screenHeight) {
         super(screenWidth, screenHeight);
-        setObjectImage("/images/menu/menu.png");
+        setObjectImage("/images/menu/menu.jpg");
         highScores = new ArrayList<>();
         loadHighScores();
         createButtons();
@@ -41,7 +41,7 @@ public class HighScoreMenu extends Menu {
      * Loads high scores from file.
      */
     private void loadHighScores() {
-        File file = new File(HIGHSCORE_FILE);
+        File file = new File(FILE_PATH);
         if (!file.exists()) {
             System.out.println("High score file not found: " + file.getAbsolutePath());
             return;
@@ -114,20 +114,14 @@ public class HighScoreMenu extends Menu {
      */
     @Override
     public void render(GraphicsContext gc) {
-        // Draw background
-        if (getBackgroundImage() != null) {
-            gc.drawImage(getBackgroundImage(), 0, 0, screenWidth, screenHeight);
-        } else {
-            gc.setFill(Color.DARKBLUE);
-            gc.fillRect(0, 0, screenWidth, screenHeight);
-        }
+        gc.drawImage(getBackgroundImage(), 0, 0, screenWidth, screenHeight);
 
         // Draw semi-transparent overlay
-        gc.setFill(Color.rgb(0, 0, 0, 0.5));
+        gc.setFill(Color.rgb(0, 0, 0, 0.7));
         gc.fillRect(0, 0, screenWidth, screenHeight);
 
         // Draw title
-        gc.setFill(Color.GOLD);
+        gc.setFill(Color.CYAN);
         gc.setFont(TITLE_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("HIGH SCORES", screenWidth / 2, 80);
@@ -147,7 +141,7 @@ public class HighScoreMenu extends Menu {
         gc.fillText("SCORE", columnX3 + 100, startY);
 
         // Draw separator line
-        gc.setStroke(Color.GOLD);
+        gc.setStroke(Color.CYAN);
         gc.setLineWidth(2);
         gc.strokeLine(columnX1 - 10, startY + 10, columnX3 + 110, startY + 10);
 
@@ -190,11 +184,6 @@ public class HighScoreMenu extends Menu {
 
             currentY += rowHeight;
         }
-
-        // Draw back button
-        /*for (Button button : getButtons()) {
-            button.render(gc);
-        }*/
 
         // Draw instructions
         gc.setFill(Color.rgb(255, 255, 255, 0.7));
