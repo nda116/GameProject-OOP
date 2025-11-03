@@ -72,7 +72,6 @@ public class NormalBrick extends Brick {
                 type = rand.nextInt(5);
             }
             //set up power
-            type = 5;
             if (type == PowerUp.SPLITBALL) {
                 powerupmanager.addPowerUps(new SplitBallPowerUp(getX(), getY()));
             } else if (type == PowerUp.SLOWBALL) {

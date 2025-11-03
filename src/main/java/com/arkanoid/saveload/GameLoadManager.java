@@ -91,14 +91,6 @@ public class GameLoadManager {
                     }
                 }
             }
-            if (manager.getPowerupManager() != null) {
-                manager.getPowerupManager().clearPowerUpList(
-                        manager.getPaddle(),
-                        manager.getBallManager(),
-                        manager.getBulletManager()
-                );
-            }
-
 
             // Restore main state
             manager.getBrickManager().recalculateTotalScore();
