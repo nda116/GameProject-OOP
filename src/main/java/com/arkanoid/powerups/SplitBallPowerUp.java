@@ -19,7 +19,7 @@ import java.util.List;
  * </p>
  */
 public class SplitBallPowerUp extends PowerUp {
-    private static final double ANGLE_OFFSET = Math.toRadians(45);
+    private static final double ANGLE_OFFSET = Math.toRadians(30);
 
     /**
      * Creates a new SplitBallPowerUp at the given position.
@@ -52,13 +52,20 @@ public class SplitBallPowerUp extends PowerUp {
 
             double dirX = ball.getDirectionX();
             double dirY = ball.getDirectionY();
+            double currentAngle = Math.atan2(dirY, dirX);
 
-            double newDirX = dirX * Math.cos(ANGLE_OFFSET) - dirY * Math.sin(ANGLE_OFFSET);
-            double newDirY = dirX * Math.sin(ANGLE_OFFSET) + dirY * Math.cos(ANGLE_OFFSET);
+            double newBallDirX = Math.cos(currentAngle - ANGLE_OFFSET);
+            double newBallDirY = Math.sin(currentAngle - ANGLE_OFFSET);
+
+            double oldBallDirX =Math.cos(currentAngle + ANGLE_OFFSET);
+            double oldBallDirY = Math.sin(currentAngle + ANGLE_OFFSET);
+
+            ball.setDirectionX(oldBallDirX);
+            ball.setDirectionY(oldBallDirY);
 
             Ball splitBall = new Ball(x, y, radius, speed);
-            splitBall.setDirectionX(newDirX);
-            splitBall.setDirectionY(newDirY);
+            splitBall.setDirectionX(newBallDirX);
+            splitBall.setDirectionY(newBallDirY);
             newBalls.add(splitBall);
         }
 
@@ -73,7 +80,7 @@ public class SplitBallPowerUp extends PowerUp {
      */
     @Override
     public void removeEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
-        // No removal needed
+        setRemove(true);
     }
 
     /**
