@@ -71,7 +71,7 @@ public class NormalBrick extends Brick {
             } else {
                 type = rand.nextInt(5);
             }
-             //set up power
+            //set up power
             if (type == PowerUp.SPLITBALL) {
                 powerupmanager.addPowerUps(new SplitBallPowerUp(getX(), getY()));
             } else if (type == PowerUp.SLOWBALL) {
@@ -87,5 +87,9 @@ public class NormalBrick extends Brick {
         }
 
         return numberPowerUp;
+    }
+
+    public String getColorType() {
+        return color;
     }
 }
