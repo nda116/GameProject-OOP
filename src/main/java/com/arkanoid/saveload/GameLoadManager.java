@@ -100,7 +100,6 @@ public class GameLoadManager {
             BulletManager bulletManager = manager.getBulletManager();
 
             powerUpManager.clearPowerUpList(paddle, ballManager, bulletManager);
-            powerUpManager.getPowerupList().clear();
 
             paddle.setWidth(150);
             paddle.setHeight(25);
