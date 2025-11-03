@@ -49,20 +49,6 @@ public class GameSaveManager {
                 writer.newLine();
             }
 
-            //Save bullets
-            for (Bullet bullet : manager.getBulletManager().getBulletsList()) {
-                writer.write(String.format("BULLET %.2f %.2f", bullet.getX(), bullet.getY()));
-                writer.newLine();
-            }
-
-            //Save power-ups
-            for (PowerUp p : manager.getPowerupManager().getPowerupList()) {
-                if (p.isRemove()) continue;
-                writer.write("POWERUP " + p.getX() + " " + p.getY() + " " + p.getType() + " "
-                        + p.isFalling() + " " + p.isRemove() + "\n");
-            }
-
-
             manager.getGameView().showStatusMessage("Game Saved!");
             return true;
 

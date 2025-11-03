@@ -32,8 +32,6 @@ public class GameLoadManager {
             manager.setLevel(level);
             java.lang.reflect.Method initGameObjects =
                     GameManager.class.getDeclaredMethod("initGameObjects", int.class);
-            initGameObjects.setAccessible(true);
-            initGameObjects.invoke(manager, level);
 
             // Clear current lists
             manager.getBrickManager().getBricksList().clear();
@@ -47,11 +45,8 @@ public class GameLoadManager {
                 switch (data[0]) {
                     case "PADDLE" -> {
                         Paddle paddle = manager.getPaddle();
-                        paddle.setDefault();
                         paddle.setX(Double.parseDouble(data[1]));
                         paddle.setY(Double.parseDouble(data[2]));
-                        //paddle.setWidth(Double.parseDouble(data[3]));
-                        //paddle.setHeight(Double.parseDouble(data[4]));
                         paddle.setObjectImage("/images/paddle/normal_paddle.png");
                     }
 
@@ -94,36 +89,6 @@ public class GameLoadManager {
                         newBrick.setBrickHP(hp);
                         manager.getBrickManager().getBricksList().add(newBrick);
                     }
-
-                    case "BULLET" -> {
-                        double bx = Double.parseDouble(data[1]);
-                        double by = Double.parseDouble(data[2]);
-                        manager.getBulletManager().getBulletsList().add(new Bullet(bx, by, 5, 10));
-                    }
-
-                    /***
-                     case "POWERUP" -> {
-                     double px = Double.parseDouble(data[1]);
-                     double py = Double.parseDouble(data[2]);
-                     int typeP = Integer.parseInt(data[3]);
-                     boolean falling = Boolean.parseBoolean(data[4]);
-                     boolean remove = Boolean.parseBoolean(data[5]);
-
-                     PowerUp powerUp = switch (typeP) {
-                     case PowerUp.SPLITBALL -> new SplitBallPowerUp(px, py);
-                     case PowerUp.SLOWBALL -> new SlowBallPowerUp(px, py);
-                     case PowerUp.FASTBALL -> new FastBallPowerUp(px, py);
-                     case PowerUp.FIREBULLET -> new FireBulletsPowerUp(px, py);
-                     case PowerUp.EXPAND -> new ExpandPowerUp(px, py);
-                     default -> null;
-                     };
-
-                     if (powerUp != null) {
-                     if (!falling) powerUp.stopFalling();
-                     powerUp.setRemove(remove);
-                     manager.getPowerupManager().addPowerUps(powerUp);
-                     }
-                     } ***/
                 }
             }
             if (manager.getPowerupManager() != null) {
@@ -141,7 +106,6 @@ public class GameLoadManager {
             manager.setLives(lives);
 
             Paddle paddle = manager.getPaddle();
-            //paddle.setObjectImage("/images/paddle/normal_paddle.png");
 
             PowerUpManager powerUpManager = manager.getPowerupManager();
             BallManager ballManager = manager.getBallManager();
@@ -150,12 +114,13 @@ public class GameLoadManager {
             powerUpManager.clearPowerUpList(paddle, ballManager, bulletManager);
             powerUpManager.getPowerupList().clear();
 
+            paddle.setWidth(150);
+            paddle.setHeight(25);
+            paddle.setObjectImage("/images/paddle/normal_paddle.png");
+
             for (Ball ball : manager.getBallManager().getBallsList()) {
                 ball.setSpeed(330);
             }
-
-            //Remove active powerups (In case of bugs)
-            //manager.getPowerupManager().getPowerupList().removeIf(PowerUp::isRemove);
 
             //Continue immediately after loading (Can change later)
             manager.setGameState(GameState.PAUSED);

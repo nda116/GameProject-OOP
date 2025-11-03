@@ -336,11 +336,15 @@ public class GameManager {
             if (selection == 0) { // New Game
                 startNewGame();
             } else if (selection == 1) { // Continue
+                this.initGameObjects(1);
+
                 boolean success = GameLoadManager.loadGame(this);
                 if (success) {
                     System.out.println("Game loaded successfully!");
                     SoundManager.getInstance().stopMenuMusic();
                     SoundManager.getInstance().playBackgroundMusic();
+                } else {
+                    System.out.println("Failed to load game.");
                 }
             } else if (selection == 2) { // High Scores
                 showHighScores();
