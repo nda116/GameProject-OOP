@@ -114,13 +114,11 @@ public class GameLoadManager {
                 ball.setSpeed(330);
             }
 
-            //Continue immediately after loading (Can change later)
             manager.setGameState(GameState.PAUSED);
 
             manager.start();
             manager.setLoadingGame(false);
 
-            System.out.println("Game loaded successfully!");
             manager.getGameView().showStatusMessage("Game Loaded!");
             return true;
 
