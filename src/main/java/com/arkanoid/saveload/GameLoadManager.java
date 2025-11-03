@@ -168,7 +168,7 @@ public class GameLoadManager {
             return true;
 
         } catch (Exception e) {
-            System.err.println("Error loading game: " + e.getMessage());
+            manager.getGameView().showStatusMessage("Can't load the game!");
             e.printStackTrace();
             return false;
         }

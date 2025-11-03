@@ -339,8 +339,8 @@ public class GameManager {
                 boolean success = GameLoadManager.loadGame(this);
                 if (success) {
                     System.out.println("Game loaded successfully!");
-                } else {
-                    System.out.println("No save file found!");
+                    SoundManager.getInstance().stopMenuMusic();
+                    SoundManager.getInstance().playBackgroundMusic();
                 }
             } else if (selection == 2) { // High Scores
                 showHighScores();
@@ -370,6 +370,11 @@ public class GameManager {
                 resumeGame();
             } else if (selection == 1) { // Save Game
                 boolean success = GameSaveManager.saveGame(this);
+                if (success) {
+                    System.out.println("Game saved successfully!");
+                } else {
+                    System.out.println("Failed to save game.");
+                }
             } else if (selection == 2) { // Settings
                 showSettingsFromPause();
             } else if (selection == 3) { // Main Menu

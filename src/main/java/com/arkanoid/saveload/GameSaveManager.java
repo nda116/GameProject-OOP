@@ -67,7 +67,7 @@ public class GameSaveManager {
             return true;
 
         } catch (IOException e) {
-            System.err.println("Error saving game: " + e.getMessage());
+            manager.getGameView().showStatusMessage("Error saving game!");
             return false;
         }
     }
