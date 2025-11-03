@@ -28,8 +28,6 @@ public class GameLoadManager {
             // Reset game objects
             manager.stop();
             manager.setLevel(level);
-            java.lang.reflect.Method initGameObjects =
-                    GameManager.class.getDeclaredMethod("initGameObjects", int.class);
 
             // Clear current lists
             manager.getBrickManager().getBricksList().clear();
