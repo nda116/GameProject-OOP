@@ -1,4 +1,4 @@
-    package com.arkanoid.entities.bricks;
+package com.arkanoid.entities.bricks;
 
 
 import javafx.animation.PauseTransition;
@@ -194,4 +194,14 @@ public class BrickManager {
             brick.render(gc);
         }
     }
+
+    public void recalculateTotalScore() {
+        this.totalScore = 0;
+        for (Brick b : bricksList) {
+            if (!(b instanceof InvincibleBrick)) {
+                this.totalScore += b.getBrickScore();
+            }
+        }
+    }
+
 }
