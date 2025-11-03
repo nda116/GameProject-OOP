@@ -16,8 +16,6 @@ public class GameLoadManager {
 
     public static boolean loadGame(GameManager manager) {
         try (BufferedReader reader = new BufferedReader(new FileReader(SAVE_PATH))) {
-            manager.setLoadingGame(true);
-
             String line = reader.readLine();
             if (line == null) return false;
 
@@ -117,7 +115,6 @@ public class GameLoadManager {
             manager.setGameState(GameState.PAUSED);
 
             manager.start();
-            manager.setLoadingGame(false);
 
             manager.getGameView().showStatusMessage("Game Loaded!");
             return true;

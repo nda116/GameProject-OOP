@@ -58,9 +58,6 @@ public class GameManager {
     private static final int LIVES = 3;
     private static final int NUMBER_OF_LEVEL = 4;
 
-    //Save/load flags
-    private boolean isLoadingGame = false;
-
     /**
      * Private constructor for Singleton pattern.
      */
@@ -616,14 +613,6 @@ public class GameManager {
 
     public BulletManager getBulletManager() {
         return bulletManager;
-    }
-
-    public boolean isLoadingGame() {
-        return isLoadingGame;
-    }
-
-    public void setLoadingGame(boolean isLoadingGame) {
-        this.isLoadingGame = isLoadingGame;
     }
 
     public GameView getGameView() {
