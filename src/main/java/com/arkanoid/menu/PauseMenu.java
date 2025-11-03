@@ -34,12 +34,13 @@ public class PauseMenu extends Menu {
         double buttonWidth = 200;
         double buttonHeight = 40;
         double startX = (screenWidth - buttonWidth) / 2;
-        double startY = (screenHeight - buttonHeight) / 2;
+        double startY = (screenHeight - buttonHeight) / 2 - 30;
         double spacing = 60;
 
         getButtons().add(new Button(startX, startY, buttonWidth, buttonHeight, "RESUME"));
-        getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "SETTINGS"));
-        getButtons().add(new Button(startX, startY + spacing * 2, buttonWidth, buttonHeight, "MAIN MENU"));
+        getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "SAVE GAME"));
+        getButtons().add(new Button(startX, startY + spacing * 2, buttonWidth, buttonHeight, "SETTINGS"));
+        getButtons().add(new Button(startX, startY + spacing * 3, buttonWidth, buttonHeight, "MAIN MENU"));
     }
 
     /**

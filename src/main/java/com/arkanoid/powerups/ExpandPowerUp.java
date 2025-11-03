@@ -44,6 +44,7 @@ public class ExpandPowerUp extends PowerUp {
     public void removeEffect(Paddle paddle, BallManager ballManager, BulletManager bulletManager) {
         if (timeline != null) {
             timeline.stop();
+            timeline = null;
         }
         paddle.setWidth(originalWidth);
         paddle.setObjectImage("/images/paddle/normal_paddle.png");

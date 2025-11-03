@@ -88,4 +88,8 @@ public class NormalBrick extends Brick {
 
         return numberPowerUp;
     }
+
+    public String getColorType() {
+        return color;
+    }
 }

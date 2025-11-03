@@ -7,6 +7,7 @@ import com.arkanoid.entities.bullets.Bullet;
 import com.arkanoid.entities.bullets.BulletManager;
 import com.arkanoid.menu.*;
 import com.arkanoid.powerups.*;
+import com.arkanoid.saveload.*;
 
 
 import javafx.animation.AnimationTimer;
@@ -56,6 +57,9 @@ public class GameManager {
 
     private static final int LIVES = 3;
     private static final int NUMBER_OF_LEVEL = 4;
+
+    //Save/load flags
+    private boolean isLoadingGame = false;
 
     /**
      * Private constructor for Singleton pattern.
@@ -331,14 +335,24 @@ public class GameManager {
             int selection = gameView.getMainMenu().getSelectedIndex();
             if (selection == 0) { // New Game
                 startNewGame();
-            } else if (selection == 1) { // High Scores
+            } else if (selection == 1) { // Continue
+                boolean success = GameLoadManager.loadGame(this);
+                if (success) {
+                    System.out.println("Game loaded successfully!");
+                    SoundManager.getInstance().stopMenuMusic();
+                    SoundManager.getInstance().playBackgroundMusic();
+                } else {
+                    System.out.println("No save file found!");
+                }
+            } else if (selection == 2) { // High Scores
                 showHighScores();
-            } else if (selection == 2) { // Settings
+            } else if (selection == 3) { // Settings
                 showSettings();
-            } else if (selection == 3) { // Exit
+            } else if (selection == 4) { // Exit
                 SoundManager.getInstance().dispose();
                 System.exit(0);
             }
+
         }
         SoundManager.getInstance().playSound(SoundManager.Sound.BUTTON);
     }
@@ -356,10 +370,16 @@ public class GameManager {
             int selection = gameView.getPauseMenu().getSelectedIndex();
             if (selection == 0) { // Resume
                 resumeGame();
-            } else if (selection == 1) { // Settings
+            } else if (selection == 1) { // Save Game
+                boolean success = GameSaveManager.saveGame(this);
+                if (success) {
+                    System.out.println("Game saved successfully!");
+                } else {
+                    System.out.println("Failed to save game.");
+                }
+            } else if (selection == 2) { // Settings
                 showSettingsFromPause();
-            }
-            else if (selection == 2) { // Main Menu
+            } else if (selection == 3) { // Main Menu
                 returnToMainMenu();
             }
         } else if (key == KeyCode.ESCAPE || key == KeyCode.SPACE) {
@@ -556,6 +576,18 @@ public class GameManager {
         return gameState;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
@@ -582,5 +614,17 @@ public class GameManager {
 
     public BulletManager getBulletManager() {
         return bulletManager;
+    }
+
+    public boolean isLoadingGame() {
+        return isLoadingGame;
+    }
+
+    public void setLoadingGame(boolean isLoadingGame) {
+        this.isLoadingGame = isLoadingGame;
+    }
+
+    public GameView getGameView() {
+        return gameView;
     }
 }

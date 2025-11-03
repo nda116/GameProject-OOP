@@ -194,4 +194,14 @@ public class BrickManager {
             brick.render(gc);
         }
     }
+
+    public void recalculateTotalScore() {
+        this.totalScore = 0;
+        for (Brick b : bricksList) {
+            if (!(b instanceof InvincibleBrick)) {
+                this.totalScore += b.getBrickScore();
+            }
+        }
+    }
+
 }

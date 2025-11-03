@@ -31,9 +31,10 @@ public class StartMenu extends Menu {
         double spacing = 60;
 
         getButtons().add(new Button(startX, startY, buttonWidth, buttonHeight, "NEW GAME"));
-        getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "HIGH SCORES"));
-        getButtons().add(new Button(startX, startY + spacing * 2, buttonWidth, buttonHeight, "SETTINGS"));
-        getButtons().add(new Button(startX, startY + spacing * 3, buttonWidth, buttonHeight, "EXIT"));
+        getButtons().add(new Button(startX, startY + spacing, buttonWidth, buttonHeight, "CONTINUE"));
+        getButtons().add(new Button(startX, startY + spacing * 2, buttonWidth, buttonHeight, "HIGH SCORES"));
+        getButtons().add(new Button(startX, startY + spacing * 3, buttonWidth, buttonHeight, "SETTINGS"));
+        getButtons().add(new Button(startX, startY + spacing * 4, buttonWidth, buttonHeight, "EXIT"));
     }
 
     /**
