@@ -96,7 +96,7 @@ public class GameManager {
         double paddleHeight = 25;
         double paddleX = (WINDOW_WIDTH - paddleWidth) / 2;
         double paddleY = WINDOW_HEIGHT - 50;
-        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 550);
+        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 450);
 
         ballManager = new BallManager();
         powerupManager = new PowerUpManager();
@@ -195,7 +195,7 @@ public class GameManager {
 
         // Check collision between balls and paddle
         for (Ball ball : ballManager.getBallsList()){
-            if (checkCollision(ball, paddle)) {
+            if (ball.checkPaddleCollision(paddle)) {
                 ball.bounceOffPaddle(paddle);
                 SoundManager.getInstance().playSound(SoundManager.Sound.PADDLE_HIT);
             }
