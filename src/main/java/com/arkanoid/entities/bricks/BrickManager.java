@@ -23,13 +23,34 @@ import static com.arkanoid.Main.WINDOW_WIDTH;
 public class BrickManager {
     private final ArrayList<Brick> bricksList = new ArrayList<>();
     private int totalScore;
-    private int numberPowerUp;
     private int numberNormalBrick;
+    private int numberPowerUp;
+
     private static final int BRICK_ROWS = 7;
     private static final int BRICK_COLS = 10;
 
     public int getTotalScore() {
         return totalScore;
+    }
+
+    public void setTotalScore(int totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public int getNumberPowerUp() {
+        return numberPowerUp;
+    }
+
+    public void setNumberPowerUp(int numberPowerUp) {
+        this.numberPowerUp = numberPowerUp;
+    }
+
+    public int getNumberNormalBrick() {
+        return numberNormalBrick;
+    }
+
+    public void setNumberNormalBrick(int numberNormalBrick) {
+        this.numberNormalBrick = numberNormalBrick;
     }
 
     public ArrayList<Brick> getBricksList() {
@@ -192,15 +213,6 @@ public class BrickManager {
         //render from copy
         for (Brick brick : copy) {
             brick.render(gc);
-        }
-    }
-
-    public void recalculateTotalScore() {
-        this.totalScore = 0;
-        for (Brick b : bricksList) {
-            if (!(b instanceof InvincibleBrick)) {
-                this.totalScore += b.getBrickScore();
-            }
         }
     }
 }

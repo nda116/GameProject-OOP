@@ -18,11 +18,24 @@ import static com.arkanoid.Main.WINDOW_WIDTH;
 public class Ball extends MovableObject {
     private double speed;
     private double directionX;
-    private double directionY;;
+    private double directionY;
+    private final static double BALL_RADIUS = 12;
+    private final static double BALL_SPEED = 330;
 
-    public Ball(double x, double y, double radius, double speed) {
-        super(x, y, radius * 2, radius * 2, 0, 0);
-        this.speed = speed;
+    public Ball() {
+        super(0, 0, BALL_RADIUS * 2, BALL_RADIUS * 2, 0, 0);
+        this.speed = BALL_SPEED;
+
+        setObjectImage("/images/ball.png");
+
+        directionX = 0;
+        directionY = 0;
+        updateVelocity();
+    }
+
+    public Ball(double x, double y) {
+        super(x, y, BALL_RADIUS * 2, BALL_RADIUS * 2, 0, 0);
+        this.speed = BALL_SPEED;
 
         setObjectImage("/images/ball.png");
 

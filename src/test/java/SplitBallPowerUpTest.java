@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class SplitBallPowerUpTest {
     // Init objects to test.
-    Paddle paddle = new Paddle(150, 25, 100, 20, 550);
+    Paddle paddle = new Paddle();
     BallManager ballManager = new BallManager();
     BulletManager bulletManager = new BulletManager();
     SplitBallPowerUp testSplitBallPowerUp = new SplitBallPowerUp(0, 0);
@@ -17,7 +17,7 @@ public class SplitBallPowerUpTest {
 
     @Test
     public void testSplitBall1 () {
-        ballManager.addBall(new Ball(0, 0, 12,330));
+        ballManager.addBall(new Ball());
 
         // set direction of ball.
         Ball first = ballManager.getBallsList().get(0);
@@ -37,7 +37,7 @@ public class SplitBallPowerUpTest {
 
     @Test
     public void testSplitBall2 () {
-        ballManager.addBall(new Ball(0, 0, 12,330));
+        ballManager.addBall(new Ball());
         double resultX = (Math.sqrt(6) + Math.sqrt(2)) / 4;
         double resultY = (Math.sqrt(6) - Math.sqrt(2)) / 4;
 
@@ -59,7 +59,7 @@ public class SplitBallPowerUpTest {
 
     @Test
     public void testSplitBall3 () {
-        ballManager.addBall(new Ball(0, 0, 12,330));
+        ballManager.addBall(new Ball());
 
         // set direction of ball.
         Ball first = ballManager.getBallsList().get(0);

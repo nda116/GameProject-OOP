@@ -23,15 +23,15 @@ public class GameSaveManager {
 
             //Save paddle
             Paddle paddle = manager.getPaddle();
-            writer.write(String.format("PADDLE %.2f %.2f %.2f %.2f",
-                    paddle.getX(), paddle.getY(), paddle.getWidth(), paddle.getHeight()));
+            writer.write(String.format("PADDLE %.2f",
+                    paddle.getX()));
             writer.newLine();
 
             //Save balls
             for (Ball ball : manager.getBallManager().getBallsList()) {
-                writer.write(String.format("BALL %.2f %.2f %.2f %.2f %.3f %.3f",
-                        ball.getX(), ball.getY(), ball.getWidth() / 2,
-                        ball.getSpeed(), ball.getDirectionX(), ball.getDirectionY()));
+                writer.write(String.format("BALL %.2f %.2f %.3f %.3f",
+                        ball.getX(), ball.getY(),
+                        ball.getDirectionX(), ball.getDirectionY()));
                 writer.newLine();
             }
 
@@ -48,6 +48,12 @@ public class GameSaveManager {
                 }
                 writer.newLine();
             }
+
+            writer.write(String.format("BRICKMANAGER %d %d %d",
+                    manager.getBrickManager().getTotalScore(),
+                    manager.getBrickManager().getNumberNormalBrick(),
+                    manager.getBrickManager().getNumberPowerUp()));
+            writer.newLine();
 
             manager.getGameView().showStatusMessage("Game Saved!");
             return true;

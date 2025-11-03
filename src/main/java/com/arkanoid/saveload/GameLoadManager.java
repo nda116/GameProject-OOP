@@ -9,12 +9,11 @@ import com.arkanoid.powerups.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 
 public class GameLoadManager {
     private static final String SAVE_PATH = "savegame.txt";
 
-    public static boolean loadGame(GameManager manager) {
+    public static boolean loadGame(GameManager gameManager) {
         try (BufferedReader reader = new BufferedReader(new FileReader(SAVE_PATH))) {
             String line = reader.readLine();
             if (line == null) return false;
@@ -26,38 +25,27 @@ public class GameLoadManager {
             int level = Integer.parseInt(mainData[2]);
 
             // Reset game objects
-            manager.stop();
-            manager.setLevel(level);
-
-            // Clear current lists
-            manager.getBrickManager().getBricksList().clear();
-            manager.getBallManager().getBallsList().clear();
-            manager.getPowerupManager().getPowerupList().clear();
-            manager.getBulletManager().getBulletsList().clear();
+            gameManager.stop();
 
             // Read data from save
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(" ");
                 switch (data[0]) {
                     case "PADDLE" -> {
-                        Paddle paddle = manager.getPaddle();
+                        Paddle paddle = gameManager.getPaddle();
                         paddle.setX(Double.parseDouble(data[1]));
-                        paddle.setY(Double.parseDouble(data[2]));
-                        paddle.setObjectImage("/images/paddle/normal_paddle.png");
                     }
 
                     case "BALL" -> {
                         double x = Double.parseDouble(data[1]);
                         double y = Double.parseDouble(data[2]);
-                        double r = Double.parseDouble(data[3]);
-                        double speed = Double.parseDouble(data[4]);
-                        double dirX = Double.parseDouble(data[5]);
-                        double dirY = Double.parseDouble(data[6]);
+                        double dirX = Double.parseDouble(data[3]);
+                        double dirY = Double.parseDouble(data[4]);
 
-                        Ball ball = new Ball(x, y, r, speed);
+                        Ball ball = new Ball(x, y);
                         ball.setDirectionX(dirX);
                         ball.setDirectionY(dirY);
-                        manager.getBallManager().addBall(ball);
+                        gameManager.getBallManager().addBall(ball);
                     }
 
                     case "BRICK" -> {
@@ -83,41 +71,33 @@ public class GameLoadManager {
                         }
 
                         newBrick.setBrickHP(hp);
-                        manager.getBrickManager().getBricksList().add(newBrick);
+                        gameManager.getBrickManager().getBricksList().add(newBrick);
+                    }
+
+                    case "BRICKMANAGER" -> {
+                        int totalScore = Integer.parseInt(data[1]);
+                        int numberNormalBrick = Integer.parseInt(data[2]);
+                        int numberPowerUp = Integer.parseInt(data[3]);
+                        gameManager.getBrickManager().setTotalScore(totalScore);
+                        gameManager.getBrickManager().setNumberNormalBrick(numberNormalBrick);
+                        gameManager.getBrickManager().setNumberPowerUp(numberPowerUp);
                     }
                 }
             }
 
             // Restore main state
-            manager.getBrickManager().recalculateTotalScore();
-            manager.setScore(score);
-            manager.setLives(lives);
+            gameManager.setGameState(GameState.PAUSED);
 
-            Paddle paddle = manager.getPaddle();
+            gameManager.setLevel(level);
+            gameManager.setScore(score);
+            gameManager.setLives(lives);
+            gameManager.start();
 
-            PowerUpManager powerUpManager = manager.getPowerupManager();
-            BallManager ballManager = manager.getBallManager();
-            BulletManager bulletManager = manager.getBulletManager();
-
-            powerUpManager.clearPowerUpList(paddle, ballManager, bulletManager);
-
-            paddle.setWidth(150);
-            paddle.setHeight(25);
-            paddle.setObjectImage("/images/paddle/normal_paddle.png");
-
-            for (Ball ball : manager.getBallManager().getBallsList()) {
-                ball.setSpeed(330);
-            }
-
-            manager.setGameState(GameState.PAUSED);
-
-            manager.start();
-
-            manager.getGameView().showStatusMessage("Game Loaded!");
+            gameManager.getGameView().showStatusMessage("Game Loaded!");
             return true;
 
         } catch (Exception e) {
-            manager.getGameView().showStatusMessage("Can't load the game!");
+            gameManager.getGameView().showStatusMessage("Can't load the game!");
             e.printStackTrace();
             return false;
         }

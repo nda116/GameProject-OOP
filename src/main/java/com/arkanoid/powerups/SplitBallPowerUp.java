@@ -47,7 +47,6 @@ public class SplitBallPowerUp extends PowerUp {
         for (Ball ball : ballManager.getBallsList()) {
             double x = ball.getX();
             double y = ball.getY();
-            double radius = ball.getWidth() / 2.0;
             double speed = ball.getSpeed();
 
             double dirX = ball.getDirectionX();
@@ -63,7 +62,8 @@ public class SplitBallPowerUp extends PowerUp {
             ball.setDirectionX(oldBallDirX);
             ball.setDirectionY(oldBallDirY);
 
-            Ball splitBall = new Ball(x, y, radius, speed);
+            Ball splitBall = new Ball(x, y);
+            splitBall.setSpeed(speed);
             splitBall.setDirectionX(newBallDirX);
             splitBall.setDirectionY(newBallDirY);
             newBalls.add(splitBall);
