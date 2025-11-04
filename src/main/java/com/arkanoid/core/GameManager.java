@@ -101,7 +101,7 @@ public class GameManager {
      */
     private void clearGameObject() {
         if (powerupManager != null && paddle != null
-                && ballManager != null & bulletManager != null) {
+                && ballManager != null && bulletManager != null) {
             powerupManager.clearPowerUpList(paddle, ballManager, bulletManager);
         }
         if (paddle != null) {
@@ -194,12 +194,9 @@ public class GameManager {
     public void update(double deltaTime) {
         if (gameState == GameState.PLAYING || gameState == GameState.READY) {
             handleContinuousInput(deltaTime);
-        } else if (gameState == GameState.GAME_OVER || gameState == GameState.HIGH_SCORES) {
-            return;
         } else {
             return;
         }
-
 
         if (gameState == GameState.READY) {
             if (ballManager.getBallsList().isEmpty()) {
@@ -441,6 +438,7 @@ public class GameManager {
             System.out.println("Game loaded successfully!");
             SoundManager.getInstance().stopMenuMusic();
             SoundManager.getInstance().playBackgroundMusic();
+            GameSaveManager.clearSave();
         } else {
             System.out.println("Failed to load game.");
         }
@@ -586,7 +584,6 @@ public class GameManager {
      * Handles game over state.
      */
     private void gameOver() {
-        GameSaveManager.clearSave();
         gameState = GameState.GAME_OVER;
         gameView.resetGameOverMenu(score);
     }

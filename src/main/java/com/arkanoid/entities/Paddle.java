@@ -42,6 +42,7 @@ public class Paddle extends MovableObject {
     public void setDefault() {
         setX((WINDOW_WIDTH - getWidth()) / 2);
         setY(WINDOW_HEIGHT - 50);
+        setObjectImage("/images/paddle/normal_paddle.png");
     }
 
     /**
