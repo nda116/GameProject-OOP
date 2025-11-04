@@ -85,7 +85,7 @@ public class Ball extends MovableObject {
      */
 
     public boolean checkPaddleCollision(Paddle paddle) {
-        if (getDy() <= 0) return false;
+        if (getDy() < 0) return false;
 
         double ballCenterX = getX() + getWidth() / 2.0;
         double ballBottom = getY() + getHeight();
