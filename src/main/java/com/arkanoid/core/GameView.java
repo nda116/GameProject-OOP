@@ -144,18 +144,29 @@ public class GameView {
      */
     private void renderGameplay(GameManager gameManager) {
         // Render bricks
-        gameManager.getBrickManager().renderBrickList(gc);
+        if (gameManager.getBrickManager() != null) {
+            gameManager.getBrickManager().renderBrickList(gc);
+        }
 
         // Render power-ups
-        gameManager.getPowerupManager().renderPowerUpList(gc);
+        if (gameManager.getPowerupManager() != null) {
+            gameManager.getPowerupManager().renderPowerUpList(gc);
+        }
 
         // Render bullets
-        gameManager.getBulletManager().renderBulletList(gc);
+        if (gameManager.getBulletManager() != null) {
+            gameManager.getBulletManager().renderBulletList(gc);
+        }
 
+        // Render paddle
+        if (gameManager.getPaddle() != null) {
+            gameManager.getPaddle().render(gc);
+        }
 
-        // Render paddle and ball
-        gameManager.getPaddle().render(gc);
-        gameManager.getBallManager().renderBallList(gc);
+        // Render balls
+        if (gameManager.getBallManager() != null) {
+            gameManager.getBallManager().renderBallList(gc);
+        }
 
         // Render UI
         renderGameUI(gameManager);
