@@ -14,21 +14,16 @@ import static com.arkanoid.Main.WINDOW_WIDTH;
  */
 public class Paddle extends MovableObject {
     private double speed;
+    private final static double PADDLE_WIDTH = 150;
+    private final static double PADDLE_HEIGHT = 25;
+    private final static double PADDLE_SPEED = 550;
 
-    public Paddle(double x, double y, double width, double height,
-                  double speed) {
-        super(x, y, width, height, 0, 0);
-        this.speed = speed;
+    public Paddle() {
+        super(0, 0, PADDLE_WIDTH, PADDLE_HEIGHT, 0, 0);
+        this.speed = PADDLE_SPEED;
 
         setObjectImage("/images/paddle/normal_paddle.png");
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
+        this.setDefault();
     }
 
     public void moveLeft(double deltatime) {

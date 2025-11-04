@@ -7,6 +7,7 @@ import com.arkanoid.entities.bullets.Bullet;
 import com.arkanoid.entities.bullets.BulletManager;
 import com.arkanoid.menu.*;
 import com.arkanoid.powerups.*;
+import com.arkanoid.saveload.*;
 
 
 import javafx.animation.AnimationTimer;
@@ -14,8 +15,6 @@ import javafx.scene.input.KeyCode;
 
 import java.util.*;
 
-import static com.arkanoid.Main.WINDOW_HEIGHT;
-import static com.arkanoid.Main.WINDOW_WIDTH;
 import static com.arkanoid.core.GameObject.checkCollision;
 
 /**
@@ -24,7 +23,6 @@ import static com.arkanoid.core.GameObject.checkCollision;
  *
  */
 public class GameManager {
-    public long frame = 0;
     private static GameManager instance;
 
     // Game objects
@@ -88,23 +86,37 @@ public class GameManager {
     }
 
     /**
-     * Initializes game objects (paddle, ball, bricks).
+     * Initializes game objects (Paddle, BallManager, PowerUpManager, BulletManager, BrickManager).
      */
-    private void initGameObjects(int level) {
-        // Create paddle
-        double paddleWidth = 150;
-        double paddleHeight = 25;
-        double paddleX = (WINDOW_WIDTH - paddleWidth) / 2;
-        double paddleY = WINDOW_HEIGHT - 50;
-        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, 450);
-
+    private void initGameObjects() {
+        paddle = new Paddle();
         ballManager = new BallManager();
         powerupManager = new PowerUpManager();
         bulletManager = new BulletManager();
-
-        // create Bricks
         brickManager = new BrickManager();
-        brickManager.createBricksFromFile("/maps/level" + level + ".txt");
+    }
+
+    /**
+     * end effect and clear all GameObject.
+     */
+    private void clearGameObject() {
+        if (powerupManager != null && paddle != null
+                && ballManager != null & bulletManager != null) {
+            powerupManager.clearPowerUpList(paddle, ballManager, bulletManager);
+        }
+        if (paddle != null) {
+            paddle = null;
+        }
+        if (ballManager != null) {
+            ballManager.getBallsList().clear();
+            ballManager = null;
+        }
+        if (bulletManager != null) {
+            bulletManager = null;
+        }
+        if (brickManager != null) {
+            brickManager = null;
+        }
     }
 
     /**
@@ -115,7 +127,10 @@ public class GameManager {
         lives = LIVES;
         level = 1;
 
-        initGameObjects(level);
+        GameSaveManager.clearSave();
+        clearGameObject();
+        initGameObjects();
+        brickManager.createBricksFromFile("/maps/level" + level + ".txt");;
         gameState = GameState.READY;
         start();
         SoundManager.getInstance().stopMenuMusic();
@@ -188,7 +203,7 @@ public class GameManager {
 
         if (gameState == GameState.READY) {
             if (ballManager.getBallsList().isEmpty()) {
-                ballManager.addBall(new Ball(0, 0, 12,330));
+                ballManager.addBall(new Ball());
             }
             ballManager.setDefault(paddle);
         }
@@ -266,7 +281,6 @@ public class GameManager {
             } else {
                 powerupManager.clearPowerUpList(paddle, ballManager, bulletManager);
                 paddle.setDefault();
-                ballManager.setDefault(paddle);
                 gameState = GameState.READY;
                 SoundManager.getInstance().playSound(SoundManager.Sound.LOSE_LIFE);
             }
@@ -331,14 +345,17 @@ public class GameManager {
             int selection = gameView.getMainMenu().getSelectedIndex();
             if (selection == 0) { // New Game
                 startNewGame();
-            } else if (selection == 1) { // High Scores
+            } else if (selection == 1) { // Continue
+                loadGame();
+            } else if (selection == 2) { // High Scores
                 showHighScores();
-            } else if (selection == 2) { // Settings
+            } else if (selection == 3) { // Settings
                 showSettings();
-            } else if (selection == 3) { // Exit
+            } else if (selection == 4) { // Exit
                 SoundManager.getInstance().dispose();
                 System.exit(0);
             }
+
         }
         SoundManager.getInstance().playSound(SoundManager.Sound.BUTTON);
     }
@@ -356,10 +373,11 @@ public class GameManager {
             int selection = gameView.getPauseMenu().getSelectedIndex();
             if (selection == 0) { // Resume
                 resumeGame();
-            } else if (selection == 1) { // Settings
+            } else if (selection == 1) { // Save Game
+                gameSave();
+            } else if (selection == 2) { // Settings
                 showSettingsFromPause();
-            }
-            else if (selection == 2) { // Main Menu
+            } else if (selection == 3) { // Main Menu
                 returnToMainMenu();
             }
         } else if (key == KeyCode.ESCAPE || key == KeyCode.SPACE) {
@@ -406,9 +424,40 @@ public class GameManager {
     /**
      * Shows the high score menu.
      */
-    public void showHighScores() {
+    private void showHighScores() {
         gameView.getHighScoreMenu().reloadHighScores();
         gameState = GameState.HIGH_SCORES;
+    }
+
+    /**
+     * load saved game from file.
+     */
+    private void loadGame() {
+        clearGameObject();
+        initGameObjects();
+
+        boolean success = GameLoadManager.loadGame(this);
+        if (success) {
+            System.out.println("Game loaded successfully!");
+            SoundManager.getInstance().stopMenuMusic();
+            SoundManager.getInstance().playBackgroundMusic();
+        } else {
+            System.out.println("Failed to load game.");
+        }
+    }
+
+    private void gameSave() {
+        powerupManager.clearPowerUpList(paddle, ballManager, bulletManager);
+
+        boolean success = GameSaveManager.saveGame(this);
+        if (success) {
+            System.out.println("Game saved successfully!");
+        } else {
+            System.out.println("Failed to save game.");
+            System.out.println("Failed to save game.");
+        }
+
+        returnToMainMenu();
     }
 
     /**
@@ -430,7 +479,7 @@ public class GameManager {
     /**
      * Shows the settings menu.
      */
-    public void showSettings() {
+    private void showSettings() {
         gameView.getSettingsMenu().setPreviousState(GameState.MENU);
         gameView.getSettingsMenu().resetSelection();
         gameState = GameState.SETTINGS;
@@ -439,7 +488,7 @@ public class GameManager {
     /**
      * Shows the settings from pause.
      */
-    public void showSettingsFromPause() {
+    private void showSettingsFromPause() {
         gameView.getSettingsMenu().setPreviousState(GameState.PAUSED);
         gameView.getSettingsMenu().resetSelection();
         gameState = GameState.SETTINGS;
@@ -448,7 +497,7 @@ public class GameManager {
     /**
      * Check back in settings return to which state.
      */
-    public void returnFromSettings() {
+    private void returnFromSettings() {
         GameState previous = gameView.getSettingsMenu().getPreviousState();
 
         if (previous == GameState.PAUSED) {
@@ -485,7 +534,8 @@ public class GameManager {
     /**
      * Returns to main menu.
      */
-    public void returnToMainMenu() {
+    private void returnToMainMenu() {
+        clearGameObject();
         stop();
         gameState = GameState.MENU;
         gameView.getMainMenu().resetSelection();
@@ -496,7 +546,7 @@ public class GameManager {
     /**
      * Resumes the game from pause.
      */
-    public void resumeGame() {
+    private void resumeGame() {
         gameState = GameState.PLAYING;
         SoundManager.getInstance().resumeBackgroundMusic();
     }
@@ -525,7 +575,10 @@ public class GameManager {
      * Starts the next level.
      */
     private void startNextLevel() {
-        initGameObjects((level - 1) % NUMBER_OF_LEVEL + 1);
+        clearGameObject();
+        initGameObjects();
+        int map = (level - 1) % NUMBER_OF_LEVEL + 1;
+        brickManager.createBricksFromFile("/maps/level" + map + ".txt");
         gameState = GameState.READY;
     }
 
@@ -533,6 +586,7 @@ public class GameManager {
      * Handles game over state.
      */
     private void gameOver() {
+        GameSaveManager.clearSave();
         gameState = GameState.GAME_OVER;
         gameView.resetGameOverMenu(score);
     }
@@ -554,6 +608,18 @@ public class GameManager {
 
     public GameState getGameState() {
         return gameState;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public void setGameState(GameState gameState) {
@@ -582,5 +648,9 @@ public class GameManager {
 
     public BulletManager getBulletManager() {
         return bulletManager;
+    }
+
+    public GameView getGameView() {
+        return gameView;
     }
 }

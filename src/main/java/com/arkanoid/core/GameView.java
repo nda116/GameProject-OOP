@@ -33,6 +33,9 @@ public class GameView {
     private static final Font TITLE_FONT = Font.font("Impact", FontWeight.BOLD, 48);
     private static final Font MESSAGE_FONT = Font.font("Impact", FontWeight.BOLD, 24);
 
+    private String statusMessage = "";
+    private long statusMessageTime = 0;
+    private static final long STATUS_DURATION = 2000;
     /**
      * Constructs a GameView with specified dimensions.
      *
@@ -76,6 +79,7 @@ public class GameView {
         switch (state) {
             case MENU:
                 renderMainMenu();
+                renderStatusMessage();
                 break;
 
             case SETTINGS:
@@ -95,6 +99,7 @@ public class GameView {
             case PAUSED:
                 renderGameplay(gameManager);
                 renderPauseMenu();
+                renderStatusMessage();
                 break;
 
             case GAME_OVER:
@@ -159,6 +164,8 @@ public class GameView {
         if (gameManager.getGameState() != GameState.GAME_OVER) {
             renderGameStateMessage(gameManager.getGameState());
         }
+
+        renderStatusMessage();
     }
 
     /**
@@ -226,6 +233,33 @@ public class GameView {
             case PLAYING:
                 break;
         }
+    }
+
+    //Show save/load notification
+    public void showStatusMessage(String message) {
+        this.statusMessage = message;
+        this.statusMessageTime = System.currentTimeMillis();
+    }
+
+    private void renderStatusMessage() {
+        if (statusMessage == null || statusMessage.isEmpty()) return;
+
+        long elapsed = System.currentTimeMillis() - statusMessageTime;
+        if (elapsed > STATUS_DURATION) {
+            statusMessage = "";
+            return;
+        }
+
+        // Hiệu ứng mờ dần
+        double alpha = 1.0 - (double) elapsed / STATUS_DURATION;
+        gc.setGlobalAlpha(alpha);
+
+        gc.setFont(Font.font("Consolas", FontWeight.BOLD, 22));
+        gc.setFill(Color.LIGHTGREEN);
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.fillText(statusMessage, canvas.getWidth() / 2, canvas.getHeight() - 40);
+
+        gc.setGlobalAlpha(1.0);
     }
 
     public StackPane getRoot() {
