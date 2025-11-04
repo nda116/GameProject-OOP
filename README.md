@@ -27,6 +27,8 @@ Control your **paddle** to bounce the ball, break all the bricks, collect **powe
 - **Object-Oriented Design** — Clean, modular, and easy to extend.
 
 ## 💻 Preview
+<img width="1000" height="750" alt="PreviewMainMenu" src="https://github.com/user-attachments/assets/553d89d9-ac07-454e-bed3-a8b3ff7571d1" />
+<img width="1000" height="750" alt="PreviewGamePlay" src="https://github.com/user-attachments/assets/0609d330-d23e-492f-be9e-6b6a120fd1e5" />
 
 ## 🎮 Installation & Run
 ### Requirements
