@@ -77,13 +77,27 @@ public abstract class GameObject {
     /**
      * check collision between 2 objects.
      * @param a first object.
-     * @param b seconf object.
+     * @param b second object.
      * @return collision or not.
      */
     public static boolean checkCollision (GameObject a, GameObject b) {
-        return a.getX() < b.getX() + b.getWidth() &&
-                a.getX() + a.getWidth() > b.getX() &&
-                a.getY() < b.getY() + b.getHeight() &&
-                a.getY() + a.getHeight() > b.getY();
+        if (a == null || b == null) {
+            return false;
+        }
+
+        double aLeft = a.x;
+        double aRight = a.x + a.width;
+        double aTop = a.y;
+        double aBottom = a.y + a.height;
+
+        double bLeft = b.x;
+        double bRight = b.x + b.width;
+        double bTop = b.y;
+        double bBottom = b.y + b.height;
+
+        return aLeft < bRight &&
+                aRight > bLeft &&
+                aTop < bBottom &&
+                aBottom > bTop;
     }
 }
