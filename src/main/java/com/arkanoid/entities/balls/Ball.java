@@ -89,6 +89,42 @@ public class Ball extends MovableObject {
     }
 
     /**
+     * Checks if the ball collides with the top of the paddle while moving downward.
+     * Uses a predictive check to see if the ball will cross the paddle top this frame.
+     * Snaps the ball above the paddle to prevent sticking.
+     *
+     * @param paddle the paddle to check
+     * @return true if collision occurs, false otherwise
+     */
+    public boolean checkPaddleCollision(Paddle paddle) {
+        if (getDy() < 0) return false;
+
+        double ballCenterX = getX() + getWidth() / 2.0;
+        double ballBottom = getY() + getHeight();
+        double ballNextBottom = ballBottom + getDy() * (1.0/60.0); // Predict next position
+
+        double paddleTop = paddle.getY();
+        double paddleLeft = paddle.getX();
+        double paddleRight = paddle.getX() + paddle.getWidth();
+
+        // Check if ball center is within paddle horizontal bounds
+        if (ballCenterX < paddleLeft || ballCenterX > paddleRight) {
+            return false;
+        }
+
+        // Check current and next frame collision
+        if ((ballBottom <= paddleTop && ballNextBottom >= paddleTop) ||
+                (ballBottom >= paddleTop && ballBottom <= paddleTop + 5)) {
+
+            // Snap ball to top of paddle
+            setY(paddleTop - getHeight());
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Handles bouncing off another GameObject.
      * Determines the collision side by overlap (minimum translation)
      * and reverses the appropriate direction. Handles corner collisions
@@ -123,7 +159,7 @@ public class Ball extends MovableObject {
         if (overlapX <= 0 || overlapY <= 0) return;
 
         // corner case: very close overlaps -> reflect both axes
-        final double CORNER_THRESHOLD = 1e-6;
+        final double CORNER_THRESHOLD = 0.1;
         if (Math.abs(overlapX - overlapY) < CORNER_THRESHOLD) {
             directionX = -directionX;
             directionY = -directionY;
@@ -209,16 +245,23 @@ public class Ball extends MovableObject {
     public void update(double deltaTime) {
         move(deltaTime);
 
-        // Collision with left and right walls
-        if (getX() <= 0 || getX() + getWidth() >= WINDOW_WIDTH) {
-            directionX = -directionX;
+        // Left wall collision
+        if (getX() <= 0) {
+            directionX = Math.abs(directionX);
             updateVelocity();
-            setX(Math.max(0, Math.min(getX(), WINDOW_WIDTH - getWidth())));
+            setX(0);
         }
 
-        // Collision with top wall
+        // Right wall collision
+        if (getX() + getWidth() >= WINDOW_WIDTH) {
+            directionX = -Math.abs(directionX);
+            updateVelocity();
+            setX(WINDOW_WIDTH - getWidth());
+        }
+
+        // Top wall collision
         if (getY() <= 0) {
-            directionY = -directionY;
+            directionY = Math.abs(directionY);
             updateVelocity();
             setY(0);
         }

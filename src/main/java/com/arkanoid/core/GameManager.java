@@ -210,7 +210,7 @@ public class GameManager {
 
         // Check collision between balls and paddle
         for (Ball ball : ballManager.getBallsList()){
-            if (checkCollision(ball, paddle)) {
+            if (ball.checkPaddleCollision(paddle)) {
                 ball.bounceOffPaddle(paddle);
                 SoundManager.getInstance().playSound(SoundManager.Sound.PADDLE_HIT);
             }
