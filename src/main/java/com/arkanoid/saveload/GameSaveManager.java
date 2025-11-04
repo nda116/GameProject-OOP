@@ -14,6 +14,23 @@ import java.io.IOException;
 public class GameSaveManager {
     private static final String SAVE_PATH = "savegame.txt";
 
+    /**
+     * clear file savegame.txt
+     */
+    public static void clearSave() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(SAVE_PATH, false))) {
+            writer.write("");
+            System.out.println("Save file cleared successfully.");
+        } catch (IOException e) {
+            System.out.println("Failed to clear save file: " + e.getMessage());
+        }
+    }
+
+    /**
+     * save current game to file.
+     * @param manager current game manager.
+     * @return save game success or not.
+     */
     public static boolean saveGame(GameManager manager) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(SAVE_PATH))) {
 

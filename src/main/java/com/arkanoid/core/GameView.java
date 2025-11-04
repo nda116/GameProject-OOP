@@ -79,6 +79,7 @@ public class GameView {
         switch (state) {
             case MENU:
                 renderMainMenu();
+                renderStatusMessage();
                 break;
 
             case SETTINGS:

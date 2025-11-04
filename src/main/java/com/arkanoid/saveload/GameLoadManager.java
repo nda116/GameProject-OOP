@@ -13,10 +13,18 @@ import java.io.FileReader;
 public class GameLoadManager {
     private static final String SAVE_PATH = "savegame.txt";
 
+    /**
+     * laod game from file.
+     * @param gameManager current game manager.
+     * @return laodGame success or not.
+     */
     public static boolean loadGame(GameManager gameManager) {
         try (BufferedReader reader = new BufferedReader(new FileReader(SAVE_PATH))) {
             String line = reader.readLine();
-            if (line == null) return false;
+            if (line == null) {
+                gameManager.getGameView().showStatusMessage("Save file is empty!");
+                return false;
+            }
 
             // Read global info
             String[] mainData = line.split(" ");
@@ -97,8 +105,6 @@ public class GameLoadManager {
             return true;
 
         } catch (Exception e) {
-            gameManager.getGameView().showStatusMessage("Can't load the game!");
-            e.printStackTrace();
             return false;
         }
     }

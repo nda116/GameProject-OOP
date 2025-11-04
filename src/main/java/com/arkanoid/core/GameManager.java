@@ -127,6 +127,7 @@ public class GameManager {
         lives = LIVES;
         level = 1;
 
+        GameSaveManager.clearSave();
         clearGameObject();
         initGameObjects();
         brickManager.createBricksFromFile("/maps/level" + level + ".txt");;
@@ -280,7 +281,6 @@ public class GameManager {
             } else {
                 powerupManager.clearPowerUpList(paddle, ballManager, bulletManager);
                 paddle.setDefault();
-                ballManager.setDefault(paddle);
                 gameState = GameState.READY;
                 SoundManager.getInstance().playSound(SoundManager.Sound.LOSE_LIFE);
             }
@@ -454,6 +454,7 @@ public class GameManager {
             System.out.println("Game saved successfully!");
         } else {
             System.out.println("Failed to save game.");
+            System.out.println("Failed to save game.");
         }
 
         returnToMainMenu();
@@ -585,6 +586,7 @@ public class GameManager {
      * Handles game over state.
      */
     private void gameOver() {
+        GameSaveManager.clearSave();
         gameState = GameState.GAME_OVER;
         gameView.resetGameOverMenu(score);
     }
