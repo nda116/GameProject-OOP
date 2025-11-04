@@ -94,29 +94,6 @@ public class GameManager {
     }
 
     /**
-     * end effect and clear all GameObject.
-     */
-    private void clearGameObject() {
-        if (powerupManager != null && paddle != null
-                && ballManager != null && bulletManager != null) {
-            powerupManager.clearPowerUpList(paddle, ballManager, bulletManager);
-        }
-        if (paddle != null) {
-            paddle = null;
-        }
-        if (ballManager != null) {
-            ballManager.getBallsList().clear();
-            ballManager = null;
-        }
-        if (bulletManager != null) {
-            bulletManager = null;
-        }
-        if (brickManager != null) {
-            brickManager = null;
-        }
-    }
-
-    /**
      * Starts a new game from main menu.
      */
     public void startNewGame() {
