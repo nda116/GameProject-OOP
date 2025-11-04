@@ -7,7 +7,6 @@ import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Timer;
 
 /**
  * Manage power-ups for the game.
@@ -18,7 +17,6 @@ import java.util.Timer;
  */
 public class PowerUpManager {
     private final ArrayList<PowerUp> powerupList = new ArrayList<>();
-    private final Timer timer = new Timer(true);
 
     public ArrayList<PowerUp> getPowerupList() {
         return powerupList;

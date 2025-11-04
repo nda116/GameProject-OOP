@@ -49,9 +49,6 @@ public class GameManager {
     // Input handling
     private Set<KeyCode> pressedKeys;
 
-    // Power-up timing
-    private PowerUp powerUp;
-
     private static final int LIVES = 3;
     private static final int NUMBER_OF_LEVEL = 4;
 
