@@ -125,7 +125,6 @@ public class GameManager {
         level = 1;
 
         GameSaveManager.clearSave();
-        clearGameObject();
         initGameObjects();
         brickManager.createBricksFromFile("/maps/level" + level + ".txt");;
         gameState = GameState.READY;
@@ -427,7 +426,6 @@ public class GameManager {
      * load saved game from file.
      */
     private void loadGame() {
-        clearGameObject();
         initGameObjects();
 
         boolean success = GameLoadManager.loadGame(this);
@@ -530,7 +528,6 @@ public class GameManager {
      * Returns to main menu.
      */
     private void returnToMainMenu() {
-        clearGameObject();
         stop();
         gameState = GameState.MENU;
         gameView.getMainMenu().resetSelection();
@@ -570,7 +567,6 @@ public class GameManager {
      * Starts the next level.
      */
     private void startNextLevel() {
-        clearGameObject();
         initGameObjects();
         int map = (level - 1) % NUMBER_OF_LEVEL + 1;
         brickManager.createBricksFromFile("/maps/level" + map + ".txt");
