@@ -36,10 +36,12 @@ Control your **paddle** to bounce the ball, break all the bricks, collect **powe
 - *(Optional)* IDE: IntelliJ IDEA / Eclipse / VS Code  
 
 ### Clone the project
+```bash
 git clone https://github.com/just-not-nda/GameProject-OOP.git
 cd GameProject-OOP
-
+```
 ### Run project
+```bash
 mvn clean javafx:run
-
+```
 ## 📝 Project Structure
