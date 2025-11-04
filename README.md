@@ -46,4 +46,6 @@ cd GameProject-OOP
 ```bash
 mvn clean javafx:run
 ```
-## 📝 Project Structure
+## 📝 Project Structure (commit [8e6dc3c](https://github.com/just-not-nda/GameProject-OOP/commit/8e6dc3c3f0e0cf1e6bd5fe29f8e810e5c81735ca))
+<img width="2316" height="4053" alt="structure" src="https://github.com/user-attachments/assets/bf0f9de0-c438-4116-875a-f7fa92af2f2a" />
+
