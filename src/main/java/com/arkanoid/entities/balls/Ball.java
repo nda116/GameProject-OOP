@@ -83,7 +83,6 @@ public class Ball extends MovableObject {
      * @param paddle the paddle to check
      * @return true if collision occurs, false otherwise
      */
-
     public boolean checkPaddleCollision(Paddle paddle) {
         if (getDy() < 0) return false;
 
@@ -147,7 +146,7 @@ public class Ball extends MovableObject {
         if (overlapX <= 0 || overlapY <= 0) return;
 
         // corner case: very close overlaps -> reflect both axes
-        final double CORNER_THRESHOLD = 1e-6;
+        final double CORNER_THRESHOLD = 0.1;
         if (Math.abs(overlapX - overlapY) < CORNER_THRESHOLD) {
             directionX = -directionX;
             directionY = -directionY;
