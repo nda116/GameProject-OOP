@@ -53,7 +53,7 @@ jobs:
           files: release_files/*.jar
           name: "Arkanoid Release ${{ github.ref_name }}"
           body: |
-            Bản phát hành chính thức phiên bản ${{ github.ref_name }} 
-            Chạy bằng lệnh: java -jar <tên-file>.jar
+            Official release version: ${{ github.ref_name }} 
+            Run by: java -jar GameProject-OOP-${{ github.ref_name }}-SNAPSHOT.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
