@@ -72,7 +72,7 @@ jobs:
           name: windows-build-jar
           path: windows-build
 
-      - name: Rename files for clarity
+      - name: Copy To Final
         run: |
           mkdir -p final_assets
           cp linux-build/*.jar final_assets/Arkanoid-Linux.jar
