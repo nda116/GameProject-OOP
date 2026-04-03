@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.arkanoid.Main.WINDOW_WIDTH;
+import static com.arkanoid.AppLauncher.WINDOW_WIDTH;
 
 /**
  * void addBrick(Bricks) add new brick to brickList.

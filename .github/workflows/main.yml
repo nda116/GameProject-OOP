@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - '**'
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - 'main'
@@ -30,3 +32,28 @@ jobs:
         with:
           name: java-build-files
           path: target/*.jar
+
+  release:
+    needs: build
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && github.event.base_ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Build Files
+        uses: actions/download-artifact@v4
+        with:
+          name: java-build-files
+          path: release_files
+
+      - name: Upload to Github Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release_files/*.jar
+          name: "Arkanoid Release ${{ github.ref_name }}"
+          body: |
+            Bản phát hành chính thức phiên bản ${{ github.ref_name }} 
+            Chạy bằng lệnh: java -jar <tên-file>.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

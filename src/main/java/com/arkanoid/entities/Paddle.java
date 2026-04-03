@@ -4,8 +4,8 @@ import com.arkanoid.core.MovableObject;
 
 import javafx.scene.canvas.GraphicsContext;
 
-import static com.arkanoid.Main.WINDOW_HEIGHT;
-import static com.arkanoid.Main.WINDOW_WIDTH;
+import static com.arkanoid.AppLauncher.WINDOW_HEIGHT;
+import static com.arkanoid.AppLauncher.WINDOW_WIDTH;
 
 
 /**

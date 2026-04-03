@@ -67,7 +67,7 @@ public class GameView {
     }
 
     /**
-     * Main render method that delegates to appropriate renderer.
+     * AppLauncher render method that delegates to appropriate renderer.
      *
      * @param gameManager the game manager with game state
      */

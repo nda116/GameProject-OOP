@@ -4,7 +4,7 @@ package com.arkanoid.core;
  * Enum representing all possible game states including menus.
  */
 public enum GameState {
-    /** Main menu state */
+    /** AppLauncher menu state */
     MENU,
 
     /** Ready to start playing */

@@ -347,7 +347,7 @@ public class GameManager {
                 gameSave();
             } else if (selection == 2) { // Settings
                 showSettingsFromPause();
-            } else if (selection == 3) { // Main Menu
+            } else if (selection == 3) { // AppLauncher Menu
                 returnToMainMenu();
             }
         } else if (key == KeyCode.ESCAPE || key == KeyCode.SPACE) {

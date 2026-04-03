@@ -5,7 +5,7 @@ import com.arkanoid.entities.Paddle;
 import com.arkanoid.entities.balls.BallManager;
 import com.arkanoid.entities.bullets.BulletManager;
 
-import static com.arkanoid.Main.WINDOW_HEIGHT;
+import static com.arkanoid.AppLauncher.WINDOW_HEIGHT;
 
 /**
  * This class represents power-ups for the game.
