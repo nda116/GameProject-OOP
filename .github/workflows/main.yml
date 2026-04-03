@@ -75,8 +75,8 @@ jobs:
       - name: Copy To Final
         run: |
           mkdir -p final_assets
-          cp linux-build/*.jar final_assets/Arkanoid-Linux.jar
-          cp windows-build/*.jar final_assets/Arkanoid-Windows.jar
+          find linux-build/ -name "*.jar" ! -name "original-*" -exec cp {} final_assets/Arkanoid-Linux.jar \;
+          find windows-build/ -name "*.jar" ! -name "original-*" -exec cp {} final_assets/Arkanoid-Windows.jar \;
 
       - name: Upload to Github Releases
         uses: softprops/action-gh-release@v2
