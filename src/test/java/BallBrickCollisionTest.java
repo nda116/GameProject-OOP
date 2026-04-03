@@ -32,8 +32,7 @@ public class BallBrickCollisionTest {
         // Create brick at center position
         brick = new ExplosionBrick(200, 100, BRICK_WIDTH, BRICK_HEIGHT);
 
-        // Create ball moving upward and to the right
-        ball = new Ball(0, 0, BALL_RADIUS, BALL_SPEED);
+        ball = new Ball();
     }
 
     /**
