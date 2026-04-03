@@ -36,8 +36,12 @@ public class BallPaddleCollisionTest {
 
     @Before
     public void setUp() {
-        paddle = new Paddle(325, 550, 150, 25, 550);
-        ball = new Ball(400, 500, 12, 330);
+        paddle = new Paddle();
+        paddle.setX(325);
+        paddle.setY(550);
+        ball = new Ball();
+        ball.setX(400);
+        ball.setY(500);
     }
 
     @Test
